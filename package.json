@@ -1,0 +1,24 @@
+{
+  "name": "bus-reservation",
+  "version": "1.0.0",
+  "description": "this project is to convert the traditional method of bus reservation to online",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "npm run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "Ab1jeet-1"
+  },
+  "author": "Abijeet Raut",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mysql2": "^3.5.1",
+    "nodemon": "^3.0.1",
+    "sequelize": "^6.32.1"
+  }
+}
