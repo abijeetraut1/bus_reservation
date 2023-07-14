@@ -19,7 +19,7 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false
         },
         role:{
-            type: Sequelize.ENUM("user", "owner", "driver"),
+            type: Sequelize.ENUM("user", "owner", "driver", "vender"),
         },
         password: {
             type: Sequelize.STRING,

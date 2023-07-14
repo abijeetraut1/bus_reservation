@@ -1,0 +1,12 @@
+signup 
+  1. phone
+  2. email
+  3. firstName
+  4. lastName
+  5. password
+
+login 
+  1. phone
+  2. password
+
+
