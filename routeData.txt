@@ -1,12 +1,18 @@
-signup 
+signup  -> /signup
   1. phone
   2. email
   3. firstName
   4. lastName
   5. password
 
-login 
+login   ->  /login
   1. phone
   2. password
 
 
+number verification   -> /useraccount/verify
+  1. verificationCode
+
+update Password    ->  /update-password
+  1. oldPassword
+  2. newPassword

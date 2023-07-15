@@ -109,7 +109,7 @@ exports.isLoggedIn = async (req, res, next) => {
 }
 
 // chanage password 
-exports.updateShowableData = async (req, res) => {
+exports.updatePassword = async (req, res) => {
     const userData = res.locals.user;
     const {
         oldPassword,
