@@ -18,6 +18,12 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false
         },
+        verificationCode:{
+            type: Sequelize.INTEGER,
+        },
+        isVerified: {
+            type: Sequelize.BOOLEAN
+        },
         role:{
             type: Sequelize.ENUM("user", "owner", "driver", "vender"),
         },

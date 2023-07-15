@@ -12,8 +12,6 @@ const createRefreshToken = (res, userData) => {
     const id = userData.id;
     const token = jwtToken(id);
 
-    console.log(token);
-
     res.cookie("jwt", token, {
         expires: new Date(
             Date.now() + process.env.BROWSER_COOKIES_EXPIRES_IN * 24 * 60 * 60 * 1000
@@ -53,13 +51,16 @@ exports.signup = async (req, res) => {
         statusFunc(res, 400, "user already exist")
     }
 
+    const code = Math.floor(Math.random() * 1000000);
     const signup = await users.create({
         phoneNo: phone,
         email: email,
         firstName: firstName,
         lastName: lastName,
         role: "user",
-        password: await bcrypt.hash(password, 12)
+        password: await bcrypt.hash(password, 12),
+        isVerified: false,
+        verificationCode: code,
     })
 
     createRefreshToken(res, signup);
@@ -78,17 +79,18 @@ exports.login = async (req, res) => {
         }
     })
 
-    if(login === null){
+    if (login === null) {
         return statusFunc(res, 400, "Cannot Find User");
     }
 
-    if (await bcrypt.compare(password, login.password)) {
+    if (!(await bcrypt.compare(password, login.password))) {
         return statusFunc(res, 400, "wrong email and password");
     }
 
     createRefreshToken(res, login);
 }
 
+// login checker
 exports.isLoggedIn = async (req, res, next) => {
     if (req.cookies.jwt) {
         const id = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
@@ -106,6 +108,7 @@ exports.isLoggedIn = async (req, res, next) => {
     next();
 }
 
+// chanage password 
 exports.updateShowableData = async (req, res) => {
     const userData = res.locals.user;
     const {
@@ -113,14 +116,13 @@ exports.updateShowableData = async (req, res) => {
         newPassword
     } = req.body;
 
-    console.log(userData.password, oldPassword)
 
     if (!(await bcrypt.compare(oldPassword, userData.password))) {
         return statusFunc(res, 400, "Password didn't match");
     }
 
     const changePasswordUser = await users.findOne({
-        where:{
+        where: {
             id: userData.id
         }
     })
@@ -128,4 +130,24 @@ exports.updateShowableData = async (req, res) => {
     changePasswordUser.save();
 
     statusFunc(res, 200, "password changed sucessfully");
+}
+
+// check verification
+exports.numberVerification = async(req, res) => {
+    const user = res.locals.user;
+    if(req.body.verificationCode){
+        const verifyUser = await users.findOne({
+            where: {
+                id: user.id
+            }
+        })
+        
+        if(verifyUser.verificationCode === req.body.verificationCode){   
+            verifyUser.isVerified = 1 || true;
+            verifyUser.save();
+            statusFunc(res, 202, "verified");
+        }else{
+            statusFunc(res, 400, "wrong verification code");
+        }
+    }
 }
