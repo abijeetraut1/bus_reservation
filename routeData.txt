@@ -17,8 +17,7 @@ update Password    ->  /update-password
   1. oldPassword
   2. newPassword
 
-Role Change Form  -> /role-change-form
-
+upload profile picture  -> /profile-picture
 
 
 NOTE: 

@@ -152,7 +152,7 @@ exports.numberVerification = async(req, res) => {
     }
 }
 
-// 
+// upload profile picture
 exports.uploadProfilePicture = async(req, res) => {
     const user = res.locals.user;
     console.log(req.file.filename)
