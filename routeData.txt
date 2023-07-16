@@ -16,3 +16,10 @@ number verification   -> /useraccount/verify
 update Password    ->  /update-password
   1. oldPassword
   2. newPassword
+
+Role Change Form  -> /role-change-form
+
+
+
+NOTE: 
+  AFTER UPLOADING Role Change FORM TRANSFER THE USER TO UPLOAD VEHICLE FROM

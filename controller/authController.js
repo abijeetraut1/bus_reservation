@@ -151,3 +151,18 @@ exports.numberVerification = async(req, res) => {
         }
     }
 }
+
+// 
+exports.uploadProfilePicture = async(req, res) => {
+    const user = res.locals.user;
+    console.log(req.file.filename)
+    const userProfile = await users.findOne({
+        where:{ 
+            id: user.id
+        }
+    })
+
+    userProfile.profile = req.file.filename;
+    userProfile.save();
+    statusFunc(res, 201, userProfile) 
+}

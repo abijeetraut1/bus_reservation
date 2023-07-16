@@ -18,6 +18,9 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false
         },
+        profile: {
+            type: Sequelize.STRING,
+        },
         verificationCode:{
             type: Sequelize.INTEGER,
         },
