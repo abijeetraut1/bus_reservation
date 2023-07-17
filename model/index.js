@@ -1,4 +1,5 @@
 const DBconfig = require("../config/config");
+const bcrypt = require("bcrypt")
 
 const {
     Sequelize,
@@ -33,8 +34,9 @@ db.sequelize = sequelize;
 db.users = require("./model/userModel")(sequelize, DataTypes);
 
 db.sequelize.sync({
-    force: false
-}).then(() => {
+    force: false,
+
+}).then(async () => {
     console.log("yes! sync done");
 })
 

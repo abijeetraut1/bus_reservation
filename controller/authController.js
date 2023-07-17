@@ -2,7 +2,9 @@ const database = require("../model/index");
 const users = database.users;
 
 const bcrypt = require("bcrypt");
+const fs = require("fs");
 const jwt = require("jsonwebtoken");
+const sharp = require("sharp");
 const {
     statusFunc
 } = require("./../utils/statusFunc");
@@ -34,16 +36,17 @@ const jwtToken = (id) => {
 // signup
 exports.signup = async (req, res) => {
     const {
-        phone,
+        phoneno,
         email,
         firstName,
         lastName,
         password
     } = req.body;
+    console.log(req.body)
 
     const checkUser = await users.findOne({
         where: {
-            phoneNo: phone,
+            phoneNo: phoneno,
         }
     })
 
@@ -53,7 +56,7 @@ exports.signup = async (req, res) => {
 
     const code = Math.floor(Math.random() * 1000000);
     const signup = await users.create({
-        phoneNo: phone,
+        phoneNo: phoneno,
         email: email,
         firstName: firstName,
         lastName: lastName,
@@ -133,36 +136,38 @@ exports.updatePassword = async (req, res) => {
 }
 
 // check verification
-exports.numberVerification = async(req, res) => {
+exports.numberVerification = async (req, res) => {
     const user = res.locals.user;
-    if(req.body.verificationCode){
+    if (req.body.verificationCode) {
         const verifyUser = await users.findOne({
             where: {
                 id: user.id
             }
         })
-        
-        if(verifyUser.verificationCode === req.body.verificationCode){   
+
+        if (verifyUser.verificationCode === req.body.verificationCode) {
             verifyUser.isVerified = 1 || true;
             verifyUser.save();
             statusFunc(res, 202, "verified");
-        }else{
+        } else {
             statusFunc(res, 400, "wrong verification code");
         }
     }
 }
 
+
+
 // upload profile picture
-exports.uploadProfilePicture = async(req, res) => {
+exports.uploadProfilePicture = async (req, res) => {
     const user = res.locals.user;
-    console.log(req.file.filename)
+    
     const userProfile = await users.findOne({
-        where:{ 
+        where: {
             id: user.id
         }
     })
 
     userProfile.profile = req.file.filename;
     userProfile.save();
-    statusFunc(res, 201, userProfile) 
+    statusFunc(res, 201, userProfile)
 }
