@@ -4,7 +4,6 @@ const users = database.users;
 const bcrypt = require("bcrypt");
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
-const sharp = require("sharp");
 const {
     statusFunc
 } = require("./../utils/statusFunc");
@@ -160,7 +159,7 @@ exports.numberVerification = async (req, res) => {
 // upload profile picture
 exports.uploadProfilePicture = async (req, res) => {
     const user = res.locals.user;
-    
+
     const userProfile = await users.findOne({
         where: {
             id: user.id
@@ -170,4 +169,59 @@ exports.uploadProfilePicture = async (req, res) => {
     userProfile.profile = req.file.filename;
     userProfile.save();
     statusFunc(res, 201, userProfile)
+}
+
+
+// change number
+exports.changeNumber = async (req, res) => {
+    const user = res.locals.user;
+
+    // send verification code to new number to verify that number belongs to the same user
+
+    if (!(await bcrypt.compare(req.body.password, user.password))) {
+        statusFunc(res, 400, "wrong password");
+    } else {
+        const numberUpdate = await users.findOne({
+            where: {
+                id: user.id
+            }
+        })
+        numberUpdate.phoneNo = req.body.phone;
+        numberUpdate.save();
+        statusFunc(res, 200, "Number updated sucessfully to : " + req.body.phone);
+    }
+}
+
+
+// forget password
+exports.generate_password_forget_code = async (req, res, next) => {
+    if (req.body.phoneno) {
+        const passwordForgetUser = await users.findOne({
+            where: {
+                phoneNo: req.body.phoneno
+            }
+        });
+
+        if (!passwordForgetUser) {
+            statusFunc(res, 400, "cannot find user with that number");
+        } else {
+            const code = Math.floor(Math.random() * (process.env.MAX_GENERATION - process.env.MIN_GENERATION + 1) + process.env.MIN_GENERATION);
+            passwordForgetUser.verificationCode = code;
+            passwordForgetUser.save();      
+        }
+        statusFunc(res, 200, "verification code send to :" + req.body.phoneno);
+    }else{
+        statusFunc(res, 400, "please enter account number");
+    }
+}
+
+exports.password_change = async (req, res) => {
+    const user = res.locals.forgetPasswordUser;
+
+    if(user.code === req.body.verificationCode){
+        user.password = await bcrypt.hash(req.body.password, 12);
+        user.save();
+        statusFunc(res, 200, user);
+    }
+
 }
