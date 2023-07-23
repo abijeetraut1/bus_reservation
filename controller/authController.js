@@ -192,7 +192,6 @@ exports.changeNumber = async (req, res) => {
     }
 }
 
-
 // forget password
 exports.generate_password_forget_code = async (req, res, next) => {
     if (req.body.phoneno) {
@@ -215,13 +214,3 @@ exports.generate_password_forget_code = async (req, res, next) => {
     }
 }
 
-exports.password_change = async (req, res) => {
-    const user = res.locals.forgetPasswordUser;
-
-    if(user.code === req.body.verificationCode){
-        user.password = await bcrypt.hash(req.body.password, 12);
-        user.save();
-        statusFunc(res, 200, user);
-    }
-
-}

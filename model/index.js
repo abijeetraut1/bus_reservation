@@ -32,10 +32,10 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.users = require("./model/userModel")(sequelize, DataTypes);
+db.bus = require("./model/busModel")(sequelize, DataTypes);
 
 db.sequelize.sync({
     force: false,
-
 }).then(async () => {
     console.log("yes! sync done");
 })
