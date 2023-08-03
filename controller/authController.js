@@ -41,7 +41,10 @@ exports.signup = async (req, res) => {
         lastName,
         password
     } = req.body;
-    console.log(req.body)
+
+    if(!phoneno || !email || !firstName || !lastName || !password){
+        return statusFunc(res, 400, "you forget to insert the field");
+    }
 
     const checkUser = await users.findOne({
         where: {
@@ -53,7 +56,8 @@ exports.signup = async (req, res) => {
         statusFunc(res, 400, "user already exist")
     }
 
-    const code = Math.floor(Math.random() * 1000000);
+    const code = Math.floor(Math.random() * (process.env.MAX_GENERATION - process.env.MIN_GENERATION + 1) + process.env.MIN_GENERATION);
+
     const signup = await users.create({
         phoneNo: phoneno,
         email: email,
@@ -155,7 +159,6 @@ exports.numberVerification = async (req, res) => {
 }
 
 
-
 // upload profile picture
 exports.uploadProfilePicture = async (req, res) => {
     const user = res.locals.user;
@@ -202,7 +205,7 @@ exports.generate_password_forget_code = async (req, res, next) => {
         });
 
         if (!passwordForgetUser) {
-            statusFunc(res, 400, "cannot find user with that number");
+            return statusFunc(res, 400, "cannot find user with that number");
         } else {
             const code = Math.floor(Math.random() * (process.env.MAX_GENERATION - process.env.MIN_GENERATION + 1) + process.env.MIN_GENERATION);
             passwordForgetUser.verificationCode = code;
@@ -213,4 +216,3 @@ exports.generate_password_forget_code = async (req, res, next) => {
         statusFunc(res, 400, "please enter account number");
     }
 }
-

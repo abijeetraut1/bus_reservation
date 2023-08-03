@@ -2,10 +2,19 @@ const multer = require("multer");
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "./uploads/profile");
+        if (req.route.path === "/register-bus") {
+            cb(null, "./uploads/bus");
+        } else {
+            cb(null, "./uploads/profile");
+        }
     },
     filename: function (req, file, cb) {
-        const image = "profile" + "-" + Date.now() + ".png";
+        let image;
+        if (req.route.path === "/register-bus") {
+            image = req.body.busName.replaceAll(" ", "-") + "-" + Date.now() + ".png";
+        } else {
+            image = "profile" + "-" + Date.now() + ".png";
+        }
         cb(null, image);
     }
 })
