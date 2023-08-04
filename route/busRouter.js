@@ -9,5 +9,6 @@ const upload = multer({
 });
 
 router.post("/register-bus", authController.isLoggedIn, upload.array("busImage"), busController.registerBus);
+router.get("/search", busController.searchBus);
 
 module.exports = router;

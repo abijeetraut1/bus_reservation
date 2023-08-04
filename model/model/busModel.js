@@ -26,6 +26,10 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.INTEGER,
             allowNull: false
         },
+        noOfSheats:{
+            type: Sequelize.INTEGER,
+            allowNull: false, 
+        },
         busImages: {
             type: Sequelize.JSON,
             allowNull: false,
@@ -40,6 +44,22 @@ module.exports = (sequelize, Sequelize) => {
         },
         acceptMobileTicket:{
             type: Sequelize.BOOLEAN,
+            allowNull: false
+        },
+        fromLocation: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        toLocation: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        joruneyDates:{
+            type: Sequelize.JSON,
+            allowNull: false
+        },
+        slug:{
+            type: Sequelize.STRING,
             allowNull: false
         }
     })

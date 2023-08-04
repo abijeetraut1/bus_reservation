@@ -38,6 +38,7 @@ db.bus = require("./model/busModel")(sequelize, DataTypes);
 db.users.hasMany(db.bus);
 db.bus.belongsTo(db.users);
 
+
 db.sequelize.sync({
     force: false,
 }).then(async () => {
