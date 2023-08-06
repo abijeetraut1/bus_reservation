@@ -10,7 +10,7 @@ const upload = multer({
 
 router.post("/register-bus", authController.isLoggedIn, upload.array("busImage"), busController.registerBus);
 router.get("/search", busController.searchBus);
-router.get("/:slug/:seatno/:year/:month/:day", authController.isLoggedIn, busController.reserveSeat);
-
+router.post("/:slug/reserve-seat", authController.isLoggedIn, busController.reserveSeat);
+router.get("/getReservedDetails", authController.isLoggedIn, busController.allReservedSeat);
 
 module.exports = router;

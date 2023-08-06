@@ -43,6 +43,8 @@ exports.registerBus = async (req, res) => {
             saturday
         } = req.body;
 
+
+        // check if the bus number is already stored in the database
         const beforeUploadedData = await busModel.findAll({
             where: {
                 busNumber: busNumber,
@@ -117,6 +119,8 @@ exports.registerBus = async (req, res) => {
     }
 }
 
+
+// still not completed
 exports.searchBus = async (req, res) => {
     const {
         fromLocation,
@@ -145,12 +149,15 @@ exports.reserveSeat = async (req, res) => {
     try {
         const user = res.locals.user;
         const {
-            slug,
+            slug
+        } = req.params;
+        const {
             seatno,
             year,
             month,
             day
-        } = req.params;
+        } = req.body;
+
 
         const bus = await busModel.findOne({
             where: {
@@ -172,9 +179,9 @@ exports.reserveSeat = async (req, res) => {
             type: QueryTypes.SELECT,
             replacements: [seatno * 1],
         })
-        
-        // blocks the reservation if there's is already another one
-        if(checkReservedSeat.length != 0){
+
+        // blocks the reservation if the seats been already been booked
+        if (checkReservedSeat.length != 0) {
             return statusFunc(res, 400, "seat is already reserved please check another one");
         }
 
@@ -186,20 +193,17 @@ exports.reserveSeat = async (req, res) => {
             }
         );
 
-        const userTravelSchema = user.id + "-" + user.firstName + "-" + user.lastName + "-travel-record";
-
-        const createUserTravelRecord = `CREATE TABLE IF NOT EXISTS \`${userTravelSchema}\` (id INT AUTO_INCREMENT PRIMARY KEY, userId INT, seatno INT, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
-        await database.sequelize.query(createUserTravelRecord, {
+        // save the book data
+        const userBookingRecordSchema = user.id + "-" + user.firstName + "-" + user.lastName + "-travel-record";
+        const createUserBookingRecord = `CREATE TABLE IF NOT EXISTS \`${userBookingRecordSchema}\` (id INT AUTO_INCREMENT PRIMARY KEY, userId INT, seatno INT, busId INT, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
+        await database.sequelize.query(createUserBookingRecord, {
             type: QueryTypes.RAW
         });
 
-        // saves the user travel record
-        const reservedDate = `${nowDate.getFullYear()}-${(nowDate.getMonth() + 1).toString().padStart(2, '0')}-${nowDate.getDate().toString().padStart(2, '0')}`;
-
         const resrveSeatRecord = await database.sequelize.query(
-            `INSERT INTO \`${userTravelSchema}\` (userId, seatno, createdAt) VALUES (?, ?, NOW())`, {
+            `INSERT INTO \`${userTravelSchema}\` (userId, seatno, busId, createdAt) VALUES (?, ?, ?, NOW())`, {
                 type: QueryTypes.INSERT,
-                replacements: [user.id, seatno * 1]
+                replacements: [user.id, seatno * 1, bus.id]
             }
         );
 
@@ -210,7 +214,22 @@ exports.reserveSeat = async (req, res) => {
     } catch (err) {
         return console.error(err);
     }
-
 }
 
 // 23-07-14-kankai-1234
+
+exports.allReservedSeat = async (req, res) => {
+    try{
+        const user = res.locals.user;
+
+        const recordSchemaName = user.id + "-" + user.firstName + "-" + user.lastName + "-travel-record";
+        const userReservationDetails = await database.sequelize.query(`
+        SELECT * FROM \`${recordSchemaName}\` JOIN buses ON \`${recordSchemaName}\`.busId = buses.id`, {
+            type: QueryTypes.SELECT
+        });
+
+        statusFunc(res, 200, userReservationDetails);
+    } catch(err){
+        statusFunc(res, 400, err);
+    }
+}
