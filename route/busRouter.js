@@ -12,5 +12,7 @@ router.post("/register-bus", authController.isLoggedIn, upload.array("busImage")
 router.get("/search", busController.searchBus);
 router.post("/:slug/reserve-seat", authController.isLoggedIn, busController.reserveSeat);
 router.get("/getReservedDetails", authController.isLoggedIn, busController.allReservedSeat);
+router.get("/showAllTicket", authController.isLoggedIn, busController.showAllTicket);
+// router.get("/showTicket/:date", authController.isLoggedIn, busController.showTicket);
 
 module.exports = router;

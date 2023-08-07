@@ -1,9 +1,9 @@
 const {
-    statusFunc
+    statusFunc,
+    statusFuncLength
 } = require("../utils/statusFunc");
 const database = require("./../model/index");
 const busModel = database.bus;
-
 
 const {
     QueryTypes,
@@ -34,6 +34,7 @@ exports.registerBus = async (req, res) => {
             fromLocation,
             toLocation,
             noOfSheats,
+            price,
             sunday,
             monday,
             tuesday,
@@ -158,17 +159,15 @@ exports.reserveSeat = async (req, res) => {
             day
         } = req.body;
 
-
         const bus = await busModel.findOne({
             where: {
                 slug
             }
         });
 
-        const nowDate = new Date();
         const schemaName = `${year}-${month}-${day}-${bus.slug}`;
 
-        const createTable = `CREATE TABLE IF NOT EXISTS \`${schemaName}\` (id INT AUTO_INCREMENT PRIMARY KEY, userId INT, seatno INT, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
+        const createTable = `CREATE TABLE IF NOT EXISTS \`${schemaName}\` (id INT AUTO_INCREMENT PRIMARY KEY, userId INT, seatno INT, isTicketChecked BOOL, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
 
         await database.sequelize.query(createTable, {
             type: QueryTypes.RAW
@@ -185,11 +184,17 @@ exports.reserveSeat = async (req, res) => {
             return statusFunc(res, 400, "seat is already reserved please check another one");
         }
 
+
+        // booking stop when seat are full
+        if (checkReservedSeat.length === bus.noOfSheats) {
+            return statusFunc(res, 400, "All seats are full please choose another bus");
+        }
+
         const reserveSeat = await database.sequelize.query(
-            `INSERT INTO \`${schemaName}\` (userId, seatno, createdAt) VALUES (?, ?, NOW())`, // Use backticks to escape table name
+            `INSERT INTO \`${schemaName}\` (userId, seatno, isTicketChecked,createdAt) VALUES (?, ?, ?, NOW())`, // Use backticks to escape table name
             {
                 type: QueryTypes.INSERT,
-                replacements: [user.id, seatno]
+                replacements: [user.id, seatno, false]
             }
         );
 
@@ -201,7 +206,7 @@ exports.reserveSeat = async (req, res) => {
         });
 
         const resrveSeatRecord = await database.sequelize.query(
-            `INSERT INTO \`${userTravelSchema}\` (userId, seatno, busId, createdAt) VALUES (?, ?, ?, NOW())`, {
+            `INSERT INTO \`${userBookingRecordSchema}\` (userId, seatno, busId, createdAt) VALUES (?, ?, ?, NOW())`, {
                 type: QueryTypes.INSERT,
                 replacements: [user.id, seatno * 1, bus.id]
             }
@@ -216,10 +221,12 @@ exports.reserveSeat = async (req, res) => {
     }
 }
 
+
 // 23-07-14-kankai-1234
+// year-month-day-busName-busNumber
 
 exports.allReservedSeat = async (req, res) => {
-    try{
+    try {
         const user = res.locals.user;
 
         const recordSchemaName = user.id + "-" + user.firstName + "-" + user.lastName + "-travel-record";
@@ -229,7 +236,27 @@ exports.allReservedSeat = async (req, res) => {
         });
 
         statusFunc(res, 200, userReservationDetails);
+    } catch (err) {
+        return statusFunc(res, 400, err);
+    }
+}
+
+
+// generate qrCode based on the ticket
+exports.showAllTicket = async (req, res) => {
+    try {
+        const user = res.locals.user;
+        const userSchema = `${user.id}-${user.firstName}-${user.lastName}-travel-record`;
+        const storeAllTicket = await database.sequelize.query(`SELCT * FROM \`${userSchema}\``, {
+            type: QueryTypes.SELECT
+        })
+
+        if (storeAllTicket.length === 0) {
+            return statusFunc(res, 400, "you dont have any bookings yet");
+        }
+
+        statusFuncLength(res, 200, storeAllTicket);
     } catch(err){
-        statusFunc(res, 400, err);
+        return statusFunc(res, 400, err);
     }
 }
