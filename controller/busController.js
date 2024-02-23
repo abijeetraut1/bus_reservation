@@ -12,7 +12,7 @@ const {
 
 exports.registerBus = async (req, res) => {
     try {
-        const user = res.locals.user;
+        const user = 1;
 
         // adding image name in array
         let image = [];
@@ -20,21 +20,20 @@ exports.registerBus = async (req, res) => {
             image.push(el.filename);
         });
 
-
         const {
             busNumber,
             busName,
+            noOfStaff,
+            fromLocation,
+            toLocation,
+            price,
             isAcAvailable,
             isWaterProvidable,
-            isBlankeProvidable,
-            noOfStaff,
+            isBlanketProvidable,
             isCharginPointAvailable,
             isCCTVavailable,
             acceptMobileTicket,
-            fromLocation,
-            toLocation,
             noOfSheats,
-            price,
             sunday,
             monday,
             tuesday,
@@ -44,77 +43,43 @@ exports.registerBus = async (req, res) => {
             saturday
         } = req.body;
 
+        const createTableQuery = `CREATE TABLE IF NOT EXISTS buses (id INT AUTO_INCREMENT PRIMARY KEY,busNumber INT,busName TEXT,noOfStaff INT,fromLocation TEXT,toLocation TEXT,price INT,isAcAvailable TINYINT(1),isWaterProvidable TINYINT(1),isBlanketProvidable TINYINT(1),isCharginPointAvailable TINYINT(1),isCCTVavailable TINYINT(1),acceptMobileTicket TINYINT(1),noOfSeats TINYINT(1),sunday TINYINT(1),monday TINYINT(1),tuesday TINYINT(1),wednesday TINYINT(1),thursday TINYINT(1),friday TINYINT(1),saturday TINYINT(1))`;
 
-        // check if the bus number is already stored in the database
-        const beforeUploadedData = await busModel.findAll({
-            where: {
-                busNumber: busNumber,
-            }
+        const insertDataQuery = `INSERT INTO buses ( busNumber, busName, noOfStaff, fromLocation, toLocation, price, isAcAvailable, isWaterProvidable, isBlanketProvidable, isCharginPointAvailable, isCCTVavailable, acceptMobileTicket, noOfSeats, sunday, monday, tuesday, wednesday, thursday, friday, saturday) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+        // Create table
+        await database.sequelize.query(createTableQuery, {
+            type: Sequelize.QueryTypes.RAW
         });
 
-        if (beforeUploadedData.length != 0) {
-            return statusFunc(res, 400, "you already uploaded this bus")
-        }
-
-        if (
-            !busNumber ||
-            !busName ||
-            !isAcAvailable ||
-            !isCharginPointAvailable ||
-            !isBlankeProvidable ||
-            !noOfStaff ||
-            !isWaterProvidable ||
-            !isCCTVavailable ||
-            !acceptMobileTicket ||
-            !fromLocation ||
-            !toLocation ||
-            !noOfSheats ||
-            !sunday ||
-            !monday ||
-            !tuesday ||
-            !wednesday ||
-            !thursday ||
-            !friday ||
-            !saturday
-        ) {
-            return statusFunc(res, 200, "you forget to insert some field");
-        }
-
-
-        // journey dates
-        let joruneyDates = [];
-        const day = [sunday, monday, tuesday, wednesday, thursday, friday, saturday]
-        const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-
-
-        // this stores all the day and dates into objects of array
-        for (let i = 0; i < day.length; i++) {
-            joruneyDates.push({
-                day: dayNames[i],
-                time: day[i]
-            })
-        }
-
-        const registerBus = await busModel.create({
-            busNumber: busNumber,
-            busName: busName,
-            isAcAvailable: isAcAvailable,
-            isWaterProvidable: isWaterProvidable,
-            isBlankeProvidable: isBlankeProvidable,
-            noOfStaff: noOfStaff,
-            noOfSheats: noOfSheats,
-            isCharginPointAvailable: isCharginPointAvailable,
-            isCCTVavailable: isCCTVavailable,
-            acceptMobileTicket: acceptMobileTicket,
-            busImages: image,
-            fromLocation,
-            toLocation,
-            joruneyDates: joruneyDates,
-            slug: busName.replaceAll(" ", "-") + "-" + busNumber,
-            userId: user.id * 1
+        // Insert data
+        await database.sequelize.query(insertDataQuery, {
+            type: Sequelize.QueryTypes.INSERT,
+            replacements: [
+                busNumber,
+                busName,
+                noOfStaff,
+                fromLocation,
+                toLocation,
+                price,
+                isAcAvailable,
+                isWaterProvidable,
+                isBlanketProvidable,
+                isCharginPointAvailable,
+                isCCTVavailable,
+                acceptMobileTicket,
+                noOfSheats,
+                sunday,
+                monday,
+                tuesday,
+                wednesday,
+                thursday,
+                friday,
+                saturday
+            ]
         });
+        statusFunc(res, 200, "createdDB");
 
-        statusFunc(res, 200, registerBus);
     } catch (err) {
         throw err;
     }
@@ -148,7 +113,7 @@ exports.searchBus = async (req, res) => {
 
 exports.reserveSeat = async (req, res) => {
     try {
-        const user = res.locals.user;
+        const user = 1;
         const {
             slug
         } = req.params;
@@ -184,7 +149,6 @@ exports.reserveSeat = async (req, res) => {
             return statusFunc(res, 400, "seat is already reserved please check another one");
         }
 
-
         // booking stop when seat are full
         if (checkReservedSeat.length === bus.noOfSheats) {
             return statusFunc(res, 400, "All seats are full please choose another bus");
@@ -199,7 +163,7 @@ exports.reserveSeat = async (req, res) => {
         );
 
         // save the book data
-        const userBookingRecordSchema = user.id + "-" + user.firstName + "-" + user.lastName + "-travel-record";
+        const userBookingRecordSchema = user.id + "-" + user.firstName + "-" + user.lastName + Date.now() + "-travel-record";
         const createUserBookingRecord = `CREATE TABLE IF NOT EXISTS \`${userBookingRecordSchema}\` (id INT AUTO_INCREMENT PRIMARY KEY, userId INT, seatno INT, busId INT, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
         await database.sequelize.query(createUserBookingRecord, {
             type: QueryTypes.RAW
@@ -227,7 +191,7 @@ exports.reserveSeat = async (req, res) => {
 
 exports.allReservedSeat = async (req, res) => {
     try {
-        const user = res.locals.user;
+        const user = 1;
 
         const recordSchemaName = user.id + "-" + user.firstName + "-" + user.lastName + "-travel-record";
         const userReservationDetails = await database.sequelize.query(`
@@ -241,11 +205,21 @@ exports.allReservedSeat = async (req, res) => {
     }
 }
 
+exports.reservedSeat = async (req, res) => {
+    try {
+
+        const user = 1;
+        // const ticketName = 
+    } catch (err) {
+        return statusFunc(res, 400, err);
+    }
+}
+
 
 // generate qrCode based on the ticket
 exports.showAllTicket = async (req, res) => {
     try {
-        const user = res.locals.user;
+        const user = 1;
         const userSchema = `${user.id}-${user.firstName}-${user.lastName}-travel-record`;
         const storeAllTicket = await database.sequelize.query(`SELCT * FROM \`${userSchema}\``, {
             type: QueryTypes.SELECT
@@ -256,7 +230,45 @@ exports.showAllTicket = async (req, res) => {
         }
 
         statusFuncLength(res, 200, storeAllTicket);
-    } catch(err){
+    } catch (err) {
         return statusFunc(res, 400, err);
+    }
+}
+
+exports.rateBus = async (req, res) => {
+    try {
+        const busSlug = req.params.slug;
+        const user = 1;
+        const {
+            rate,
+            review
+        } = req.body;
+
+        if (!rate || !review) {
+            return statusFunc(res, 400, "rate or review is empty");
+        }
+
+        const bus = await busModel.findOne({
+            where: {
+                slug: busSlug
+            }
+        });
+        // const createUserBookingRecord = `CREATE TABLE IF NOT EXISTS \`${userBookingRecordSchema}\` (id INT AUTO_INCREMENT PRIMARY KEY, userId INT, seatno INT, busId INT, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
+        // const resrveSeatRecord = await database.sequelize.query(
+        //     `INSERT INTO \`${userBookingRecordSchema}\` (userId, seatno, busId, createdAt) VALUES (?, ?, ?, NOW())`, {
+        //         type: QueryTypes.INSERT,
+        //         replacements: [user.id, seatno * 1, bus.id]
+        //     }
+        // );
+        await database.sequelize.query(`CREATE TABLE IF NOT EXISTS \`${busSlug}-${bus.id}\` (id INT AUTO_INCREMENT PRIMARY KEY, userId INT, busId, rate INT, review STRING, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`);
+        const uploadBusRating = await database.sequelize.query(`INSERT INTO \`${busSlug}-${bus.id}\` (userid , busId, rate, review) VALUES (?, ?, ?, ?, NOW())`, {
+            type: QueryTypes.INSERT,
+            replacements: [user.id, bus.id, rate, review]
+        })
+
+        statusFunc(res, 201, uploadBusRating);
+
+    } catch (err) {
+        return statusFunc(res, 400, err)
     }
 }

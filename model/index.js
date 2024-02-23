@@ -32,11 +32,11 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.users = require("./model/userModel")(sequelize, DataTypes);
-db.bus = require("./model/busModel")(sequelize, DataTypes);
+// db.bus = require("./model/busModel")(sequelize, DataTypes);
 
 // relation
-db.users.hasMany(db.bus);
-db.bus.belongsTo(db.users);
+// db.users.hasMany(db.bus);
+// db.bus.belongsTo(db.users);
 
 
 db.sequelize.sync({
