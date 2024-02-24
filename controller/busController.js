@@ -10,6 +10,13 @@ const {
     Sequelize
 } = require('sequelize');
 
+const locations = ["Damak", "Urlabari", "Manglabare", "Pathri", "Bhaunne", "LaxmiMarga", "Belbari", "Lalbhitti", "Khorsane", "BirathChowk", "Gothgaon", "Itahari"];
+
+// extract the index position of the location 
+function extractLocationIndex(locations, checkLocation) {
+    return locations.findIndex(el => el.toUpperCase() === checkLocation.toUpperCase());
+}
+
 exports.registerBus = async (req, res) => {
     try {
         const user = 1;
@@ -43,9 +50,30 @@ exports.registerBus = async (req, res) => {
             saturday
         } = req.body;
 
-        const createTableQuery = `CREATE TABLE IF NOT EXISTS buses (id INT AUTO_INCREMENT PRIMARY KEY,busNumber INT,busName TEXT,noOfStaff INT,fromLocation TEXT,toLocation TEXT,price INT,isAcAvailable TINYINT(1),isWaterProvidable TINYINT(1),isBlanketProvidable TINYINT(1),isCharginPointAvailable TINYINT(1),isCCTVavailable TINYINT(1),acceptMobileTicket TINYINT(1),noOfSeats TINYINT(1),sunday TINYINT(1),monday TINYINT(1),tuesday TINYINT(1),wednesday TINYINT(1),thursday TINYINT(1),friday TINYINT(1),saturday TINYINT(1))`;
+        let fromLocationIndex = extractLocationIndex(locations, fromLocation);
+        let toLocationIndex = extractLocationIndex(locations, toLocation);
 
-        const insertDataQuery = `INSERT INTO buses ( busNumber, busName, noOfStaff, fromLocation, toLocation, price, isAcAvailable, isWaterProvidable, isBlanketProvidable, isCharginPointAvailable, isCCTVavailable, acceptMobileTicket, noOfSeats, sunday, monday, tuesday, wednesday, thursday, friday, saturday) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        // adding sublist of the location
+        const stopLocation = [];
+        for (let index = fromLocationIndex; index < locations.length; index++) {
+            stopLocation.push(locations[index]);
+            if (index === toLocationIndex) break;
+        }
+
+        const busSlug = `${busNumber}-${busName.replaceAll(" ", "-")}`;
+
+        const createTableQuery = `CREATE TABLE IF NOT EXISTS buses (id INT AUTO_INCREMENT PRIMARY KEY, busNumber INT,busName TEXT,noOfStaff INT,fromLocation TEXT,toLocation TEXT, stopLocation JSON, price INT,isAcAvailable TINYINT(1),isWaterProvidable TINYINT(1),isBlanketProvidable TINYINT(1),isCharginPointAvailable TINYINT(1),isCCTVavailable TINYINT(1),acceptMobileTicket TINYINT(1),noOfSeats TINYINT(1),sunday TINYINT(1),monday TINYINT(1),tuesday TINYINT(1),wednesday TINYINT(1),thursday TINYINT(1),friday TINYINT(1),saturday TINYINT(1), slug TEXT)`;
+
+        const insertDataQuery = `INSERT INTO buses ( busNumber, busName, noOfStaff, fromLocation, toLocation, stopLocation, price, isAcAvailable, isWaterProvidable, isBlanketProvidable, isCharginPointAvailable, isCCTVavailable, acceptMobileTicket, noOfSeats, sunday, monday, tuesday, wednesday, thursday, friday, saturday, slug) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+        // // validating the registration of bus if someone try to register the bus with the same number
+        // const busNumberValidation = await database.sequelize.query(`SELECT busNumber from buses WHERE busNumber = ${busNumber}`, {
+        //     type: Sequelize.QueryTypes.RAW,
+        // })
+
+        // if (busNumberValidation[0].length > 0) {
+        //     return statusFunc(res, 401, "this bus number is already registered")
+        // }
 
         // Create table
         await database.sequelize.query(createTableQuery, {
@@ -61,6 +89,7 @@ exports.registerBus = async (req, res) => {
                 noOfStaff,
                 fromLocation,
                 toLocation,
+                JSON.stringify(stopLocation),
                 price,
                 isAcAvailable,
                 isWaterProvidable,
@@ -75,9 +104,10 @@ exports.registerBus = async (req, res) => {
                 wednesday,
                 thursday,
                 friday,
-                saturday
+                saturday, busSlug
             ]
         });
+
         statusFunc(res, 200, "createdDB");
 
     } catch (err) {
@@ -102,12 +132,12 @@ exports.searchBus = async (req, res) => {
             type: QueryTypes.SELECT,
             replacements: {
                 fromLocation: `%${fromLocation}%`,
-                toLocation: `%${toLocation}%`
             }
         }
     );
 
-    statusFunc(res, 200, searchResult);
+
+    statusFuncLength(res, 200, searchResult);
 }
 
 
