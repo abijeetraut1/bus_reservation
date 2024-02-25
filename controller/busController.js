@@ -127,32 +127,19 @@ exports.searchBus = async (req, res) => {
     }
 
     // search all the buses
-    const searchResult = await database.sequelize.query('SELECT * FROM buses', {
-        type: QueryTypes.SELECT,
-    });
-    
+    const searchResult = await database.sequelize.query(
+        'SELECT  buses.id,  buses.busName, buses.stopLocation, buses.price, buses.busNumber, buses.isAcAvailable, buses.isWaterProvidable, buses.isBlanketProvidable, buses.isCharginPointAvailable, buses.isCCTVavailable, buses.acceptMobileTicket, buses.noOfSeats, buses.slug FROM buses ', {
+            type: QueryTypes.SELECT,
+        });
+
     // extract the id where the locations contains
     const LocationsContains = [];
     searchResult.forEach(el => {
-        const stopLocations = {
-            id: el.id,
-            busName: el.busName,
-            locations: JSON.parse(el.stopLocation),
-            price: el.price,
-            busNumber: el.busNumber,
-            isAcAvailable: el.isAcAvailable,
-            isWaterProvidable: el.isWaterProvidable,
-            isBlanketProvidable: el.isBlanketProvidable,
-            isCharginPointAvailable: el.isCharginPointAvailable,
-            isCCTVavailable: el.isCCTVavailable,
-            acceptMobileTicket: el.acceptMobileTicket,
-            noOfSeats: el.noOfSeats,
-            slug: el.slug
-        }
+        el.stopLocation = JSON.parse(el.stopLocation)
 
         // only select those field which contains those 2 locations
-        if(stopLocations.locations.includes(fromLocation) && stopLocations.locations.includes(toLocation)){
-            LocationsContains.push(stopLocations)
+        if (el.stopLocation.includes(fromLocation) && el.stopLocation.includes(toLocation) === true) {
+            LocationsContains.push(el)
         }
     })
 
