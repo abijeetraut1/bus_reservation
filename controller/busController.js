@@ -10,7 +10,7 @@ const {
     Sequelize
 } = require('sequelize');
 
-const locations = ["Damak", "Urlabari", "Manglabare", "Pathri", "Bhaunne", "LaxmiMarga", "Belbari", "Lalbhitti", "Khorsane", "BirathChowk", "Gothgaon", "Itahari"];
+const locations = ['damak', 'urlabari', 'manglabare', 'pathri', 'bhaunne', 'laxmimarga', 'belbari', 'lalbhitti', 'khorsane', 'birathchowk', 'gothgaon', 'itahari'];
 
 // extract the index position of the location 
 function extractLocationIndex(locations, checkLocation) {
@@ -116,7 +116,6 @@ exports.registerBus = async (req, res) => {
 }
 
 
-// still not completed
 exports.searchBus = async (req, res) => {
     const {
         fromLocation,
@@ -127,17 +126,37 @@ exports.searchBus = async (req, res) => {
         return statusFunc(res, 200, "please enter appropriate location");
     }
 
-    const searchResult = await database.sequelize.query(
-        'SELECT * FROM buses WHERE fromLocation LIKE :fromLocation', {
-            type: QueryTypes.SELECT,
-            replacements: {
-                fromLocation: `%${fromLocation}%`,
-            }
+    // search all the buses
+    const searchResult = await database.sequelize.query('SELECT * FROM buses', {
+        type: QueryTypes.SELECT,
+    });
+    
+    // extract the id where the locations contains
+    const LocationsContains = [];
+    searchResult.forEach(el => {
+        const stopLocations = {
+            id: el.id,
+            busName: el.busName,
+            locations: JSON.parse(el.stopLocation),
+            price: el.price,
+            busNumber: el.busNumber,
+            isAcAvailable: el.isAcAvailable,
+            isWaterProvidable: el.isWaterProvidable,
+            isBlanketProvidable: el.isBlanketProvidable,
+            isCharginPointAvailable: el.isCharginPointAvailable,
+            isCCTVavailable: el.isCCTVavailable,
+            acceptMobileTicket: el.acceptMobileTicket,
+            noOfSeats: el.noOfSeats,
+            slug: el.slug
         }
-    );
 
+        // only select those field which contains those 2 locations
+        if(stopLocations.locations.includes(fromLocation) && stopLocations.locations.includes(toLocation)){
+            LocationsContains.push(stopLocations)
+        }
+    })
 
-    statusFuncLength(res, 200, searchResult);
+    statusFuncLength(res, 200, LocationsContains);
 }
 
 
