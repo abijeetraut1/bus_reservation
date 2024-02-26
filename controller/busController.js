@@ -66,14 +66,14 @@ exports.registerBus = async (req, res) => {
 
         const insertDataQuery = `INSERT INTO buses ( busNumber, busName, noOfStaff, fromLocation, toLocation, stopLocation, price, isAcAvailable, isWaterProvidable, isBlanketProvidable, isCharginPointAvailable, isCCTVavailable, acceptMobileTicket, noOfSeats, sunday, monday, tuesday, wednesday, thursday, friday, saturday, slug) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
-        // // validating the registration of bus if someone try to register the bus with the same number
-        // const busNumberValidation = await database.sequelize.query(`SELECT busNumber from buses WHERE busNumber = ${busNumber}`, {
-        //     type: Sequelize.QueryTypes.RAW,
-        // })
+        // validating the registration of bus if someone try to register the bus with the same number
+        const busNumberValidation = await database.sequelize.query(`SELECT busNumber from buses WHERE busNumber = ${busNumber}`, {
+            type: Sequelize.QueryTypes.RAW,
+        })
 
-        // if (busNumberValidation[0].length > 0) {
-        //     return statusFunc(res, 401, "this bus number is already registered")
-        // }
+        if (busNumberValidation[0].length > 0) {
+            return statusFunc(res, 401, "this bus number is already registered")
+        }
 
         // Create table
         await database.sequelize.query(createTableQuery, {
@@ -116,6 +116,29 @@ exports.registerBus = async (req, res) => {
 }
 
 
+exports.setTravellingDate = async (req, res) => {
+    const {
+        busId,
+        travellingDate,
+        time
+    } = req.body;
+
+    const stringTravellingDate = JSON.stringify(travellingDate);
+
+    const createTable = `CREATE TABLE IF NOT EXISTS bus_travelling_day_record (id int AUTO_INCREMENT PRIMARY KEY, busId INT, month TEXT, days JSON, time TEXT, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
+    await database.sequelize.query(createTable, {
+        type: QueryTypes.RAW,
+    })
+    const insertData = `INSERT INTO bus_travelling_day_record (busId, month, days, time) VALUES (?, ?,?, ?) `;
+    
+    await database.sequelize.query(insertData, {
+        type: QueryTypes.RAW,
+        replacements: [busId, new Date().getMonth() + 1, stringTravellingDate, time]
+    })
+
+    statusFunc(res, 200, "created")
+}
+
 exports.searchBus = async (req, res) => {
     const {
         fromLocation,
@@ -139,7 +162,7 @@ exports.searchBus = async (req, res) => {
 
         // only select those field which contains those 2 locations
         if (el.stopLocation.includes(fromLocation) && el.stopLocation.includes(toLocation) === true) {
-            LocationsContains.push(el)
+            LocationsContains.push(el);
         }
     })
 
@@ -201,6 +224,8 @@ exports.reserveSeat = async (req, res) => {
         // save the book data
         const userBookingRecordSchema = user.id + "-" + user.firstName + "-" + user.lastName + Date.now() + "-travel-record";
         const createUserBookingRecord = `CREATE TABLE IF NOT EXISTS \`${userBookingRecordSchema}\` (id INT AUTO_INCREMENT PRIMARY KEY, userId INT, seatno INT, busId INT, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
+
+        // CREATE TABLE
         await database.sequelize.query(createUserBookingRecord, {
             type: QueryTypes.RAW
         });
