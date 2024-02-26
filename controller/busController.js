@@ -123,6 +123,7 @@ exports.setTravellingDate = async (req, res) => {
         time
     } = req.body;
 
+    // converting the array data into string to insert into DB
     const stringTravellingDate = JSON.stringify(travellingDate);
 
     const createTable = `CREATE TABLE IF NOT EXISTS bus_travelling_day_record (id int AUTO_INCREMENT PRIMARY KEY, busId INT, month TEXT, days JSON, time TEXT, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
@@ -130,7 +131,7 @@ exports.setTravellingDate = async (req, res) => {
         type: QueryTypes.RAW,
     })
     const insertData = `INSERT INTO bus_travelling_day_record (busId, month, days, time) VALUES (?, ?,?, ?) `;
-    
+
     await database.sequelize.query(insertData, {
         type: QueryTypes.RAW,
         replacements: [busId, new Date().getMonth() + 1, stringTravellingDate, time]
@@ -139,6 +140,7 @@ exports.setTravellingDate = async (req, res) => {
     statusFunc(res, 200, "created")
 }
 
+// searching the bus according to the bus location
 exports.searchBus = async (req, res) => {
     const {
         fromLocation,
@@ -169,7 +171,7 @@ exports.searchBus = async (req, res) => {
     statusFuncLength(res, 200, LocationsContains);
 }
 
-
+// reserve the seat according to the bus location
 exports.reserveSeat = async (req, res) => {
     try {
         const user = 1;
