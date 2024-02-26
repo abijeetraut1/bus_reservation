@@ -174,7 +174,6 @@ exports.searchBus = async (req, res) => {
 // reserve the seat according to the bus location
 exports.reserveSeat = async (req, res) => {
     try {
-        const user = 1;
         const {
             slug
         } = req.params;
@@ -184,65 +183,44 @@ exports.reserveSeat = async (req, res) => {
             month,
             day
         } = req.body;
+        const userId = 1;
 
-        const bus = await busModel.findOne({
-            where: {
-                slug
-            }
-        });
+        const tableName = `${year}_${month}_${day}_${slug.replaceAll("-", "_")}`;
 
-        const schemaName = `${year}-${month}-${day}-${bus.slug}`;
-
-        const createTable = `CREATE TABLE IF NOT EXISTS \`${schemaName}\` (id INT AUTO_INCREMENT PRIMARY KEY, userId INT, seatno INT, isTicketChecked BOOL, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
-
-        await database.sequelize.query(createTable, {
-            type: QueryTypes.RAW
-        });
-
-        // check if the seat is already booked or not
-        const checkReservedSeat = await database.sequelize.query(`SELECT * FROM \`${schemaName}\` WHERE seatno = ?`, {
+        // checking if the bus is available
+        const bus = await database.sequelize.query("SELECT * FROM buses WHERE slug = ?", {
             type: QueryTypes.SELECT,
-            replacements: [seatno * 1],
+            replacements: [slug],
+        });
+
+        if (bus.length === 0) {
+            return statusFunc(res, 400, "bus not found");
+        }
+
+        // checking if the reserved seat is available or already reserved
+        const ifSeatAvailable = await database.sequelize.query(`SELECT ${tableName}.seatNo FROM ${tableName} WHERE seatNo = ${seatno}`, {
+            type: QueryTypes.SELECT,
         })
 
-        // blocks the reservation if the seats been already been booked
-        if (checkReservedSeat.length != 0) {
-            return statusFunc(res, 400, "seat is already reserved please check another one");
+        if(ifSeatAvailable.length === 1){
+            return statusFunc(res, 400, "seat is already booked");
         }
 
-        // booking stop when seat are full
-        if (checkReservedSeat.length === bus.noOfSheats) {
-            return statusFunc(res, 400, "All seats are full please choose another bus");
-        }
+        const createTable = `CREATE TABLE IF NOT EXISTS ${tableName} (id INT AUTO_INCREMENT PRIMARY KEY, seatNo INT, userid INT, isTicketChecked TINYINT(0) NOT NULL, createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
 
-        const reserveSeat = await database.sequelize.query(
-            `INSERT INTO \`${schemaName}\` (userId, seatno, isTicketChecked,createdAt) VALUES (?, ?, ?, NOW())`, // Use backticks to escape table name
-            {
-                type: QueryTypes.INSERT,
-                replacements: [user.id, seatno, false]
-            }
-        );
+        // created table
+        await database.sequelize.query(createTable, {
+            type: QueryTypes.RAW,
+        })
 
-        // save the book data
-        const userBookingRecordSchema = user.id + "-" + user.firstName + "-" + user.lastName + Date.now() + "-travel-record";
-        const createUserBookingRecord = `CREATE TABLE IF NOT EXISTS \`${userBookingRecordSchema}\` (id INT AUTO_INCREMENT PRIMARY KEY, userId INT, seatno INT, busId INT, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
+        // inserting the data
+        await database.sequelize.query(`INSERT INTO ${tableName} (seatNo, userId, isTicketChecked) values (?, ?, ?)`, {
+            type: QueryTypes.RAW,
+            replacements: [seatno, userId, 0]
+        })
 
-        // CREATE TABLE
-        await database.sequelize.query(createUserBookingRecord, {
-            type: QueryTypes.RAW
-        });
+        statusFunc(res, 200, `seat no: ${seatno} by userid: ${userId}`)
 
-        const resrveSeatRecord = await database.sequelize.query(
-            `INSERT INTO \`${userBookingRecordSchema}\` (userId, seatno, busId, createdAt) VALUES (?, ?, ?, NOW())`, {
-                type: QueryTypes.INSERT,
-                replacements: [user.id, seatno * 1, bus.id]
-            }
-        );
-
-        statusFunc(res, 200, {
-            seat: reserveSeat,
-            record: resrveSeatRecord
-        });
     } catch (err) {
         return console.error(err);
     }
