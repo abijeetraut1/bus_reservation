@@ -181,11 +181,41 @@ exports.reserveSeat = async (req, res) => {
             seatno,
             year,
             month,
-            day
+            day,
+            passengerCurrentLocation,
+            passengerDestination
         } = req.body;
+
+        // block the reservation on past dates
+        // if(year < new Date().getFullYear() || month < new Date().getMonth() + 1 || day < new Date().getDate()){
+        //     return statusFunc(res, 400, "cannot reserve seat on the past dates");
+        // } 
+
         const userId = 1;
 
         const tableName = `${year}_${month}_${day}_${slug.replaceAll("-", "_")}`;
+
+        const createTable = `CREATE TABLE IF NOT EXISTS ${tableName} (id INT AUTO_INCREMENT PRIMARY KEY, seatNo INT, userid INT, isTicketChecked TINYINT(0) NOT NULL, passengerCurrentLocation TEXT, passengerDestination TEXT, createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
+
+        // created table
+        await database.sequelize.query(createTable, {
+            type: QueryTypes.RAW,
+        })
+
+        const allBuses = await database.sequelize.query(`SELECT * FROM ${tableName}`, {
+            type: QueryTypes.SELECT
+        })
+
+        // finding the seat no to check the bus total seats
+        const busSeat = await database.sequelize.query(`SELECT buses.noOfSeats FROM buses WHERE slug = ?`, {
+            type: QueryTypes.SELECT,
+            replacements: [slug]
+        })
+
+        // checking if all seats are reserved
+        if (allBuses.length === busSeat[0].noOfSeats) {
+            return statusFunc(res, 200, "all seats are reserved");
+        }
 
         // checking if the bus is available
         const bus = await database.sequelize.query("SELECT * FROM buses WHERE slug = ?", {
@@ -202,21 +232,15 @@ exports.reserveSeat = async (req, res) => {
             type: QueryTypes.SELECT,
         })
 
-        if(ifSeatAvailable.length === 1){
+        if (ifSeatAvailable.length === 1) {
             return statusFunc(res, 400, "seat is already booked");
         }
 
-        const createTable = `CREATE TABLE IF NOT EXISTS ${tableName} (id INT AUTO_INCREMENT PRIMARY KEY, seatNo INT, userid INT, isTicketChecked TINYINT(0) NOT NULL, createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
-
-        // created table
-        await database.sequelize.query(createTable, {
-            type: QueryTypes.RAW,
-        })
 
         // inserting the data
-        await database.sequelize.query(`INSERT INTO ${tableName} (seatNo, userId, isTicketChecked) values (?, ?, ?)`, {
+        await database.sequelize.query(`INSERT INTO ${tableName} (seatNo, userId, isTicketChecked, passengerCurrentLocation, passengerDestination) values (?, ?, ?, ?, ?)`, {
             type: QueryTypes.RAW,
-            replacements: [seatno, userId, 0]
+            replacements: [seatno, userId, 0, passengerCurrentLocation, passengerDestination]
         })
 
         statusFunc(res, 200, `seat no: ${seatno} by userid: ${userId}`)
