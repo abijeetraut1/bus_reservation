@@ -195,7 +195,7 @@ exports.reserveSeat = async (req, res) => {
 
         const tableName = `${year}_${month}_${day}_${slug.replaceAll("-", "_")}`;
 
-        const createTable = `CREATE TABLE IF NOT EXISTS ${tableName} (id INT AUTO_INCREMENT PRIMARY KEY, seatNo INT, userid INT, isTicketChecked TINYINT(0) NOT NULL, passengerCurrentLocation TEXT, passengerDestination TEXT, createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
+        const createTable = `CREATE TABLE IF NOT EXISTS ${tableName} (id INT AUTO_INCREMENT PRIMARY KEY, seatNo INT, userid INT, busid INT, isTicketChecked TINYINT(0) NOT NULL, passengerCurrentLocation TEXT, passengerDestination TEXT, createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
 
         // created table
         await database.sequelize.query(createTable, {
@@ -207,7 +207,7 @@ exports.reserveSeat = async (req, res) => {
         })
 
         // finding the seat no to check the bus total seats
-        const busSeat = await database.sequelize.query(`SELECT buses.noOfSeats FROM buses WHERE slug = ?`, {
+        const busSeat = await database.sequelize.query(`SELECT buses.id, buses.noOfSeats FROM buses WHERE slug = ?`, {
             type: QueryTypes.SELECT,
             replacements: [slug]
         })
@@ -218,12 +218,7 @@ exports.reserveSeat = async (req, res) => {
         }
 
         // checking if the bus is available
-        const bus = await database.sequelize.query("SELECT * FROM buses WHERE slug = ?", {
-            type: QueryTypes.SELECT,
-            replacements: [slug],
-        });
-
-        if (bus.length === 0) {
+        if (busSeat.length === 0) {
             return statusFunc(res, 400, "bus not found");
         }
 
@@ -238,9 +233,9 @@ exports.reserveSeat = async (req, res) => {
 
 
         // inserting the data
-        await database.sequelize.query(`INSERT INTO ${tableName} (seatNo, userId, isTicketChecked, passengerCurrentLocation, passengerDestination) values (?, ?, ?, ?, ?)`, {
+        await database.sequelize.query(`INSERT INTO ${tableName} (seatNo, userId, busid, isTicketChecked, passengerCurrentLocation, passengerDestination) values (?, ?, ?, ?, ?, ?)`, {
             type: QueryTypes.RAW,
-            replacements: [seatno, userId, 0, passengerCurrentLocation, passengerDestination]
+            replacements: [seatno, userId, busSeat[0].id, 0, passengerCurrentLocation, passengerDestination]
         })
 
         statusFunc(res, 200, `seat no: ${seatno} by userid: ${userId}`)
@@ -251,18 +246,35 @@ exports.reserveSeat = async (req, res) => {
 }
 
 
+
 // 23-07-14-kankai-1234
 // year-month-day-busName-busNumber
-
+// gives the reserved seats based on that day driver perspective
 exports.allReservedSeat = async (req, res) => {
     try {
         const user = 1;
+        const {
+            year,
+            month,
+            day
+        } = req.body;
+        const {
+            slug
+        } = req.params;
 
-        const recordSchemaName = user.id + "-" + user.firstName + "-" + user.lastName + "-travel-record";
-        const userReservationDetails = await database.sequelize.query(`
-        SELECT * FROM \`${recordSchemaName}\` JOIN buses ON \`${recordSchemaName}\`.busId = buses.id`, {
-            type: QueryTypes.SELECT
-        });
+        const tableName = `${year}_${month}_${day}_${slug.replaceAll("-", "_")}`;
+        
+        // JOINED users table and buses table to extract who booked the ticket
+        // used sql projection to extract the only wanted information
+        const userReservationDetails = await database.sequelize.query(
+            `SELECT users.email, users.phoneNo, users.firstName, users.lastName, ${tableName}.passengerCurrentLocation, ${tableName}.passengerDestination, buses.busNumber, buses.busName, buses.fromLocation, buses.toLocation, buses.stopLocation, buses.price FROM ${tableName} JOIN users ON users.id = ${tableName}.userid  JOIN buses ON buses.id = ${tableName}.busid`, {
+                type: QueryTypes.SELECT,
+            }
+        )
+
+        userReservationDetails.forEach((el, i) => {
+            userReservationDetails[i].stopLocation = JSON.parse(el.stopLocation);
+        })
 
         statusFunc(res, 200, userReservationDetails);
     } catch (err) {

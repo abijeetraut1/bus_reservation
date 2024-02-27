@@ -14,7 +14,7 @@ router.post("/:slug/reserve-seat", authController.isLoggedIn, busController.rese
 router.post("/:slug/rate-bus", authController.isLoggedIn, busController.rateBus);
 
 router.get("/search", busController.searchBus);
-router.get("/getReservedDetails", authController.isLoggedIn, busController.allReservedSeat);
+router.get("/:slug/allReservedSeats", authController.isLoggedIn, busController.allReservedSeat);
 router.get("/showAllTicket", authController.isLoggedIn, busController.showAllTicket);
 // router.get("/showTicket/:date", authController.isLoggedIn, busController.showTicket);
 
