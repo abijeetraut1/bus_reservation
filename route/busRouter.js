@@ -2,7 +2,12 @@ const express = require("express");
 const router = express.Router();
 const busController = require("../controller/busController");
 const authController = require("../controller/authController");
-const {multer, storage} = require("../services/multer");
+const busReviewAndRatings = require("../controller/busReviewAndRatings");
+
+const {
+    multer,
+    storage
+} = require("../services/multer");
 
 const upload = multer({
     storage
@@ -11,7 +16,7 @@ const upload = multer({
 router.post("/register-bus", authController.isLoggedIn, upload.array("busImage"), busController.registerBus);
 router.post("/setdate", busController.setTravellingDate);
 router.post("/:slug/reserve-seat", authController.isLoggedIn, busController.reserveSeat);
-router.post("/:slug/rate-bus", authController.isLoggedIn, busController.rateBus);
+router.post("/:slug/rate-bus", authController.isLoggedIn, busReviewAndRatings.rateBus);
 
 router.get("/search", busController.searchBus);
 router.get("/:slug/allReservedSeats", authController.isLoggedIn, busController.allReservedSeat);
