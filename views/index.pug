@@ -15,7 +15,7 @@
     <ul id="messages"></ul>
     <input id="name" type="text" placeholder="Your Name">
     <input id="message" type="text" placeholder="Location">
-    <button onclick="sendMessage()">Send</button>
+    <button>Send</button>
 
     <div id="map" style="height: 50rem; width: 100%"></div>
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
@@ -24,52 +24,73 @@
     script.
         const socket = io();
 
-        function sendMessage() {
-            const name = document.getElementById('name').value;
-            const message = document.getElementById('message').value;
-            if (name && message) {
-                socket.emit('chat message', { name, message });
-                document.getElementById('message').value = '';
-            } else {
-                alert('Please enter your name and message.');
-            }
-        }
-
-        socket.on('chat message', (data) => {
-            const messages = document.getElementById('messages');
-            const li = document.createElement('li');
-            li.textContent = `${data.name}: ${data.message}`;
-            li.setAttribute("sender-profile", data.name)
-            messages.appendChild(li);
-        });
+        //- map
+        let map = L.map('map').setView([51.505, -0.09], 13);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
 
-        navigator.geolocation.getCurrentPosition(getPositionCoords);
-        function getPositionCoords(position) {
+            //- navigator.geolocation.watchposition(position => {
+            //-     currentLocation = {
+            //-         latitude: position.coords.latitude,
+            //-         longitude: position.coords.longitude
+            //-     };
 
-            //- var map = L.map('map').setView([87.3988096, 26.6534912], 13);
-            var map = L.map('map').fitWorld();
+            //-     console.log(currentLocation)
 
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '© OpenStreetMap'
-            }).addTo(map);
+            //-     //- send message to another device
+            //-     socket.emit('chat message', { currentLocation });
+            //- })
 
-            const {
-                longitude,
-                latitude
-            } = position.coords;
 
-            //- gives the shortest path between how many points you took
+            //- //- recive the message from another device
+            //- socket.on('chat message', (data) => {
+            //-     //- data.currentLocation
+
+            //- });
+            let currentLocation;
+            navigator.geolocation.watchPosition(position => {
+                currentLocation = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                };
+
+                //- console.log(currentLocation);
+                //- L.marker([position.coords.latitude, position.coords.longitude])
+                //-     .addTo(map)
+                //-     .bindPopup('user location')
+                //-     .openPopup();
+
+                socket.emit('chat message', { currentLocation });
+            });
+
+                console.log(currentLocation);
+            
+
+            // Listen for incoming messages from another device
+            let incommingLocation;
+            socket.on('chat message', (data) => {
+                // Access the received current location data
+                const receivedLocation = data.currentLocation;
+                console.log('Received location:', receivedLocation);
+                
+                incommingLocation = {
+                    latitude: receivedLocation.latitude + .5,
+                    longitude: receivedLocation.longitude + .5,
+                }
+                //- L.marker([receivedLocation.latitude + .5, receivedLocation.longitude + .5])
+                //-     .addTo(map)
+                //-     .bindPopup('my location')
+                //-     .openPopup();
+            });
+
             L.Routing.control({
                 waypoints: [
-                    L.latLng(26.811869665166828, 87.28527786902535), // dharan location   
-                    L.latLng(latitude, longitude),
-                    // L.latLng(26.4803, 87.2901) // birathnagar location
+                    L.lnatlng(incommingLocation.latitude, incommingLocation.longitude),
+                    L.lnatlng(currentLocation.latitude, currentLocation.longitude),
                 ]
-                })
-                .addTo(map);
-            }
+            }).addTo(map)
+
+        //- map.fitbounds([currentLocation, incommingLocation])
 
 </body>
 </html>

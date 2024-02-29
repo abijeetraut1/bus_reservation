@@ -310,7 +310,7 @@ const io = socketIo(server);
 exports.currentBusLocations = async (req, res) => {
     // Handle socket connections
     io.on('connection', (socket) => {
-        console.log('A user connected');
+        console.log('Driver is Sending Location');
 
         // Handle incoming messages
         socket.on('chat message', (msg) => {
@@ -325,4 +325,21 @@ exports.currentBusLocations = async (req, res) => {
     });
 
     res.render("index.pug")
+}
+
+exports.getCurrentBusPosition = async (req, res) => {
+    io.on('connection', (socket) => {
+        console.log('users is reciving location');
+
+        // Handle incoming messages
+        socket.on('chat message', (msg) => {
+            console.log('message: ' + msg);
+            io.emit('chat message', msg); // Broadcast message to all connected clients
+        });
+
+        // Handle disconnections
+        socket.on('disconnect', () => {
+            console.log('User disconnected');
+        });
+    });
 }

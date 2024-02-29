@@ -9,7 +9,7 @@ require("dotenv").config();
 
 
 io.on('connection', (socket) => {
-    console.log('A user connected');
+    console.log('user connected');
 
     // Handle incoming messages
     socket.on('chat message', (msg) => {
