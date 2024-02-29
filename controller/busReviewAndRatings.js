@@ -4,7 +4,8 @@ const {
 const database = require("./../model/index");
 const {
     QueryTypes
-} = require("sequelize")
+} = require("sequelize");
+
 
 exports.rateBus = async (req, res) => {
     try {
@@ -19,12 +20,12 @@ exports.rateBus = async (req, res) => {
         // create review and rating table
         await database.sequelize.query(`CREATE TABLE IF NOT EXISTS ${slug+"_ratings"} (id INT AUTO_INCREMENT PRIMARY KEY, userId INT, busId INT, rate INT, review TEXT, aggree INT, disaggree INT, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`);
 
-        const checkAlreadyReviewed =  await database.sequelize.query(`SELECT ${slug+"_ratings"}.userId FROM ${slug+"_ratings"}`, {
+        const checkAlreadyReviewed = await database.sequelize.query(`SELECT ${slug+"_ratings"}.userId FROM ${slug+"_ratings"}`, {
             type: QueryTypes.SELECT,
         });
 
         // prevent user reviewing more then one time
-        if(checkAlreadyReviewed[0].userId === user){
+        if (checkAlreadyReviewed[0].userId === user) {
             return statusFunc(res, 200, "cannot review on single bus more then one");
         }
 

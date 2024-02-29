@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Socket.IO Chat</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css">
+    <link rel="stylesheet" href="./style/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.0/socket.io.js"></script>
+
+</head>
+<body>
+    <h1>Socket.IO Chat</h1>
+    <ul id="messages"></ul>
+    <input id="name" type="text" placeholder="Your Name">
+    <input id="message" type="text" placeholder="Location">
+    <button onclick="sendMessage()">Send</button>
+
+    <div id="map" style="height: 50rem; width: 100%"></div>
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+    script.
+        const socket = io();
+
+        function sendMessage() {
+            const name = document.getElementById('name').value;
+            const message = document.getElementById('message').value;
+            if (name && message) {
+                socket.emit('chat message', { name, message });
+                document.getElementById('message').value = '';
+            } else {
+                alert('Please enter your name and message.');
+            }
+        }
+
+        socket.on('chat message', (data) => {
+            const messages = document.getElementById('messages');
+            const li = document.createElement('li');
+            li.textContent = `${data.name}: ${data.message}`;
+            li.setAttribute("sender-profile", data.name)
+            messages.appendChild(li);
+        });
+
+
+        navigator.geolocation.getCurrentPosition(getPositionCoords);
+        function getPositionCoords(position) {
+
+            //- var map = L.map('map').setView([87.3988096, 26.6534912], 13);
+            var map = L.map('map').fitWorld();
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+
+            const {
+                longitude,
+                latitude
+            } = position.coords;
+
+            //- gives the shortest path between how many points you took
+            L.Routing.control({
+                waypoints: [
+                    L.latLng(26.811869665166828, 87.28527786902535), // dharan location   
+                    L.latLng(latitude, longitude),
+                    // L.latLng(26.4803, 87.2901) // birathnagar location
+                ]
+                })
+                .addTo(map);
+            }
+
+</body>
+</html>

@@ -21,6 +21,11 @@ router.post("/:slug/rate-bus", authController.isLoggedIn, busReviewAndRatings.ra
 router.get("/search", busController.searchBus);
 router.get("/:slug/allReservedSeats", authController.isLoggedIn, busController.allReservedSeat);
 router.get("/showAllTicket", authController.isLoggedIn, busController.showAllTicket);
+
 // router.get("/showTicket/:date", authController.isLoggedIn, busController.showTicket);
+
+// user page controlls route
+router.get("/:slug/accessCurrentBusLocation", busController.currentBusLocations);
+router.get("/:slug/hostCurrentBusLocation", busController.currentBusLocations);
 
 module.exports = router;

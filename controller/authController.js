@@ -53,7 +53,7 @@ exports.signup = async (req, res) => {
     })
 
     if (checkUser) {
-        statusFunc(res, 400, "user already exist")
+        statusFunc(res, 400, "user already exist");
     }
 
     const code = Math.floor(Math.random() * (process.env.MAX_GENERATION - process.env.MIN_GENERATION + 1) + process.env.MIN_GENERATION);

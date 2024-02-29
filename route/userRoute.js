@@ -20,4 +20,7 @@ router.post("/password-forget-code", authController.isLoggedIn, authController.g
 router.patch("/update-password", authController.isLoggedIn, authController.updatePassword);
 router.post("/useraccount/verify", authController.isLoggedIn, authController.numberVerification);
 
+
+
+
 module.exports = router;

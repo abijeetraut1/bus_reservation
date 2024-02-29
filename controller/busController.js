@@ -263,7 +263,7 @@ exports.allReservedSeat = async (req, res) => {
         } = req.params;
 
         const tableName = `${year}_${month}_${day}_${slug.replaceAll("-", "_")}`;
-        
+
         // JOINED users table and buses table to extract who booked the ticket
         // used sql projection to extract the only wanted information
         const userReservationDetails = await database.sequelize.query(
@@ -282,17 +282,6 @@ exports.allReservedSeat = async (req, res) => {
     }
 }
 
-exports.reservedSeat = async (req, res) => {
-    try {
-
-        const user = 1;
-        // const ticketName = 
-    } catch (err) {
-        return statusFunc(res, 400, err);
-    }
-}
-
-
 // generate qrCode based on the ticket
 exports.showAllTicket = async (req, res) => {
     try {
@@ -310,4 +299,30 @@ exports.showAllTicket = async (req, res) => {
     } catch (err) {
         return statusFunc(res, 400, err);
     }
+}
+
+const socketIo = require('socket.io');
+const app = require("express")();
+const http = require("http");
+const server = http.createServer(app);
+const io = socketIo(server);
+
+exports.currentBusLocations = async (req, res) => {
+    // Handle socket connections
+    io.on('connection', (socket) => {
+        console.log('A user connected');
+
+        // Handle incoming messages
+        socket.on('chat message', (msg) => {
+            console.log('message: ' + msg);
+            io.emit('chat message', msg); // Broadcast message to all connected clients
+        });
+
+        // Handle disconnections
+        socket.on('disconnect', () => {
+            console.log('User disconnected');
+        });
+    });
+
+    res.render("index.pug")
 }
