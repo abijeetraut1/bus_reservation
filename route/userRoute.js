@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const authController = require("../controller/authController");
+const userController = require("../controller/userController");
 
 const {multer, storage} = require("../services/multer");
 
@@ -19,7 +20,6 @@ router.post("/password-forget-code", authController.isLoggedIn, authController.g
 
 router.patch("/update-password", authController.isLoggedIn, authController.updatePassword);
 router.post("/useraccount/verify", authController.isLoggedIn, authController.numberVerification);
-
 
 
 

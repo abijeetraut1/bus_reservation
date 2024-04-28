@@ -1,6 +1,7 @@
 const {
     statusFunc,
-    statusFuncLength
+    statusFuncLength,
+    statusFuncWithRender
 } = require("../utils/statusFunc");
 const database = require("./../model/index");
 const busModel = database.bus;
@@ -142,10 +143,12 @@ exports.setTravellingDate = async (req, res) => {
 
 // searching the bus according to the bus location
 exports.searchBus = async (req, res) => {
+
     const {
         fromLocation,
-        toLocation
-    } = req.body;
+        toLocation,
+        date
+    } = req.params;
 
     if (!fromLocation || !toLocation) {
         return statusFunc(res, 200, "please enter appropriate location");
@@ -167,6 +170,8 @@ exports.searchBus = async (req, res) => {
             LocationsContains.push(el);
         }
     })
+
+    console.log(LocationsContains)
 
     statusFuncLength(res, 200, LocationsContains);
 }

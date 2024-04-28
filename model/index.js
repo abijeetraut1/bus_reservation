@@ -1,5 +1,4 @@
 const DBconfig = require("../config/config");
-const bcrypt = require("bcrypt")
 
 const {
     Sequelize,
@@ -21,10 +20,10 @@ const sequelize = new Sequelize(DBconfig.db, DBconfig.USER, DBconfig.PASS, {
 })
 
 
-sequelize.authenticate().then( () => {
+sequelize.authenticate().then(() => {
     console.log("conected to database");
 }).catch(err => {
-    console.log("err"+ err);
+    console.log("err" + err);
 })
 
 const db = {};
@@ -37,6 +36,7 @@ db.users = require("./model/userModel")(sequelize, DataTypes);
 // relation
 // db.users.hasMany(db.bus);
 // db.bus.belongsTo(db.users);
+
 
 
 db.sequelize.sync({

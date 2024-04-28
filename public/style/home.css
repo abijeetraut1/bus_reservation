@@ -1,0 +1,80 @@
+input, button{
+    outline: none;
+    border: 1px solid #ccc;
+}
+
+.sologon-and-input-tag{
+    display: flex;
+    height: 80vh;
+    gap: 10rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.poppins-medium {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.poppins-semibold {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.poppins-bold {
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.poppins-extrabold {
+    font-family: "Poppins", sans-serif;
+    font-weight: 800;
+    font-style: normal;
+}
+
+.poppins-black {
+    font-family: "Poppins", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+/* pseudo code for home page */
+.hero-container::before {
+    content: "";
+    background: url("../images/home_page_cover.jpg") no-repeat center center / cover;
+    height: 80vh;
+    width: 100vw;
+    position: absolute;
+    z-index: -1;
+    filter: brightness(.4);
+}
+
+
+/* pseudo code for search page */
+.search_page::before {
+    content: "";
+    background: url("../images/search_Image.jpg") no-repeat center center / cover;
+    height: 10vh;
+    width: 100vw;
+    position: absolute;
+    z-index: -1;
+    filter: brightness(.4);
+}
+

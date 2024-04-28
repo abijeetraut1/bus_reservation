@@ -18,7 +18,7 @@ router.post("/setdate", busController.setTravellingDate);
 router.post("/:slug/reserve-seat", authController.isLoggedIn, busController.reserveSeat);
 router.post("/:slug/rate-bus", authController.isLoggedIn, busReviewAndRatings.rateBus);
 
-router.get("/search", busController.searchBus);
+// router.get("/search/:fromLocation/:toLocation/:date", busController.searchBus);
 router.get("/:slug/allReservedSeats", authController.isLoggedIn, busController.allReservedSeat);
 router.get("/showAllTicket", authController.isLoggedIn, busController.showAllTicket);
 

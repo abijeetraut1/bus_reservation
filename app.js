@@ -4,15 +4,17 @@ const cookieParser = require("cookie-parser");
 const path = require("path")
 
 // setting up the view engine
-app.set('views engine', 'pug');
+app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(path.join(__dirname, "./public"), { "Content-Type": "text/javascript" }));
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 
 // ROUTER
 const userRouter = require("./route/userRoute");
 const busRouter = require("./route/busRouter");
 const driverRouter = require("./route/driverRouter");
+const viewRouter = require("./route/viewRouter");
 
 // JSON DATA CARRIER
 app.use(express.json({
@@ -22,6 +24,8 @@ app.use(cookieParser());
 
 
 // router setup
+
+app.use("/", viewRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/bus", busRouter)
 app.use("/api/v1/driverProspective", driverRouter);

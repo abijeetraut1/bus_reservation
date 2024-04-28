@@ -1,0 +1,33 @@
+extends ../headers/base
+
+block content
+    <section class="hero-container">
+        <div class="container">
+            <div class="row">
+                <div class="sologon-and-input-tag" >
+                    <div class="d-block">
+                        <h1 class="poppins-black text-white">Seamless Travel</h1>
+                        <h1 class="poppins-semibold text-white"> Reserve Your Seat, Enjoy the Ride! </h1>
+                    </div>
+                    <div class="d-flex grid gap-2 bg-white py-2 px-4 rounded">
+                        <div>
+                            <input id="from-location" class="rounded px-3 py-1" type="text" name="" value="laxmimarga" placeholder="Location">
+                        </div>
+                        <div>
+                            <input id="to-location" class="rounded px-3 py-1" type="text" name="" value="khorsane" placeholder="Destionation">
+                        </div>
+                        <div>
+                            <input id="travel-date" class="rounded px-3 py-1" type="date" name="" value="2024-04-10" placeholder="">
+                        </div>
+                        <div>
+                            <button id="search-button" style="background-color: #309aa8;" class="text-white rounded py-1 px-4">Submit</button>
+                            //- <a href="/search">
+                            //- </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    script(src="./js/home.js") 

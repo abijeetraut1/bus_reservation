@@ -1,0 +1,437 @@
+extends ../headers/base
+
+block content
+    style.
+        .bus-seat {
+            rotate: 90deg;
+        }
+
+    <div class="container my-5">
+        <div class="row">
+            <div class="d-flex justify-content-center ">
+                <div class="d-flex grid gap-2 p-2 rounded bg-white">
+                    <div>
+                        <input class="rounded px-3 py-1" type="text" name="" id="" placeholder="Location">
+                    </div>
+                    <div>
+                        <input class="rounded px-3 py-1" type="text" name="" id="" placeholder="Destionation">
+                    </div>
+                    <div>
+                        <input class="rounded px-3 py-1" type="date" name="" id="" placeholder="">
+                    </div>
+                    <div>
+                        <button style="background-color: #309aa8;" class="text-white rounded py-1 px-4">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section id="desktop-ticket-booking" class="container my-2">
+        <div class="row">
+            <div class=" col-2 d-flex flex-column grid gap-2 ">
+                <div class="border p-3">
+                    <div class="h6">Facility</div>
+                    <div>
+                        <div class="d-flex grid gap-3 align-items-center">
+                            <input type="radio" name="" id="ac" />
+                            <label for="ac" style="font-size: small;">AC</label>
+                        </div>
+
+                        <div class="d-flex grid gap-3 align-items-center">
+                            <input type="radio" name="" id="water" />
+                            <label for="water" style="font-size: small;">Water</label>
+                        </div>
+
+                        <div class="d-flex grid gap-3 align-items-center">
+                            <input type="radio" name="" id="washroom" />
+                            <label for="washroom" style="font-size: small;">Washroom</label>
+                        </div>
+
+                        <div class="d-flex grid gap-3 align-items-center">
+                            <input type="radio" name="" id="charging" />
+                            <label for="charging" style="font-size: small;">Charging Point</label>
+                        </div>
+
+                        <div class="d-flex grid gap-3 align-items-center">
+                            <input type="radio" name="" id="mobile" />
+                            <label for="mobile" style="font-size: small;">Mobile Ticket</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border p-3">
+                    <div class="h6">Vehicle</div>
+                    <div>
+                        <div class="d-flex grid gap-3 align-items-center">
+                            <input type="radio" name="vehicle" id="bus" value="bus">
+                            <label for="bus" style="font-size: small;">Bus</label>
+                        </div>
+
+                        <div class="d-flex grid gap-3 align-items-center">
+                            <input type="radio" name="vehicle" id="hiace" value="hiace">
+                            <label for="hiace" style="font-size: small;">Hiace</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-10 grid gap-3">
+                <div>
+                    <div class="container border p-2">
+                        <div class="row">
+                            <div class="col-md-5">Service Provider</div>
+                            <div class="col-md-1">Rating</div>
+                            <div class="col-md-1">Departure</div>
+                            <div class="col-md-1">Duration</div>
+                            <div class="col-md-1">Arrrival</div>
+                            <div class="col-md-1">Seats</div>
+                            <div class="col-md-1">Booked</div>
+                            <div class="col-md-1">Fare</div>
+                        </div>
+                    </div>
+
+                    <div class="container p-0">
+                        each bus in buses
+                            <div class="border my-2 p-3 ">
+                                <div class="row">
+                                    <div class="col-5">
+                                        div.h5= bus.busName
+                                        <div class="h6"><a class="text-secondary text-decoration-none"
+                                            | href="/ram-travels-company">Ram Travels Company</a> </div>
+                                        <div class="h6">
+                                            | Type: <span class="text-secondary h6">Bus</span>
+                                        </div>
+                                        <div class="h6">
+                                            | Number: 
+                                            span.text-secondary.h6= bus.busNumber
+                                        </div> 
+                                        <div class="h6 d-flex grid gap-1">
+                                            span.h6 Route:
+                                            span.text-secondary.h6= bus.stopLocation[0] 
+                                            <span class="text-secondary h6"> - </span>
+                                            span.text-secondary.h6= bus.stopLocation[(bus.stopLocation.length) - 1]
+
+                                        </div>
+                                        <div class="h6 d-flex grid gap-1 flex-wrap">
+                                            div.h6 Point:
+                                            each location in bus.stopLocation
+                                                span.text-secondary.h6= location
+                                        </div>
+                                    </div>
+
+                                    <div class="col-1">
+                                        <div>
+                                            span 5
+                                        </div>
+                                    </div>
+                                    <div class="col-1">12: 00</div>
+                                    <div class="col-1">7 HRS</div>
+                                    <div class="col-1">19: 00</div>
+                                    div.col-1= bus.noOfSeats
+                                    div.col-1= bus.bookedSeats
+                                    div.col-1= bus.price
+                                </div>
+
+                                <div>
+                                    <hr>
+                                </div>
+
+                                <div class="row ">
+                                    <div class="col-10 d-flex align-items-center">
+                                        <div class="col-2 d-inline-flex gap-1">
+                                            a(class="text-decoration-none text-black h6" data-bs-toggle="collapse" href=`#reviews-slider-${bus.slug}` role="button" aria-expanded="false" aria-controls=`reviews-slider-${bus.slug}`) Reviews
+                                            </a>
+                                        </div>
+
+                                        <div class="col-2 d-inline-flex gap-1 ">
+                                            a(class="text-decoration-none text-black h6" data-bs-toggle="collapse" href=`#seat-slider-${bus.slug}` role="button" aria-expanded="false" aria-controls=`seat-slider-${bus.slug}`)
+                                                | Seat
+                                            </a>
+                                        </div>
+
+                                        <div class="col-2 d-inline-flex gap-1 ">
+                                            a(class="text-decoration-none text-black h6" data-bs-toggle="collapse" href=`#facility-slider-${bus.slug}` role="button" aria-expanded="false" aria-controls=`facility-${bus.slug}`)
+                                                | Facility
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                div.collapse.my-2(id=`reviews-slider-${bus.slug}`)
+                                    <div class="d-flex flex-column grid gap-1 px-3">
+                                        <div class="border py-3 row rounded">
+                                            <div class="col-11">
+                                                <div class="h6">Hari Ram</div>
+                                                <div class="h6 text-secondary">Gareman Travels</div>
+                                                <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Numquam
+                                                    | corrupti recusandae quae possimus facere natus ea tempora. Totam,
+                                                    | voluptas asperiores.</div>
+                                            </div>
+                                            <div class="col-1">
+                                                <div class="h6">5 ⭐</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="border py-3 row rounded">
+                                            <div class="col-11">
+                                                <div class="h6">Hari Ram</div>
+                                                <div class="h6 text-secondary">Gareman Travels</div>
+                                                <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Numquam
+                                                    corrupti recusandae quae possimus facere natus ea tempora. Totam,
+                                                    voluptas asperiores.</div>
+                                            </div>
+                                            <div class="col-1">
+                                                <div class="h6">5 ⭐</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                div.collapse.my-2(id=`seat-slider-${bus.slug}`)
+                                    <div class="container d-flex justify-content-between grid gap-4">
+                                        <div class="col-6 border py-3 row rounded">
+                                            <div class="d-flex justify-content-around">
+
+                                                <div class="d-flex">
+                                                    <div class="driver-line">
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <div class="mb-4 ms-3 ">
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="mb-4 ms-3">
+                                                        <div style="visibility: hidden;">
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <div class="mb-4 ms-3">
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="mb-4 ms-3">
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <div class="mb-4 ms-3">
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="mb-4 ms-3">
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <div class="mb-4 ms-3">
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="mb-4 ms-3">
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <div class="mb-4 ms-3">
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="mb-4 ms-3">
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div>
+                                                    <div class="mb-4 ms-3">
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                        <div>
+                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
+                                                            |  alt="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 border py-3 row rounded">
+                                            <div class="h6">Boarding & Dropping</div>
+                                            <div class="d-flex flex-row grid gap-3">
+                                                <div class="d-flex flex-column grid gap-3">
+                                                    <div> <input type="radio" name="" id="" checked readonly></div>
+                                                    <div> <input type="radio" name="" id="" unchecked readonly></div>
+                                                </div>
+                                                <div class="d-flex flex-column grid gap-3">
+                                                    <div class="h6 d-flex justify-content-between">
+                                                        <div>Laxmimarga</div>
+                                                        <div>12:00</div>
+                                                    </div>
+
+                                                    <div class="h6 d-flex justify-content-between">
+                                                        <div>Kathmandu</div>
+                                                        <div>24:00</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="col-12">
+                                                <button type="button" class="btn btn-primary">Reserve Seat</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                div.collapse.my-2(id=`facility-slider-${bus.slug}`)
+                                    <div class="d-flex flex-column grid gap-1 ">
+
+                                        <div class="border d-flex grid gap-4 py-3 px-3 align-items-center">
+                                            <div>
+                                                <img src="./images/icons/facility/blanket.svg" alt="">
+                                            </div>
+                                            <div>
+                                                <img src="./images/icons/facility/bus_tracking.svg" alt="">
+                                            </div>
+                                            <div>
+                                                <img src="./images/icons/facility/cctv.svg" alt="">
+                                            </div>
+                                            <div>
+                                                <img src="./images/icons/facility/chargin_point.svg" alt="">
+                                            </div>
+                                            <div>
+                                                <img src="./images/icons/facility/food-svgrepo-com.svg" alt="">
+                                            </div>
+                                            <div>
+                                                <img src="./images/icons/facility/movie.svg" alt="">
+                                            </div>
+                                            <div>
+                                                <img src="./images/icons/facility/no-smoking.svg" alt="">
+                                            </div>
+                                            <div>
+                                                <img src="./images/icons/facility/sos.svg" alt="">
+                                            </div>
+                                            <div>
+                                                <img src="./images/icons/facility/washroom.svg" alt="">
+                                            </div>
+                                            <div>
+                                                <img src="./images/icons/facility/water_bottle.svg" alt="">
+                                            </div>
+                                            <div>
+                                                <img src="./images/icons/facility/wifi.svg" alt="">
+                                            </div>
+                                            <div>
+                                                <img src="./images/icons/facility/ac.svg" alt="">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
