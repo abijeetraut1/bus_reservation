@@ -2,7 +2,7 @@ extends ../headers/base
 
 block content
     style.
-        .bus-seat {
+        svg {
             rotate: 90deg;
         }
 
@@ -191,199 +191,269 @@ block content
 
                                 div.collapse.my-2(id=`seat-slider-${bus.slug}`)
                                     <div class="container d-flex justify-content-between grid gap-4">
-                                        <div class="col-6 border py-3 row rounded">
+                                        <div class="col-3 border py-2 row rounded">
                                             <div class="d-flex justify-content-around">
+                                                <div class="container px-3">
+                                                    <div class="row">
+                                                        <div class="">
+                                                            //- driver and conduction seat
+                                                            <div class="my-2">
+                                                                <div class="d-flex justify-content-end rounded">
+                                                                    <div>
+                                                                        <div class="border p-2 rounded" style="background: red; color: white;" title="driver">DR</div>
+                                                                    </div>
+                                                                </div>
 
-                                                <div class="d-flex">
-                                                    <div class="driver-line">
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
+                                                                <div class="d-flex rounded">
+                                                                    <div>
+                                                                        <div class="border p-2 rounded" style="background: red; color: white;" title="conductor">CR</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            //- passenger seat
+                                                            <div class="my-2 d-flex justify-content-between ">
+                                                                <div class="d-flex grid gap-1">
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">A1</div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">A2</div>
+                                                                    </div>
+                                                                </div>
+
+                                                                
+                                                                <div class="d-flex rounded grid gap-1">
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">B1</div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">B2</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="my-2 d-flex justify-content-between ">
+                                                                <div class="d-flex grid gap-1">
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">A1</div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">A2</div>
+                                                                    </div>
+                                                                </div>
+
+                                                                
+                                                                <div class="d-flex rounded grid gap-1">
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">B1</div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">B2</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="my-2 d-flex justify-content-between ">
+                                                                <div class="d-flex grid gap-1">
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">A1</div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">A2</div>
+                                                                    </div>
+                                                                </div>
+
+                                                                
+                                                                <div class="d-flex rounded grid gap-1">
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">B1</div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">B2</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="my-2 d-flex justify-content-between ">
+                                                                <div class="d-flex grid gap-1">
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">A1</div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">A2</div>
+                                                                    </div>
+                                                                </div>
+
+                                                                
+                                                                <div class="d-flex rounded grid gap-1">
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">B1</div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">B2</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="my-2 d-flex justify-content-between ">
+                                                                <div class="d-flex grid gap-1">
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">A1</div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">A2</div>
+                                                                    </div>
+                                                                </div>
+
+                                                                
+                                                                <div class="d-flex rounded grid gap-1">
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">B1</div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">B2</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="my-2 d-flex justify-content-between ">
+                                                                <div class="d-flex grid gap-1">
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">A1</div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">A2</div>
+                                                                    </div>
+                                                                </div>
+
+                                                                
+                                                                <div class="d-flex rounded grid gap-1">
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">B1</div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">B2</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            //- last seat 
+                                                            <div class="my-2 d-flex justify-content-between ">
+                                                                <div class="d-flex grid gap-1">
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">A1</div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">A2</div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="d-flex grid gap-1">
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">A3</div>
+                                                                    </div>
+                                                                </div>
+
+                                                                
+                                                                <div class="d-flex rounded grid gap-1">
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">B1</div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div class="border p-2 rounded">B2</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        
+
                                                     </div>
                                                 </div>
-
-                                                <div>
-                                                    <div class="mb-4 ms-3 ">
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div class="mb-4 ms-3">
-                                                        <div style="visibility: hidden;">
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div>
-                                                    <div class="mb-4 ms-3">
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div class="mb-4 ms-3">
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div>
-                                                    <div class="mb-4 ms-3">
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div class="mb-4 ms-3">
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div>
-                                                    <div class="mb-4 ms-3">
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div class="mb-4 ms-3">
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div>
-                                                    <div class="mb-4 ms-3">
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div class="mb-4 ms-3">
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                                <div>
-                                                    <div class="mb-4 ms-3">
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                        <div>
-                                                            <img class="bus-seat" src="./images/icons/facility/seat.svg"
-                                                            |  alt="">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
+                                                
                                             </div>
                                         </div>
 
-                                        <div class="col-6 border py-3 row rounded">
+                                        //- booking page
+                                        <div class="col-9 border py-3 row rounded">
                                             <div class="h6">Boarding & Dropping</div>
-                                            <div class="d-flex flex-row grid gap-3">
-                                                <div class="d-flex flex-column grid gap-3">
+
+                                            <div>  
+                                                <hr/>
+                                            </div>   
+
+                                            <div class="d-flex flex-row grid gap-4">
+                                                <div class="d-flex flex-column grid gap-4">
                                                     <div> <input type="radio" name="" id="" checked readonly></div>
                                                     <div> <input type="radio" name="" id="" unchecked readonly></div>
                                                 </div>
-                                                <div class="d-flex flex-column grid gap-3">
-                                                    <div class="h6 d-flex justify-content-between">
-                                                        <div>Laxmimarga</div>
-                                                        <div>12:00</div>
-                                                    </div>
-
-                                                    <div class="h6 d-flex justify-content-between">
-                                                        <div>Kathmandu</div>
-                                                        <div>24:00</div>
-                                                    </div>
+                                                <div class="col-11">
+                                                    <div class="d-flex flex-column grid gap-4">  
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            div= bus.stopLocation[0]
+                                                            <div>12:00</div>
+                                                        </div>
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            div= bus.stopLocation[(bus.stopLocation.length) - 1]
+                                                            <div>12:00</div>
+                                                        </div>                                                    
+                                                    </div>                                                 
                                                 </div>
                                             </div>
-
-
-
+                                            
                                             <div class="col-12">
-                                                <button type="button" class="btn btn-primary">Reserve Seat</button>
+                                                //- line
+                                                <div>  
+                                                    <hr/>
+                                                </div>
+
+                                                <div class="d-flex flex-column">  
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div class="h6">Seat</div>
+                                                        <div>B2</div>
+                                                    </div>                                                        
+                                                </div> 
+
+                                                //- line
+                                                <div>  
+                                                    <hr/>
+                                                </div>
+                                                
+                                                <div class="d-flex flex-column">  
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div class="h6">Price</div>
+                                                        <div>1200</div>
+                                                    </div>                                                        
+                                                </div>    
+
+                                                <div>  
+                                                    <hr/>
+                                                </div>
+                                                
+                                                <div class="d-flex flex-column">  
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div class="h6">Quantity</div>
+                                                        <div>1</div>
+                                                    </div>                                                        
+                                                </div>   
+
+                                                <div>  
+                                                    <hr/>
+                                                </div>
+                                                
+                                                <div class="d-flex flex-column">  
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div class="h6">Net Price</div>
+                                                        <div>1200</div>
+                                                    </div>                                                        
+                                                </div>                                                                                                                                                        
+                                            </div>
+
+                                            <div class="col-12 ">
+                                                div.d-flex.justify-content-end 
+                                                    <button type="button" class="btn btn-primary py-2 px-4">Reserve Seat</button>
                                             </div>
                                         </div>
+
                                     </div>
 
                                 div.collapse.my-2(id=`facility-slider-${bus.slug}`)
