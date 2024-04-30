@@ -1,0 +1,104 @@
+extends adminbase
+
+
+block contentDash
+    style.
+        label{
+            margin:0 .2rem;
+        }
+
+        //- 430
+        table{
+            width: 25%;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(150, 212, 212, 0.4);
+        }
+
+        .input-change-cloth-price {
+            outline: none;
+            border-top: transparent;
+            border-left: transparent;
+            border-right: transparent;
+            border-bottom: 1px solid black; /* Changed to black border */
+        }
+
+        @media (min-width: 430px){
+            table{
+                width: 100%;
+            }   
+        }
+
+    .content
+        .container-fluid.pt-4.px-4
+            .container-fluid.pt-4.px-4.admin-container
+                table
+                    thead
+                        tr 
+                            th S.N
+                            th Material
+                            th Price
+                            th delete
+
+                    tbody
+                        each fabric, i in fabrics
+                            tr(style="margin:1rem 0;")
+                                td= i+1 + "."
+                                td(class=`${i+1}-data-edit`)= fabric.fabric
+                                td(class=`${i+1}-data-edit`)= fabric.price
+                                td
+                                    i.fa-solid.fa-trash(fabric-id=`${fabric.id}` style="color:red; cursor: pointer;"  id="delete-fabric")
+
+                //- input.input-change-cloth-price(type="text" name="")
+
+                <div class="container-fluid pt-4" style="padding-left: 0;">
+                    <button id="add-tshirt" style="background:blue; color: white; padding: .5rem; border: none;"> Add Fabric </button>
+                    <div id="add-tshirt-form" class="d-none my-2" style="width:fit-content;">
+                        <div>
+                            <label class="my-2">
+                                <span> Name: </span>
+                                <br/>
+                                <input type="text" id="fabric" name="name" required><br>
+                            </label>
+                            <br>
+                            <label class="my-2">
+                                <span> price: </span>
+                                <br/>
+                                    <input type="number" id="price" name="price" required><br>
+                            </label>
+                            <br>
+                            <label class="my-2"> 
+                                <button id="add-fabric" type="submit" class="send-of-order" style="background-color: #ff3f6c; color: white; border: none; padding: 10px 20px; cursor: pointer;">Add</button>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+    script(src="../js/jquery-latest.js")
+    script(src="../js/admin_datasend_to_backend.js")
+    script.
+        //- add tshirt into form
+        const form = $('#add-tshirt-form')[0];
+        $('#add-tshirt')[0].addEventListener("click", () => {
+            if (form.classList.contains("d-block")) {
+                $('#add-tshirt')[0].style.backgroundColor = "blue";
+                $('#add-tshirt')[0].innerText = "Add Fabric";
+                $('#add-tshirt-form')[0].classList.add("d-none");
+                $('#add-tshirt-form')[0].classList.remove("d-block");
+            } else {
+                $('#add-tshirt')[0].style.backgroundColor = "red";
+                $('#add-tshirt')[0].innerText = "close";
+                $('#add-tshirt-form')[0].classList.add("d-block");
+                $('#add-tshirt-form')[0].classList.remove("d-none");
+            }
+        });
+
+        //- const editButtons = document.querySelectorAll("#edit-button");
+        //- editButtons.forEach(el => {
+        //-     el.addEventListener("click", () => {
+        //-         console.log(el.getAttribute("data-class"))
+        //-         const clickedEdit =  document.querySelector(`.${el.getAttribute("data-class")}`);
+        //-         console.log(clickedEdit);
+        //-     })
+        //- })

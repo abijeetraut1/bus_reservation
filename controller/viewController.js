@@ -77,7 +77,4 @@ exports.search = async (req, res) => {
             // Handle error if any of the promises fail
             console.error("Error:", err);
         });
-
-
-
 }
