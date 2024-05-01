@@ -24,3 +24,10 @@ exports.bookedSeat = async(req, res) => {
         seatB
     })
 }
+
+
+exports.income = async(req, res) => {
+    res.render("./admin_pannel/income.pug", {
+        title: "Income"
+    })
+}

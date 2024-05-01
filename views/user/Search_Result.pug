@@ -92,323 +92,326 @@ block content
                     </div>
 
                     <div class="container p-0">
-                        each bus in buses
-                            <div class="border my-2 p-3 ">
-                                <div class="row">
-                                    <div class="col-5">
-                                        div.h5= bus.busName
-                                        <div class="h6"><a class="text-secondary text-decoration-none"
-                                            | href="/ram-travels-company">Ram Travels Company</a> </div>
-                                        <div class="h6">
-                                            | Type: <span class="text-secondary h6">Bus</span>
-                                        </div>
-                                        <div class="h6">
-                                            | Number: 
-                                            span.text-secondary.h6= bus.busNumber
-                                        </div> 
-                                        <div class="h6 d-flex grid gap-1">
-                                            span.h6 Route:
-                                            span.text-secondary.h6= bus.stopLocation[0] 
-                                            <span class="text-secondary h6"> - </span>
-                                            span.text-secondary.h6= bus.stopLocation[(bus.stopLocation.length) - 1]
+                        if(buses)
+                            each bus in buses
+                                <div class="border my-2 p-3 ">
+                                    <div class="row">
+                                        <div class="col-5">
+                                            div.h5= bus.busName
+                                            <div class="h6"><a class="text-secondary text-decoration-none"
+                                                | href="/ram-travels-company">Ram Travels Company</a> </div>
+                                            <div class="h6">
+                                                | Type: <span class="text-secondary h6">Bus</span>
+                                            </div>
+                                            <div class="h6">
+                                                | Number: 
+                                                span.text-secondary.h6= bus.busNumber
+                                            </div> 
+                                            <div class="h6 d-flex grid gap-1">
+                                                span.h6 Route:
+                                                span.text-secondary.h6= bus.stopLocation[0] 
+                                                <span class="text-secondary h6"> - </span>
+                                                span.text-secondary.h6= bus.stopLocation[(bus.stopLocation.length) - 1]
 
+                                            </div>
+                                            <div class="h6 d-flex grid gap-1 flex-wrap">
+                                                div.h6 Point:
+                                                each location in bus.stopLocation
+                                                    span.text-secondary.h6= location
+                                            </div>
                                         </div>
-                                        <div class="h6 d-flex grid gap-1 flex-wrap">
-                                            div.h6 Point:
-                                            each location in bus.stopLocation
-                                                span.text-secondary.h6= location
-                                        </div>
-                                    </div>
 
-                                    <div class="col-1">
-                                        <div class="d-flex grid gap-1">
-                                            span= 5
-                                            span(style="font-size: small;")= "[" + 1 + "]"
+                                        <div class="col-1">
+                                            <div class="d-flex grid gap-1">
+                                                span= 5
+                                                span(style="font-size: small;")= "[" + 1 + "]"
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-1">12: 00</div>
-                                    <div class="col-1">
+                                        <div class="col-1">12: 00</div>
+                                        <div class="col-1">
+                                            div(class="col-1 d-flex align-items-start grid gap-1")
+                                                span= 7
+                                                span(style="font-size: small;") Hrs                                        
+                                        </div>
+                                        <div class="col-1">19: 00</div>
                                         div(class="col-1 d-flex align-items-start grid gap-1")
-                                            span= 7
-                                            span(style="font-size: small;") Hrs                                        
+                                            span= bus.bookedSeats
+                                            span(style="font-size: small;")= "[" + bus.noOfSeats + "]"
+                                        div(class="col-1 d-flex align-items-start grid gap-1")
+                                            span#base-price= bus.price
+                                            span(style="font-size: small;") NPR                                       
+
                                     </div>
-                                    <div class="col-1">19: 00</div>
-                                    div(class="col-1 d-flex align-items-start grid gap-1")
-                                        span= bus.bookedSeats
-                                        span(style="font-size: small;")= "[" + bus.noOfSeats + "]"
-                                    div(class="col-1 d-flex align-items-start grid gap-1")
-                                        span#base-price= bus.price
-                                        span(style="font-size: small;") NPR                                       
 
-                                </div>
-
-                                <div>
-                                    <hr>
-                                </div>
-
-                                <div class="row ">
-                                    <div class="col-10 d-flex align-items-center">
-                                        <div class="col-2 d-inline-flex gap-1">
-                                            a(class="text-decoration-none text-black h6" data-bs-toggle="collapse" href=`#reviews-slider-${bus.slug}` role="button" aria-expanded="false" aria-controls=`reviews-slider-${bus.slug}`) Reviews
-                                            </a>
-                                        </div>
-
-                                        <div class="col-2 d-inline-flex gap-1 ">
-                                            a(class="text-decoration-none text-black h6" data-bs-toggle="collapse" href=`#seat-slider-${bus.slug}` role="button" aria-expanded="false" aria-controls=`seat-slider-${bus.slug}`)
-                                                | Seat
-                                            </a>
-                                        </div>
-
-                                        <div class="col-2 d-inline-flex gap-1 ">
-                                            a(class="text-decoration-none text-black h6" data-bs-toggle="collapse" href=`#facility-slider-${bus.slug}` role="button" aria-expanded="false" aria-controls=`facility-${bus.slug}`)
-                                                | Facility
-                                            </a>
-                                        </div>
- 
+                                    <div>
+                                        <hr>
                                     </div>
-                                </div>
 
+                                    <div class="row ">
+                                        <div class="col-10 d-flex align-items-center">
+                                            <div class="col-2 d-inline-flex gap-1">
+                                                a(class="text-decoration-none text-black h6" data-bs-toggle="collapse" href=`#reviews-slider-${bus.slug}` role="button" aria-expanded="false" aria-controls=`reviews-slider-${bus.slug}`) Reviews
+                                                </a>
+                                            </div>
 
-                                div.collapse.my-2(id=`reviews-slider-${bus.slug}`)
-                                    <div class="d-flex flex-column grid gap-1 px-3">
-                                        <div class="border py-3 row rounded">
-                                            <div class="col-11">
-                                                <div class="h6">Hari Ram</div>
-                                                <div class="h6 text-secondary">Gareman Travels</div>
-                                                <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Numquam
-                                                    | corrupti recusandae quae possimus facere natus ea tempora. Totam,
-                                                    | voluptas asperiores.</div>
+                                            <div class="col-2 d-inline-flex gap-1 ">
+                                                a(class="text-decoration-none text-black h6" data-bs-toggle="collapse" href=`#seat-slider-${bus.slug}` role="button" aria-expanded="false" aria-controls=`seat-slider-${bus.slug}`)
+                                                    | Seat
+                                                </a>
                                             </div>
-                                            <div class="col-1">
-                                                <div class="h6">5 ⭐</div>
-                                            </div>
-                                        </div>
 
-                                        <div class="border py-3 row rounded">
-                                            <div class="col-11">
-                                                <div class="h6">Hari Ram</div>
-                                                <div class="h6 text-secondary">Gareman Travels</div>
-                                                <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Numquam
-                                                    corrupti recusandae quae possimus facere natus ea tempora. Totam,
-                                                    voluptas asperiores.</div>
+                                            <div class="col-2 d-inline-flex gap-1 ">
+                                                a(class="text-decoration-none text-black h6" data-bs-toggle="collapse" href=`#facility-slider-${bus.slug}` role="button" aria-expanded="false" aria-controls=`facility-${bus.slug}`)
+                                                    | Facility
+                                                </a>
                                             </div>
-                                            <div class="col-1">
-                                                <div class="h6">5 ⭐</div>
-                                            </div>
+    
                                         </div>
                                     </div>
 
-                                div.collapse.my-2(id=`facility-slider-${bus.slug}`)
-                                    <div class="d-flex flex-column grid gap-1 ">
 
-                                        <div class="border d-flex grid gap-4 py-3 px-3 align-items-center">
-                                            <div>
-                                                <img src="./images/icons/facility/blanket.svg" alt="">
+                                    div.collapse.my-2(id=`reviews-slider-${bus.slug}`)
+                                        <div class="d-flex flex-column grid gap-1 px-3">
+                                            <div class="border py-3 row rounded">
+                                                <div class="col-11">
+                                                    <div class="h6">Hari Ram</div>
+                                                    <div class="h6 text-secondary">Gareman Travels</div>
+                                                    <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Numquam
+                                                        | corrupti recusandae quae possimus facere natus ea tempora. Totam,
+                                                        | voluptas asperiores.</div>
+                                                </div>
+                                                <div class="col-1">
+                                                    <div class="h6">5 ⭐</div>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <img src="./images/icons/facility/bus_tracking.svg" alt="">
-                                            </div>
-                                            <div>
-                                                <img src="./images/icons/facility/cctv.svg" alt="">
-                                            </div>
-                                            <div>
-                                                <img src="./images/icons/facility/chargin_point.svg" alt="">
-                                            </div>
-                                            <div>
-                                                <img src="./images/icons/facility/food-svgrepo-com.svg" alt="">
-                                            </div>
-                                            <div>
-                                                <img src="./images/icons/facility/movie.svg" alt="">
-                                            </div>
-                                            <div>
-                                                <img src="./images/icons/facility/no-smoking.svg" alt="">
-                                            </div>
-                                            <div>
-                                                <img src="./images/icons/facility/sos.svg" alt="">
-                                            </div>
-                                            <div>
-                                                <img src="./images/icons/facility/washroom.svg" alt="">
-                                            </div>
-                                            <div>
-                                                <img src="./images/icons/facility/water_bottle.svg" alt="">
-                                            </div>
-                                            <div>
-                                                <img src="./images/icons/facility/wifi.svg" alt="">
-                                            </div>
-                                            <div>
-                                                <img src="./images/icons/facility/ac.svg" alt="">
+
+                                            <div class="border py-3 row rounded">
+                                                <div class="col-11">
+                                                    <div class="h6">Hari Ram</div>
+                                                    <div class="h6 text-secondary">Gareman Travels</div>
+                                                    <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Numquam
+                                                        corrupti recusandae quae possimus facere natus ea tempora. Totam,
+                                                        voluptas asperiores.</div>
+                                                </div>
+                                                <div class="col-1">
+                                                    <div class="h6">5 ⭐</div>
+                                                </div>
                                             </div>
                                         </div>
 
-                                    </div>
+                                    div.collapse.my-2(id=`facility-slider-${bus.slug}`)
+                                        <div class="d-flex flex-column grid gap-1 ">
+
+                                            <div class="border d-flex grid gap-4 py-3 px-3 align-items-center">
+                                                <div>
+                                                    <img src="./images/icons/facility/blanket.svg" alt="">
+                                                </div>
+                                                <div>
+                                                    <img src="./images/icons/facility/bus_tracking.svg" alt="">
+                                                </div>
+                                                <div>
+                                                    <img src="./images/icons/facility/cctv.svg" alt="">
+                                                </div>
+                                                <div>
+                                                    <img src="./images/icons/facility/chargin_point.svg" alt="">
+                                                </div>
+                                                <div>
+                                                    <img src="./images/icons/facility/food-svgrepo-com.svg" alt="">
+                                                </div>
+                                                <div>
+                                                    <img src="./images/icons/facility/movie.svg" alt="">
+                                                </div>
+                                                <div>
+                                                    <img src="./images/icons/facility/no-smoking.svg" alt="">
+                                                </div>
+                                                <div>
+                                                    <img src="./images/icons/facility/sos.svg" alt="">
+                                                </div>
+                                                <div>
+                                                    <img src="./images/icons/facility/washroom.svg" alt="">
+                                                </div>
+                                                <div>
+                                                    <img src="./images/icons/facility/water_bottle.svg" alt="">
+                                                </div>
+                                                <div>
+                                                    <img src="./images/icons/facility/wifi.svg" alt="">
+                                                </div>
+                                                <div>
+                                                    <img src="./images/icons/facility/ac.svg" alt="">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                                                    
+
+                                    div.collapse.my-2(id=`seat-slider-${bus.slug}`)
+                                        <div class="container d-flex justify-content-between grid gap-4">
+                                            <div class="col-3 border py-2 row rounded">
+                                                <div class="d-flex justify-content-around">
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                //- driver and conduction seat
+                                                                div.
+                                                                    <div class="my-2 col-10">
+                                                                        <div class="d-flex flex-wrap justify-content-end">
+                                                                            <div>
+                                                                                <div class="seat-height-width border rounded" style="background: red; color: white;" title="Driver">DR</div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="d-flex rounded">
+                                                                            <div>
+                                                                                <div class="seat-height-width border rounded" style="background: red; color: white;" title="Conductor">CR</div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                style.
+                                                                    .seat-height-width{
+                                                                        height: 35px;
+                                                                        width: 35px;
+                                                                        display: flex;
+                                                                        justify-content: center;
+                                                                        align-items: center;
+                                                                        cursor: pointer;
+                                                                        user-select: none;
+                                                                    }
+
+                                                                    .active{
+                                                                        background-color: #27d327;
+                                                                        color: white;
+                                                                    }
+
+                                                                    .reserved{
+                                                                        background: orange;
+                                                                        color: white;
+                                                                        cursor: not-allowed;
+                                                                    }
+
+                                                                //- passenger seat
+                                                                <div class="my-2 justiy-content-evenly d-flex justify-content-between">
+                                                                    <div class="col-5 d-flex flex-wrap grid gap-1 justify-content-start">
+                                                                        - for(let i = 0; i <= ((bus.noOfSeats) - 5) /2 ; i++)
+                                                                            <div>
+                                                                                div(class=`avl-seat seat-height-width border rounded p-1 ${seatA ? seatA.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : "" : ""}`   value=`${"A" + (i+1)}`)= "A" + (i+1)
+                                                                            </div>                                   
+                                                                    </div>
+
+                                                                    <div class="col-5 d-flex flex-wrap grid gap-1 justify-content-start">
+                                                                        - for(let i = 0; i <= ((bus.noOfSeats) - 5)/2; i++)
+                                                                            <div>
+                                                                                div(class=`avl-seat seat-height-width border rounded p-1 ${seatB ? seatB.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : "": ""}` value=`${"B" + (i+1)} : ""`)= "B" + (i+1)
+                                                                            </div>
+                                                                    </div>
+                                                                </div>    
                                                                 
+                                                                //- 37 - 5 = 32 /2 = 16 
+                                                                <div class="d-flex flex-wrap justiy-content-evenly col-12 grid gap-1">
+                                                                    - var backSeatCalculation = Math.round(((bus.noOfSeats - 5) / 2));
 
-                                div.collapse.my-2(id=`seat-slider-${bus.slug}`)
-                                    <div class="container d-flex justify-content-between grid gap-4">
-                                        <div class="col-3 border py-2 row rounded">
-                                            <div class="d-flex justify-content-around">
-                                                <div class="container">
-                                                    <div class="row">
-                                                        <div class="col-12">
-                                                            //- driver and conduction seat
-                                                            div.
-                                                                <div class="my-2 col-10">
-                                                                    <div class="d-flex flex-wrap justify-content-end">
+                                                                    - for(let i = backSeatCalculation+1; i <= backSeatCalculation + 3; i++)
                                                                         <div>
-                                                                            <div class="seat-height-width border rounded" style="background: red; color: white;" title="Driver">DR</div>
+                                                                            div(class=`avl-seat seat-height-width border rounded ${seatA ? seatA.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : "" : ""}` value=`${"A" + backSeatCalculation + (i)}`)= "A" + parseInt(i)
                                                                         </div>
-                                                                    </div>
 
-                                                                    <div class="d-flex rounded">
+                                                                    - for(let i = backSeatCalculation +1; i <= backSeatCalculation + 2; i++)
                                                                         <div>
-                                                                            <div class="seat-height-width border rounded" style="background: red; color: white;" title="Conductor">CR</div>
-                                                                        </div>
-                                                                    </div>
+                                                                            div(class=`avl-seat seat-height-width border rounded ${seatB ? seatB.includes(JSON.stringify(i)) ? "reserved bookedTicket" : "" : ""}` value=`${"B" + backSeatCalculation + (i)}`)= "B" + parseInt(i)
+                                                                        </div>                                    
                                                                 </div>
-
-                                                            style.
-                                                                .seat-height-width{
-                                                                    height: 35px;
-                                                                    width: 35px;
-                                                                    display: flex;
-                                                                    justify-content: center;
-                                                                    align-items: center;
-                                                                    cursor: pointer;
-                                                                    user-select: none;
-                                                                }
-
-                                                                .active{
-                                                                    background-color: #27d327;
-                                                                    color: white;
-                                                                }
-
-                                                                .reserved{
-                                                                    background: orange;
-                                                                    color: white;
-                                                                    cursor: not-allowed;
-                                                                }
-
-                                                            //- passenger seat
-                                                            <div class="my-2 justiy-content-evenly d-flex justify-content-between">
-                                                                <div class="col-5 d-flex flex-wrap grid gap-1 justify-content-start">
-                                                                    - for(let i = 0; i <= ((bus.noOfSeats) - 5) /2 ; i++)
-                                                                        <div>
-                                                                            div(class=`avl-seat seat-height-width border rounded p-1 ${seatA.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : ""}`   value=`${"A" + (i+1)}`)= "A" + (i+1)
-                                                                        </div>                                   
-                                                                </div>
-
-                                                                <div class="col-5 d-flex flex-wrap grid gap-1 justify-content-start">
-                                                                    - for(let i = 0; i <= ((bus.noOfSeats) - 5)/2; i++)
-                                                                        <div>
-                                                                            div(class=`avl-seat seat-height-width border rounded p-1 ${seatB.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : ""}` value=`${"B" + (i+1)}`)= "B" + (i+1)
-                                                                        </div>
-                                                                </div>
-                                                            </div>    
-                                                            
-                                                            //- 37 - 5 = 32 /2 = 16 
-                                                            <div class="d-flex flex-wrap justiy-content-evenly col-12 grid gap-1">
-                                                                - var backSeatCalculation = Math.round(((bus.noOfSeats - 5) / 2));
-
-                                                                - for(let i = backSeatCalculation+1; i <= backSeatCalculation + 3; i++)
-                                                                    <div>
-                                                                        div(class=`avl-seat seat-height-width border rounded ${seatA.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : ""}` value=`${"A" + backSeatCalculation + (i)}`)= "A" + parseInt(i)
-                                                                    </div>
-
-                                                                - for(let i = backSeatCalculation +1; i <= backSeatCalculation + 2; i++)
-                                                                    <div>
-                                                                        div(class=`avl-seat seat-height-width border rounded ${seatB.includes(JSON.stringify(i)) ? "reserved bookedTicket" : ""}` value=`${"B" + backSeatCalculation + (i)}`)= "B" + parseInt(i)
-                                                                    </div>                                    
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
-
-                                        //- booking page
-                                        <div class="col-9 border py-3 row rounded">
-                                            <div class="h6">Boarding & Dropping</div>
-
-                                            <div>  
-                                                <hr/>
-                                            </div>   
-
-                                            <div class="d-flex flex-row grid gap-4">
-                                                <div class="d-flex flex-column grid gap-4">
-                                                    <div><input type="radio" name="" id="" checked readonly></div>
-                                                    <div> <input type="radio" name="" id="" unchecked readonly></div>
-                                                </div>
-                                                <div class="col-11">
-                                                    <div class="d-flex flex-column grid gap-4">  
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            div= bus.stopLocation[0]
-                                                            <div>12:00</div>
-                                                        </div>
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            div= bus.stopLocation[(bus.stopLocation.length) - 1]
-                                                            <div>12:00</div>
-                                                        </div>                                                    
-                                                    </div>                                                 
+                                                    
                                                 </div>
                                             </div>
-                                            
-                                            <div class="col-12">
-                                                //- line
-                                                <div>  
-                                                    <hr/>
-                                                </div>
 
-                                                <div class="d-flex flex-column">  
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <div class="h6">Seat</div>
-                                                        <div class="d-flex grid gap-1" id="seats">-</div>
-                                                    </div>
-                                                </div> 
-
-                                                //- line
-                                                <div>  
-                                                    <hr/>
-                                                </div>
-                                                
-                                                <div class="d-flex flex-column">  
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <div class="h6">Price</div>
-                                                        div#ticket-price= 0
-                                                    </div>
-                                                </div>
+                                            //- booking page
+                                            <div class="col-9 border py-3 row rounded">
+                                                <div class="h6">Boarding & Dropping</div>
 
                                                 <div>  
                                                     <hr/>
-                                                </div>
-                                                
-                                                <div class="d-flex flex-column">  
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <div class="h6">Quantity</div>
-                                                        <div id="ticket-quantity">0</div>
-                                                    </div>                                                        
                                                 </div>   
 
-                                                <div>  
-                                                    <hr/>
+                                                <div class="d-flex flex-row grid gap-4">
+                                                    <div class="d-flex flex-column grid gap-4">
+                                                        <div><input type="radio" name="" id="" checked readonly></div>
+                                                        <div> <input type="radio" name="" id="" unchecked readonly></div>
+                                                    </div>
+                                                    <div class="col-11">
+                                                        <div class="d-flex flex-column grid gap-4">  
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                div= bus.stopLocation[0]
+                                                                <div>12:00</div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                div= bus.stopLocation[(bus.stopLocation.length) - 1]
+                                                                <div>12:00</div>
+                                                            </div>                                                    
+                                                        </div>                                                 
+                                                    </div>
                                                 </div>
                                                 
-                                                <div class="d-flex flex-column">  
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <div class="h6">Net Price</div>
-                                                        <div id="net-price">0</div>
-                                                    </div>                                                        
-                                                </div>                                                                                                                                                        
+                                                <div class="col-12">
+                                                    //- line
+                                                    <div>  
+                                                        <hr/>
+                                                    </div>
+
+                                                    <div class="d-flex flex-column">  
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div class="h6">Seat</div>
+                                                            <div class="d-flex grid gap-1" id="seats">-</div>
+                                                        </div>
+                                                    </div> 
+
+                                                    //- line
+                                                    <div>  
+                                                        <hr/>
+                                                    </div>
+                                                    
+                                                    <div class="d-flex flex-column">  
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div class="h6">Price</div>
+                                                            div#ticket-price= 0
+                                                        </div>
+                                                    </div>
+
+                                                    <div>  
+                                                        <hr/>
+                                                    </div>
+                                                    
+                                                    <div class="d-flex flex-column">  
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div class="h6">Quantity</div>
+                                                            <div id="ticket-quantity">0</div>
+                                                        </div>                                                        
+                                                    </div>   
+
+                                                    <div>  
+                                                        <hr/>
+                                                    </div>
+                                                    
+                                                    <div class="d-flex flex-column">  
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div class="h6">Net Price</div>
+                                                            <div id="net-price">0</div>
+                                                        </div>                                                        
+                                                    </div>                                                                                                                                                        
+                                                </div>
+
+                                                <div class="col-12 ">
+                                                    div.d-flex.justify-content-end 
+                                                        <button type="button" class="btn btn-primary py-2 px-4">Reserve Seat</button>
+                                                </div>
                                             </div>
 
-                                            <div class="col-12 ">
-                                                div.d-flex.justify-content-end 
-                                                    <button type="button" class="btn btn-primary py-2 px-4">Reserve Seat</button>
-                                            </div>
                                         </div>
-
-                                    </div>
-                            </div>
+                                </div>
+                        else
+                            h2.h2 No Buses TO Show
                     </div>
                 </div>
             </div>

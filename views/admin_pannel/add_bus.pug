@@ -3,27 +3,31 @@ extends ./../headers/AdminBase.pug
 block content
     .container-fluid.pt-4.px-4
         .container-fluid.p-5.admin-container.col-md-6.border.rounded.shadow
-            form
+            div#bus_registration_details
                 <div class="mb-3 d-flex grid gap-3"> 
                     <div>
-                        <label for="product-name" class="form-label h6">Name</label>
-                        <input type="text" class="form-control" id="product-name" placeholder="Trivent Bus">
+                        <label for="bus-name" class="form-label h6">Name</label>
+                        <input type="text" class="form-control" id="bus-name" placeholder="Trivent Bus">
                     </div>
                     <div>
-                        <label for="product-description" class="form-label h6">Bus Number</label>
-                        <input type="number" class="form-control" id="product-description" placeholder="1234">
-                    </div>                       
+                        <label for="bus-number" class="form-label h6">Bus Number</label>
+                        <input type="number" class="form-control" id="bus-number" placeholder="1234">
+                    </div>
+                    <div>
+                        <label for="total-seats" class="form-label h6">Seats Count</label>
+                        <input type="number" class="form-control" id="total-seats" placeholder="36" />
+                    </div>                    
                 </div>                       
 
                 <div class="mb-3 d-flex grid gap-3">
                     <div>
-                        <label for="product-price" class="form-label h6">Price</label>
-                        <input type="number" class="form-control" id="product-price" placeholder="1200" />
+                        <label for="ticket-price" class="form-label h6">Price</label>
+                        <input type="number" class="form-control" id="ticket-price" placeholder="1200" />
                     </div>
 
                     <div>
                         <label for="bus-images" class="form-label h6">Bus Images</label>
-                        <input class="form-control" type="file" id="product-image-front" accept="image/*" multiple>
+                        <input class="form-control" type="file" id="bus-images" accept="image/*" multiple>
                     </div>                    
                 </div>                
 
@@ -46,10 +50,10 @@ block content
                     <label class="form-label h6">Days</label>
 
                     div.d-flex.grid.gap-3
-                        each days in ["sunday", "monday", "tuesday", "thursday", "friday", "saturday"]
+                        each days in ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
                             <div style="width: 10vw;">
-                                <div class="d-flex grid gap-2 align-items-center">
-                                    input(type="checkbox" id=`${days}`)
+                                <div class="h6 d-flex grid gap-2 align-items-center">
+                                    input(type="checkbox" id=`${days}` class="days" style="user-select: none")
                                     label(for=`${days}`)= (days.replaceAll("_", " "))[0].toUpperCase() + (days.replaceAll("_", " ")).slice(1, days.length)
                                 </div>
                             </div>
@@ -66,15 +70,16 @@ block content
                     }
 
                 <div class="d-flex flex-column mb-3">
-
-                    <label for="startLocation" class="form-label h6">Facilities</label>
+                    <label for="facilities" class="form-label h6">Facilities</label>
 
                     <div class="facility-container"> <!-- Use col-md-6 for medium screens -->
                         each facility in ["ac", "blanket", "bus_tracking", "cctv", "charging_point", "movie", "no-smoking", "sos", "washroom", "water_bottle", "wifi"]
-                            <div class="d-flex grid gap-3 align-items-center" style="width: 10vw;">
-                                input(type="checkbox" id=`${facility}`)
-                                label(for=`${facility}`)= (facility.replaceAll("_", " "))[0].toUpperCase() + (facility.replaceAll("_", " ")).slice(1, facility.length)
-                                img(src=`../../images/icons/facility/${facility}.svg`,  height="18px" width="18px", alt=`${facility}`)
+                            <div class="d-flex grid gap-3 align-items-space justify-content-between" style="width: 10vw;">
+                                div.h6.d-flex.justify-content-center.flex-row.grid.gap-3(style="user-select: none")
+                                    input(type="checkbox" id=`${facility}`)
+                                    label(for=`${facility}`)= (facility.replaceAll("_", " "))[0].toUpperCase() + (facility.replaceAll("_", " ")).slice(1, facility.length)
+                                div
+                                    img(src=`../../images/icons/facility/${facility}.svg`,  height="18px" width="18px", alt=`${facility}`)
                             </div>
                     </div>
                 </div>      
@@ -83,3 +88,4 @@ block content
                     <button id="register-bus" class="rounded py-2 px-5" style="border: none; outline: none; background-color: #5B575A; color: white;">Register Bus</button>
                 </div>
 
+    script(src="../../js/addBus.js")

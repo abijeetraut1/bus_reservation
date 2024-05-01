@@ -20,66 +20,68 @@ function extractLocationIndex(locations, checkLocation) {
 
 exports.registerBus = async (req, res) => {
     try {
-        const user = 1;
-
-        // adding image name in array
+        // Adding image name in array
         let image = [];
         req.files.forEach(el => {
             image.push(el.filename);
         });
 
+        // Extracting request body variables
         const {
-            busNumber,
             busName,
-            noOfStaff,
-            fromLocation,
-            toLocation,
-            price,
-            isAcAvailable,
-            isWaterProvidable,
-            isBlanketProvidable,
-            isCharginPointAvailable,
-            isCCTVavailable,
-            acceptMobileTicket,
-            noOfSheats,
+            startLocation,
+            endLocation,
+            journeyStartTime,
+            busNumber,
+            ticketPrice,
+            totalSeats,
             sunday,
             monday,
             tuesday,
             wednesday,
             thursday,
             friday,
-            saturday
+            saturday,
+            ac,
+            blanket,
+            busTracking,
+            cctv,
+            chargingPoint,
+            movie,
+            noSmoking,
+            sos,
+            washroom,
+            waterBottle,
+            wifi,
         } = req.body;
 
-        let fromLocationIndex = extractLocationIndex(locations, fromLocation);
-        let toLocationIndex = extractLocationIndex(locations, toLocation);
+        // Check if busNumber already exists
+        const busNumberExists = await database.sequelize.query(`SELECT busNumber from buses WHERE busNumber = ${busNumber}`, {
+            type: Sequelize.QueryTypes.RAW,
+        });
 
-        // adding sublist of the location
-        const stopLocation = [];
+        if (busNumberExists[0].length > 0) {
+            return statusFunc(res, 401, "This bus number is already registered.");
+        }
+
+        // Create slug for the bus
+        const busSlug = `${busNumber}-${busName.replaceAll(" ", "-")}`;
+
+        // Convert stopLocation array to JSON string
+        const stopLocation = []; // Define stopLocation
+        let fromLocationIndex = extractLocationIndex(locations, startLocation);
+        let toLocationIndex = extractLocationIndex(locations, endLocation);
+
         for (let index = fromLocationIndex; index < locations.length; index++) {
             stopLocation.push(locations[index]);
             if (index === toLocationIndex) break;
         }
 
-        const busSlug = `${busNumber}-${busName.replaceAll(" ", "-")}`;
+        const stopLocationJSON = JSON.stringify(stopLocation);
+        const imageJSON = JSON.stringify(image);
 
-        const createTableQuery = `CREATE TABLE IF NOT EXISTS buses (id INT AUTO_INCREMENT PRIMARY KEY, busNumber INT,busName TEXT,noOfStaff INT,fromLocation TEXT,toLocation TEXT, stopLocation JSON, price INT,isAcAvailable TINYINT(1),isWaterProvidable TINYINT(1),isBlanketProvidable TINYINT(1),isCharginPointAvailable TINYINT(1),isCCTVavailable TINYINT(1),acceptMobileTicket TINYINT(1),noOfSeats TINYINT(1),sunday TINYINT(1),monday TINYINT(1),tuesday TINYINT(1),wednesday TINYINT(1),thursday TINYINT(1),friday TINYINT(1),saturday TINYINT(1), slug TEXT)`;
-
-        // Create table
-        await database.sequelize.query(createTableQuery, {
-            type: Sequelize.QueryTypes.RAW
-        });
-
-        const insertDataQuery = `INSERT INTO buses ( busNumber, busName, noOfStaff, fromLocation, toLocation, stopLocation, price, isAcAvailable, isWaterProvidable, isBlanketProvidable, isCharginPointAvailable, isCCTVavailable, acceptMobileTicket, noOfSeats, sunday, monday, tuesday, wednesday, thursday, friday, saturday, slug) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-
-        // validating the registration of bus if someone try to register the bus with the same number
-        const busNumberValidation = await database.sequelize.query(`SELECT busNumber from buses WHERE busNumber = ${busNumber}`, {
-            type: Sequelize.QueryTypes.RAW,
-        })
-
-        if (busNumberValidation[0].length > 0) {
-            return statusFunc(res, 401, "this bus number is already registered")
-        }
+        // Prepare INSERT query
+        const insertDataQuery = `INSERT INTO buses (busNumber, busName, ticketPrice, image, startLocations, endLocation, stopLocations, journeyStartTime, totalSeats, sunday, monday, tuesday, wednesday, thursday, friday, saturday, ac, blanket, busTracking, cctv, chargingPoint, movie, noSmoking, sos, washroom, waterBottle, wifi, slug) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
         // Insert data
         await database.sequelize.query(insertDataQuery, {
@@ -87,34 +89,43 @@ exports.registerBus = async (req, res) => {
             replacements: [
                 busNumber,
                 busName,
-                noOfStaff,
-                fromLocation,
-                toLocation,
-                JSON.stringify(stopLocation),
-                price,
-                isAcAvailable,
-                isWaterProvidable,
-                isBlanketProvidable,
-                isCharginPointAvailable,
-                isCCTVavailable,
-                acceptMobileTicket,
-                noOfSheats,
+                ticketPrice,
+                imageJSON,
+                startLocation,
+                endLocation,
+                stopLocationJSON,
+                journeyStartTime,
+                totalSeats,
                 sunday,
                 monday,
                 tuesday,
                 wednesday,
                 thursday,
                 friday,
-                saturday, busSlug
+                saturday,
+                ac,
+                blanket,
+                busTracking,
+                cctv,
+                chargingPoint,
+                movie,
+                noSmoking,
+                sos,
+                washroom,
+                waterBottle,
+                wifi,
+                busSlug
             ]
         });
 
-        statusFunc(res, 200, "createdDB");
+        statusFunc(res, 200, "Bus registered successfully.");
 
     } catch (err) {
-        throw err;
+        console.error(err);
+        return statusFunc(res, 500, "Internal server error.");
     }
 }
+
 
 
 exports.setTravellingDate = async (req, res) => {
@@ -127,7 +138,7 @@ exports.setTravellingDate = async (req, res) => {
     // converting the array data into string to insert into DB
     const stringTravellingDate = JSON.stringify(travellingDate);
 
-    const createTable = `CREATE TABLE IF NOT EXISTS bus_travelling_day_record (id int AUTO_INCREMENT PRIMARY KEY, busId INT, month TEXT, days JSON, time TEXT, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
+    const createTable = `CREATE TABLE IF NOT EXISTS bus_travelling_day_record (id int AUTO_INCREMENT PRIMARY KEY, busId INT, month varchar(100), days JSON, time varchar(100), createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
     await database.sequelize.query(createTable, {
         type: QueryTypes.RAW,
     })
@@ -200,7 +211,7 @@ exports.reserveSeat = async (req, res) => {
 
         const tableName = `${year}_${month}_${day}_${slug.replaceAll("-", "_")}`;
 
-        const createTable = `CREATE TABLE IF NOT EXISTS ${tableName} (id INT AUTO_INCREMENT PRIMARY KEY, seatNo VARCHAR(3), userid INT, busid INT, isTicketChecked TINYINT(0) NOT NULL, passengerCurrentLocation TEXT, passengerDestination TEXT, createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
+        const createTable = `CREATE TABLE IF NOT EXISTS ${tableName} (id INT AUTO_INCREMENT PRIMARY KEY, seatNo VARCHAR(3), userid INT, busid INT, isTicketChecked TINYINT(0) NOT NULL, passengerCurrentLocation varchar(100), passengerDestination varchar(100), createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
 
         // created table
         await database.sequelize.query(createTable, {
@@ -234,7 +245,7 @@ exports.reserveSeat = async (req, res) => {
         // SELECT ${tableName}.seatNo FROM ${tableName} WHERE seatNo = ${seatno}
 
         console.log(ifSeatAvailable)
-        
+
         if (ifSeatAvailable.length === 1) {
             return statusFunc(res, 400, "seat is already booked");
         }

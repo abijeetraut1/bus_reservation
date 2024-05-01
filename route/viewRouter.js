@@ -12,5 +12,6 @@ router.get("/search", viewController.search);
 router.get("/admin/addBus", adminPanel.addBus);
 router.get("/admin/addBus", adminPanel.addBus);
 router.get("/admin/bookedseat", adminPanel.bookedSeat);
+router.get("/admin/income", adminPanel.income);
 
 module.exports = router;
