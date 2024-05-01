@@ -6,17 +6,9 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.BIGINT,
             allowNull: false,
         },
-        email:{
+        name: {
             type: Sequelize.STRING,
             allowNull: false,
-        },
-        firstName: {
-            type: Sequelize.STRING,
-            allowNull: false,
-        },
-        lastName:{
-            type: Sequelize.STRING,
-            allowNull: false
         },
         profile: {
             type: Sequelize.STRING,
@@ -27,8 +19,12 @@ module.exports = (sequelize, Sequelize) => {
         isVerified: {
             type: Sequelize.BOOLEAN
         },
+        isActive: {
+            type: Sequelize.BOOLEAN,
+            allowNull: false,
+        },
         role:{
-            type: Sequelize.ENUM("user", "owner", "driver", "vender"),
+            type: Sequelize.ENUM("user", "owner", "driver", "conductor", "super-admin"),
         },
         password: {
             type: Sequelize.STRING,

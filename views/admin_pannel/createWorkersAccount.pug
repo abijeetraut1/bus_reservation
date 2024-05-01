@@ -1,0 +1,45 @@
+extends ./../headers/AdminBase.pug
+
+block content
+    .container-fluid.pt-4.px-4
+        .container-fluid.p-5.admin-container.col-md-4.border.rounded.shadow
+            <form >
+                <div class="mb-3">
+                    h2 Worker Account
+                </div>
+
+                <div class="mb-3"> 
+                    <label for="worker-name" class="form-label h6">Name</label>
+                    <input type="text" class="form-control" id="worker-name" aria-describedby="emailHelp" min="9700000000" max="9899999999">
+                </div>                  
+
+                <div class="mb-3">
+                    <label for="worker-number" class="form-label h6">Phone Number</label>
+                    <input type="number" class="form-control" id="worker-number" aria-describedby="emailHelp" min="9700000000" max="9899999999">
+                </div>
+                <div class="mb-3">
+                    <label for="worker-password" class="form-label h6">Password</label>
+                    <input type="password" class="form-control" id="worker-password"  required>
+                </div>
+
+                //- pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}" title="Password must contain at least one uppercase letter, one lowercase letter, and one digit, and be at least 8 characters long."
+
+                <div class="mb-3">
+                    <label for="worker-password" class="form-label h6">Password Confirm</label>
+                    <input type="password" class="form-control" id="worker-password"  required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="worker-role" class="form-label h6">Worker Role </label>
+
+                    <select class="form-select" id="worker-role">
+                        <option value="conductor" selected>Conductor</option>
+                        <option value="driver">Driver</option>
+                    </select>                
+                </div>
+
+
+                <button type="submit" id="create-worker-account" class="btn btn-primary">Submit</button>
+            </form>
+
+    script(src="../../js/createWorkerAccount.js") 

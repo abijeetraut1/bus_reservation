@@ -34,37 +34,36 @@ const jwtToken = (id) => {
 
 // signup
 exports.signup = async (req, res) => {
+    console.log(req.query, req.body)
     const {
-        phoneno,
-        email,
-        firstName,
-        lastName,
+        phone,
+        name,
         password
     } = req.body;
 
-    if(!phoneno || !email || !firstName || !lastName || !password){
+    if(!phone || !name || !password){
         return statusFunc(res, 400, "you forget to insert the field");
     }
 
     const checkUser = await users.findOne({
         where: {
-            phoneNo: phoneno,
+            phoneNo: phone,
         }
     })
 
     if (checkUser) {
+        console.log("user exists")
         statusFunc(res, 400, "user already exist");
     }
 
     const code = Math.floor(Math.random() * (process.env.MAX_GENERATION - process.env.MIN_GENERATION + 1) + process.env.MIN_GENERATION);
 
     const signup = await users.create({
-        phoneNo: phoneno,
-        email: email,
-        firstName: firstName,
-        lastName: lastName,
-        role: "user",
+        phoneNo: phone,
+        name: name,
+        role: req.query.role,
         password: await bcrypt.hash(password, 12),
+        isActive: true,
         isVerified: false,
         verificationCode: code,
     })

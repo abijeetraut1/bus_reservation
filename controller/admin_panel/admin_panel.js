@@ -16,7 +16,6 @@ exports.bookedSeat = async(req, res) => {
     const seatA = ["1","2","3","4","17"];
     const seatB = ["1","2","3","4","15"];
 
-
     res.render("./admin_pannel/bookedSeat.pug", {
         title: "Booked Seats",
         bus: bus,
@@ -29,5 +28,11 @@ exports.bookedSeat = async(req, res) => {
 exports.income = async(req, res) => {
     res.render("./admin_pannel/income.pug", {
         title: "Income"
+    })
+}
+
+exports.createWorkersAccount = async(req, res) => {
+    res.render("./admin_pannel/createWorkersAccount.pug", {
+        title: "Worker Account",
     })
 }
