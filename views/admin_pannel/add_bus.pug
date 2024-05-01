@@ -1,8 +1,8 @@
-extends ./../headers/base.pug
- 
+extends ./../headers/AdminBase.pug
+
 block content
     .container-fluid.pt-4.px-4
-        .container-fluid.pt-4.px-4.admin-container.col-md-6.border.rounded.shadow
+        .container-fluid.p-5.admin-container.col-md-6.border.rounded.shadow
             form
                 <div class="mb-3 d-flex grid gap-3"> 
                     <div>
@@ -14,9 +14,8 @@ block content
                         <input type="number" class="form-control" id="product-description" placeholder="1234">
                     </div>                       
                 </div>                       
-                
+
                 <div class="mb-3 d-flex grid gap-3">
-         
                     <div>
                         <label for="product-price" class="form-label h6">Price</label>
                         <input type="number" class="form-control" id="product-price" placeholder="1200" />
@@ -27,7 +26,7 @@ block content
                         <input class="form-control" type="file" id="product-image-front" accept="image/*" multiple>
                     </div>                    
                 </div>                
-                
+
                 <div class="d-flex grid gap-3 mb-3">
                     <div>
                         <label for="startLocation" class="form-label h6">Start Location</label>
@@ -48,14 +47,14 @@ block content
 
                     div.d-flex.grid.gap-3
                         each days in ["sunday", "monday", "tuesday", "thursday", "friday", "saturday"]
-                            <div>
+                            <div style="width: 10vw;">
                                 <div class="d-flex grid gap-2 align-items-center">
                                     input(type="checkbox" id=`${days}`)
                                     label(for=`${days}`)= (days.replaceAll("_", " "))[0].toUpperCase() + (days.replaceAll("_", " ")).slice(1, days.length)
                                 </div>
                             </div>
                 </div>
-                
+
                 style.
                     .facility-container{
                         width: 100%;
@@ -72,17 +71,15 @@ block content
 
                     <div class="facility-container"> <!-- Use col-md-6 for medium screens -->
                         each facility in ["ac", "blanket", "bus_tracking", "cctv", "charging_point", "movie", "no-smoking", "sos", "washroom", "water_bottle", "wifi"]
-                            <div class="d-flex grid gap-2 align-items-center">
+                            <div class="d-flex grid gap-3 align-items-center" style="width: 10vw;">
                                 input(type="checkbox" id=`${facility}`)
                                 label(for=`${facility}`)= (facility.replaceAll("_", " "))[0].toUpperCase() + (facility.replaceAll("_", " ")).slice(1, facility.length)
                                 img(src=`../../images/icons/facility/${facility}.svg`,  height="18px" width="18px", alt=`${facility}`)
                             </div>
                     </div>
                 </div>      
-        
-                                   
 
                 <div class="mb-3">
-                    <button id="register-bus" class="btn" style="background-color: #ff3f6c; color: white;">Register Bus</button>
+                    <button id="register-bus" class="rounded py-2 px-5" style="border: none; outline: none; background-color: #5B575A; color: white;">Register Bus</button>
                 </div>
 

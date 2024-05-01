@@ -14,6 +14,22 @@ exports.home = (req, res) => {
     });
 }
 
+
+
+function ArrangeSeat(seatArr) {
+    for (let i = 0; i < seatArr.length - 1; i++) {
+        for (let j = 0; j < seatArr.length - i - 1; j++) {
+            if (seatArr[j] > seatArr[j + 1]) {
+                const temp = seatArr[j];
+                seatArr[j] = seatArr[j + 1];
+                seatArr[j + 1] = temp;
+            }
+        }
+    }
+    return seatArr;
+}
+
+
 // searching the bus according to the bus location
 exports.search = async (req, res) => {
     console.log(req.query)
@@ -41,6 +57,9 @@ exports.search = async (req, res) => {
         count: 0
     };
 
+    let arrangedSeatA;
+    let arrangedSeatB;
+
     Promise.all(searchResult.map(async el => {
             el.stopLocation = JSON.parse(el.stopLocation)
 
@@ -53,10 +72,20 @@ exports.search = async (req, res) => {
 
                     el.bookedSeats = checkSeat.length;
 
-                    const checkRatings = await database.sequelize.query(`SELECT * FROM ${el.busNumber + "_" + el.busName.replaceAll(" ", "_") + "_ratings" }`, {
-                        type: QueryTypes.SELECT,
-                    });
+                    // 2024_12_12_2221_kankai_bus
+                    console.log(date)
+                    const seatArr = await database.sequelize.query(`SELECT seatNo FROM ${date.replaceAll("-", "_") + "_"  + el.slug.replaceAll("-", "_")}`, {
+                        type: QueryTypes.SELECT
+                    })
 
+                    const seatA = [];
+                    const seatB = [];
+
+                    seatArr.filter((el, i) => el.seatNo.startsWith("A") ? seatA.push(el.seatNo.slice(1, el.seatNo.length)) : seatB.push(el.seatNo.slice(1, el.seatNo.length)));
+
+                    arrangedSeatA = ArrangeSeat(seatA);
+                    arrangedSeatB = ArrangeSeat(seatB);
+                    console.log(arrangedSeatA, arrangedSeatB)
                 } catch (err) {
                     // Handle error
                     el.bookedSeats = 0;
@@ -65,12 +94,14 @@ exports.search = async (req, res) => {
             }
         })).then(() => {
 
-            console.log(LocationsContains)
+            // console.log(LocationsContains)
             // statusFuncLength(res, 200, LocationsContains);
             res.render("./user/Search_Result.pug", {
                 buses: LocationsContains,
                 ratings: sumRate,
-                title: toLocation
+                title: toLocation,
+                seatA: arrangedSeatA,
+                seatB: arrangedSeatB
             })
         })
         .catch(err => {

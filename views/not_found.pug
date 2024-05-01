@@ -1,0 +1,45 @@
+extends ./headers/base.pug
+
+block content
+    style.
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+        .content {
+            text-align: center;
+        }
+        button {
+            background-color: #5B575A;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #d73254;
+        }
+
+    .container
+        .content
+            h1 Route Not Found
+            h1.route
+            p The page you are looking for does not exist.
+            button(onclick="redirectToHome()" class="rounded") Go to Home Page
+    script.
+        const route = document.querySelector(".route");
+        route.innerText = window.location.pathname;
+        function redirectToHome() {
+            window.location.href = '/';
+        }

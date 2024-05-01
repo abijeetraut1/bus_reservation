@@ -7,7 +7,11 @@ $(document).ready(function () {
     
     $(".avl-seat").each(function (index, element) {
         element.addEventListener("click", (ele) => {
-            
+
+            // return if the ticket is already booked
+            if(element.classList.contains("bookedTicket")) return;
+
+            // record the ticket
             if (element.classList.contains("active")) {
                 count--;
                 element.classList.remove("active");

@@ -10,6 +10,7 @@ router.get("/search", viewController.search);
 
 // admin panel 
 router.get("/admin/addBus", adminPanel.addBus);
-router.get("/admin/createWorkerAccount", adminPanel.createWorkerAccount);
+router.get("/admin/addBus", adminPanel.addBus);
+router.get("/admin/bookedseat", adminPanel.bookedSeat);
 
 module.exports = router;

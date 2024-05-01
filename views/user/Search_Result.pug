@@ -282,41 +282,43 @@ block content
                                                                     color: white;
                                                                 }
 
+                                                                .reserved{
+                                                                    background: orange;
+                                                                    color: white;
+                                                                    cursor: not-allowed;
+                                                                }
+
                                                             //- passenger seat
                                                             <div class="my-2 justiy-content-evenly d-flex justify-content-between">
                                                                 <div class="col-5 d-flex flex-wrap grid gap-1 justify-content-start">
                                                                     - for(let i = 0; i <= ((bus.noOfSeats) - 5) /2 ; i++)
                                                                         <div>
-                                                                            div(class="avl-seat seat-height-width border rounded p-1" value=`${"A" + (i+1)}`)= "A" + (i+1)
-                                                                        </div>                                                                                                                                      
+                                                                            div(class=`avl-seat seat-height-width border rounded p-1 ${seatA.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : ""}`   value=`${"A" + (i+1)}`)= "A" + (i+1)
+                                                                        </div>                                   
                                                                 </div>
 
                                                                 <div class="col-5 d-flex flex-wrap grid gap-1 justify-content-start">
                                                                     - for(let i = 0; i <= ((bus.noOfSeats) - 5)/2; i++)
                                                                         <div>
-                                                                            div(class="avl-seat seat-height-width border rounded p-1" value=`${"B" + (i+1)}`)= "B" + (i+1)
-                                                                        </div>                                                                                                                                      
+                                                                            div(class=`avl-seat seat-height-width border rounded p-1 ${seatB.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : ""}` value=`${"B" + (i+1)}`)= "B" + (i+1)
+                                                                        </div>
                                                                 </div>
                                                             </div>    
-
+                                                            
+                                                            //- 37 - 5 = 32 /2 = 16 
                                                             <div class="d-flex flex-wrap justiy-content-evenly col-12 grid gap-1">
-                                                                <div>
-                                                                    div(class="avl-seat seat-height-width border rounded" value=`${"A" + Math.round(((bus.noOfSeats) - 5)/2 + 1)}`)= "A" + Math.round(((bus.noOfSeats) - 5)/2 + 1) 
-                                                                </div>
-                                                                <div>
-                                                                    div(class="avl-seat seat-height-width border rounded" value=`${"A" + Math.round(((bus.noOfSeats) - 5)/2 + 2)}`)= "A" + Math.round(((bus.noOfSeats) - 5)/2 + 2) 
-                                                                </div>
-                                                                <div>
-                                                                    div(class="avl-seat seat-height-width border rounded" value=`${"A" + Math.round(((bus.noOfSeats) - 5)/2 + 3)}`)= "A" + Math.round(((bus.noOfSeats) - 5)/2 + 3) 
-                                                                </div>
-                                                                <div>
-                                                                    div(class="avl-seat seat-height-width border rounded" value=`${"B" + Math.round(((bus.noOfSeats) - 5)/2 + 1)}`)= "B" + Math.round(((bus.noOfSeats) - 5)/2 + 1) 
-                                                                </div>
-                                                                <div>
-                                                                    div(class="avl-seat seat-height-width border rounded" value=`${"B" + Math.round(((bus.noOfSeats) - 5)/2 + 2)}`)= "B" + Math.round(((bus.noOfSeats) - 5)/2 + 2) 
-                                                                </div>                                                            
-                                                            </div>
+                                                                - var backSeatCalculation = Math.round(((bus.noOfSeats - 5) / 2));
 
+                                                                - for(let i = backSeatCalculation+1; i <= backSeatCalculation + 3; i++)
+                                                                    <div>
+                                                                        div(class=`avl-seat seat-height-width border rounded ${seatA.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : ""}` value=`${"A" + backSeatCalculation + (i)}`)= "A" + parseInt(i)
+                                                                    </div>
+
+                                                                - for(let i = backSeatCalculation +1; i <= backSeatCalculation + 2; i++)
+                                                                    <div>
+                                                                        div(class=`avl-seat seat-height-width border rounded ${seatB.includes(JSON.stringify(i)) ? "reserved bookedTicket" : ""}` value=`${"B" + backSeatCalculation + (i)}`)= "B" + parseInt(i)
+                                                                    </div>                                    
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

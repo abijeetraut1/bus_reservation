@@ -1,0 +1,138 @@
+
+style.
+
+    *{
+        font-family: Montserrat, sans-serif;
+    }
+    .admin-pannel-navbar{
+        display: flex;
+        justify-content: right;
+        align-items: center;
+        height: 4rem;
+        padding: 0 2rem;
+    }
+
+    .admin-pannel-navbar div{
+        margin-left: 1rem;
+        color: white;
+    }
+
+    .mobile-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 999;
+    }
+
+    .menu-btn {
+        display: block;
+        padding: 10px;
+        cursor: pointer;
+        width: fit-content;
+    }
+
+    .menu-icon {
+        position: relative;
+        z-index: 50;
+        width: fit-content;
+    }
+
+    .nav-links {
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        background-color: #191919;
+        transition: left 0.3s ease;
+    }
+
+    @media (min-width: 732px){
+        .nav-links {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 15%;
+            display: flex;
+            flex-direction: column;
+            transition: left 0.3s ease;
+        }
+    }
+
+    .menu-icon i{
+        width: fit-content;
+    }
+    .nav-links.show {
+        left: 0;
+        height: 100vh;
+    }
+
+    .nav-links div a i{
+        margin-right: 20px;
+        overflow: hidden;
+    }
+
+    .nav-links div a , 
+    .nav-links div h5{
+        display: block;
+        padding: 15px 20px;
+        color: #fff;
+        text-decoration: none;
+        width: fit-content;
+        cursor: pointer;
+    }
+
+
+
+//- for mobile device
+<div class="mobile-nav">
+    <div class="menu-btn">
+        <div class="menu-icon">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </div>
+    div.nav-links
+        div
+            h5 User Page
+        div
+            a(href="/")
+                <i class="fa-solid fa-house"></i>
+                span Home
+
+            div
+                h5 Admin Pannel
+            div
+                a(href="/admin/dashboard-dispatched") 
+                    <i class="fa-solid fa-dollar"></i>
+                    span Dashboard
+            div
+                a(href="/admin/dashboard_products")
+                    <i class="fa-solid fa-ticket"></i>
+                    span Tickets
+            div
+                a(href="/admin/addBus")
+                    <i class="fa-solid fa-bus"></i>
+                    span Add Bus
+            div
+                a(href="/admin/addBus")
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    span Ticket Records
+</div>
+
+
+script(src="../js/jquery-latest.js")
+script.
+
+    const menuBtn = document.querySelector(".menu-btn");
+    const navLinks = document.querySelector(".nav-links");
+
+    if(window.outerWidth > 1200){
+        navLinks.classList.add("show");     
+        menuBtn.style.display = "none";
+    }else{
+        document.addEventListener("DOMContentLoaded", function() {
+            menuBtn.addEventListener("click", (el) => {    
+                navLinks.classList.toggle("show");
+            });
+        });
+    }

@@ -65,6 +65,11 @@ exports.registerBus = async (req, res) => {
 
         const createTableQuery = `CREATE TABLE IF NOT EXISTS buses (id INT AUTO_INCREMENT PRIMARY KEY, busNumber INT,busName TEXT,noOfStaff INT,fromLocation TEXT,toLocation TEXT, stopLocation JSON, price INT,isAcAvailable TINYINT(1),isWaterProvidable TINYINT(1),isBlanketProvidable TINYINT(1),isCharginPointAvailable TINYINT(1),isCCTVavailable TINYINT(1),acceptMobileTicket TINYINT(1),noOfSeats TINYINT(1),sunday TINYINT(1),monday TINYINT(1),tuesday TINYINT(1),wednesday TINYINT(1),thursday TINYINT(1),friday TINYINT(1),saturday TINYINT(1), slug TEXT)`;
 
+        // Create table
+        await database.sequelize.query(createTableQuery, {
+            type: Sequelize.QueryTypes.RAW
+        });
+
         const insertDataQuery = `INSERT INTO buses ( busNumber, busName, noOfStaff, fromLocation, toLocation, stopLocation, price, isAcAvailable, isWaterProvidable, isBlanketProvidable, isCharginPointAvailable, isCCTVavailable, acceptMobileTicket, noOfSeats, sunday, monday, tuesday, wednesday, thursday, friday, saturday, slug) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
         // validating the registration of bus if someone try to register the bus with the same number
@@ -75,11 +80,6 @@ exports.registerBus = async (req, res) => {
         if (busNumberValidation[0].length > 0) {
             return statusFunc(res, 401, "this bus number is already registered")
         }
-
-        // Create table
-        await database.sequelize.query(createTableQuery, {
-            type: Sequelize.QueryTypes.RAW
-        });
 
         // Insert data
         await database.sequelize.query(insertDataQuery, {
@@ -200,7 +200,7 @@ exports.reserveSeat = async (req, res) => {
 
         const tableName = `${year}_${month}_${day}_${slug.replaceAll("-", "_")}`;
 
-        const createTable = `CREATE TABLE IF NOT EXISTS ${tableName} (id INT AUTO_INCREMENT PRIMARY KEY, seatNo INT, userid INT, busid INT, isTicketChecked TINYINT(0) NOT NULL, passengerCurrentLocation TEXT, passengerDestination TEXT, createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
+        const createTable = `CREATE TABLE IF NOT EXISTS ${tableName} (id INT AUTO_INCREMENT PRIMARY KEY, seatNo VARCHAR(3), userid INT, busid INT, isTicketChecked TINYINT(0) NOT NULL, passengerCurrentLocation TEXT, passengerDestination TEXT, createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
 
         // created table
         await database.sequelize.query(createTable, {
@@ -228,10 +228,13 @@ exports.reserveSeat = async (req, res) => {
         }
 
         // checking if the reserved seat is available or already reserved
-        const ifSeatAvailable = await database.sequelize.query(`SELECT ${tableName}.seatNo FROM ${tableName} WHERE seatNo = ${seatno}`, {
+        const ifSeatAvailable = await database.sequelize.query(`SELECT ${tableName}.seatNo FROM ${tableName} WHERE seatNo = '${seatno}'`, {
             type: QueryTypes.SELECT,
         })
+        // SELECT ${tableName}.seatNo FROM ${tableName} WHERE seatNo = ${seatno}
 
+        console.log(ifSeatAvailable)
+        
         if (ifSeatAvailable.length === 1) {
             return statusFunc(res, 400, "seat is already booked");
         }

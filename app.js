@@ -30,4 +30,10 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/bus", busRouter)
 app.use("/api/v1/driverProspective", driverRouter);
 
+app.use("*", (req, res) => {
+    res.render("not_found.pug",{
+        title: "Not Found"
+    });
+})
+
 module.exports = app;
