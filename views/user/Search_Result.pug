@@ -32,7 +32,7 @@ block content
     <div class="image-section container mb-3">
         <div class="row">
             <div class="d-flex justify-content-center ">
-                <div class="d-flex grid gap-2 p-3 px-4 rounded bg-white">
+                <div class="d-flex flex-column flex-md-row flex-lg-row grid gap-2 p-3 px-4 rounded bg-white">
                     <div>
                         <input class="rounded px-3 py-1" type="text" name="" id="" placeholder="Location">
                     </div>
@@ -52,10 +52,11 @@ block content
 
     <section id="desktop-ticket-booking" class="container my-2">
         <div class="row">
-            <div class=" col-2 d-flex flex-column grid gap-2 ">
-                <div class="custom-border p-3">
-                    <div class="h6">Facility</div>
-                    <div>
+            <div class="d-none d-md-flex flex-md-column col-md-2 grid gap-2 ">
+                <div class="custom-border p-2">
+                    <div class="h6" data-bs-toggle="collapse" href="#facility" role="button" aria-expanded="false" aria-controls="facility">Facility</div>
+                    
+                    <div class="collapse" id="facility">
                         <div class="d-flex grid gap-3 align-items-center">
                             <input type="radio" name="" id="ac" />
                             <label for="ac" style="font-size: small;">AC</label>
@@ -83,9 +84,9 @@ block content
                     </div>
                 </div>
 
-                <div class="custom-border p-3">
-                    <div class="h6">Vehicle</div>
-                    <div>
+                <div class="custom-border p-2">
+                    <div class="h6" data-bs-toggle="collapse" href="#bus-type" role="button" aria-expanded="false" aria-controls="bus-type">Vehicle</div>
+                    <div class="collapse" id="bus-type">
                         <div class="d-flex grid gap-3 align-items-center">
                             <input type="radio" name="vehicle" id="bus" value="bus">
                             <label for="bus" style="font-size: small;">Bus</label>
@@ -100,9 +101,9 @@ block content
 
             </div>
 
-            <div class="col-10 grid gap-3">
+            <div class="col-12 col-md-10 grid gap-3">
                 <div>
-                    <div class="container custom-border p-2">
+                    <div class="d-none d-md-block container custom-border p-2">
                         <div class="row">
                             <div class="col-md-5">Service Provider</div>
                             <div class="col-md-1">Rating</div>
@@ -119,48 +120,57 @@ block content
                             each bus in buses
                                 <div class="custom-border my-2 p-3 ">
                                     <div class="row">
-                                        <div class="col-5">
+                                        <div class="col-md-5">
                                             div.h5= bus.busName
                                             <div class="h6"><a class="text-secondary text-decoration-none"
                                                 | href="/ram-travels-company">Ram Travels Company</a> </div>
-                                            <div class="h6">
+
+                                            <div class="d-flex d-md-none flex-column">  
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="h6">Price</div>
+                                                    div#ticket-price= bus.ticketPrice
+                                                </div>
+                                            </div>
+                                                                                        
+
+                                            <div class="h6 d-none d-md-block">
                                                 | Type: <span class="text-secondary h6">Bus</span>
                                             </div>
-                                            <div class="h6">
+                                            <div class="h6 d-none d-md-block">
                                                 | Number: 
                                                 span.text-secondary.h6= bus.busNumber
                                             </div> 
-                                            <div class="h6 d-flex grid gap-1">
+                                            <div class="h6 d-none d-md-flex grid gap-1 d-none d-md-block">
                                                 span.h6 Route:
                                                 span.text-secondary.h6= bus.stopLocation[0] 
                                                 <span class="text-secondary h6"> - </span>
                                                 span.text-secondary.h6= bus.stopLocation[(bus.stopLocation.length) - 1]
 
                                             </div>
-                                            <div class="h6 d-flex grid gap-1 flex-wrap">
+                                            <div class="h6 d-none d-md-flex grid gap-1 flex-wrap">
                                                 div.h6 Point:
                                                 each location in bus.stopLocation
                                                     span.text-secondary.h6= location
                                             </div>
                                         </div>
 
-                                        <div class="col-1">
+                                        <div class="col-md-1 d-none d-md-block">
                                             <div class="d-flex grid gap-1">
                                                 span= 5
                                                 span(style="font-size: small;")= "[" + 1 + "]"
                                             </div>
                                         </div>
-                                        <div class="col-1">12: 00</div>
-                                        <div class="col-1">
-                                            div(class="col-1 d-flex align-items-start grid gap-1")
+                                        <div class="col-md-1 d-none d-md-block">12: 00</div>
+                                        <div class="col-md-1 d-none d-md-block">
+                                            div(class="col-md-1 d-none d-md-flex align-items-start grid gap-1")
                                                 span= 7
                                                 span(style="font-size: small;") Hrs                                        
                                         </div>
-                                        <div class="col-1">19: 00</div>
-                                        div(class="col-1 d-flex align-items-start grid gap-1")
+                                        <div class="col-md-1 d-none d-md-block">19: 00</div>
+                                        div(class="col-1 d-none d-md-flex align-items-start grid gap-1")
                                             span= bus.bookedSeats
                                             span(style="font-size: small;")= "[" + bus.totalSeats + "]"
-                                        div(class="col-1 d-flex align-items-start grid gap-1")
+                                        div(class="col-md-1 d-none d-md-flex align-items-start grid gap-1")
                                             span#base-price= bus.ticketPrice
                                             span(style="font-size: small;") NPR                                       
 
@@ -171,19 +181,23 @@ block content
                                     </div>
 
                                     <div class="row ">
-                                        <div class="col-10 d-flex align-items-center">
-                                            <div class="col-2 d-inline-flex gap-1">
+                                        <div class="col-12 col-md-10 d-flex grid gap-3 gap-md-0 align-items-center">
+                                            <div class="col-md-2 d-inline-flex d-md-none gap-1">
+                                                a(class="text-decoration-none text-black h6" data-bs-toggle="collapse" href=`#details-slider-${bus.slug}` role="button" aria-expanded="false" aria-controls=`details-slider-${bus.slug}`) Details
+                                            </div>
+
+                                            <div class="col-md-2 d-inline-flex gap-1">
                                                 a(class="text-decoration-none text-black h6" data-bs-toggle="collapse" href=`#reviews-slider-${bus.slug}` role="button" aria-expanded="false" aria-controls=`reviews-slider-${bus.slug}`) Reviews
                                                 </a>
                                             </div>
 
-                                            <div class="col-2 d-inline-flex gap-1 ">
+                                            <div class="col-md-2 d-inline-flex gap-1 ">
                                                 a(class="text-decoration-none text-black h6" data-bs-toggle="collapse" href=`#seat-slider-${bus.slug}` role="button" aria-expanded="false" aria-controls=`seat-slider-${bus.slug}`)
                                                     | Seat
                                                 </a>
                                             </div>
 
-                                            <div class="col-2 d-inline-flex gap-1 ">
+                                            <div class="col-md-2 d-inline-flex gap-1 ">
                                                 a(class="text-decoration-none text-black h6" data-bs-toggle="collapse" href=`#facility-slider-${bus.slug}` role="button" aria-expanded="false" aria-controls=`facility-${bus.slug}`)
                                                     | Facility
                                                 </a>
@@ -191,6 +205,57 @@ block content
     
                                         </div>
                                     </div>
+
+                                    div(id=`details-slider-${bus.slug}` class="col-md-9 collapse custom-border px-2 px-md-0 py-3 row rounded")
+                                        <div class="h6">Details</div>
+                                        <div>  
+                                            <hr/>
+                                        </div>   
+                                        
+                                        <div class="col-12">
+                                            <div class="d-flex flex-column">  
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="h6">Seat</div>
+                                                    div(class="d-flex grid gap-1" id="seats")= bus.totalSeats
+                                                </div>
+                                            </div> 
+
+                                            <div class="d-flex flex-column">  
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="h6">Price</div>
+                                                    div#ticket-price= bus.ticketPrice
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="d-flex flex-column">  
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="h6">Bus Number</div>
+                                                    div(id="ticket-quantity")= bus.busNumber
+                                                </div>                                                        
+                                            </div>   
+
+                                            <div class="d-flex flex-column">  
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="h6">point: </div>
+                                                    div(id="net-price")=  bus.stopLocation.length
+                                                </div>                                                        
+                                            </div> 
+
+                                            <div class="d-flex flex-column">  
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="h6">Type: </div>
+                                                    div(id="net-price") Bus
+                                                </div>                                                   
+                                            </div>    
+
+
+                                            <div class="d-flex flex-column">  
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="h6">Company: </div>
+                                                    div(id="net-price") Ram Travel
+                                                </div>                                                   
+                                            </div>                                                                                                                                                                                                                                              
+                                        </div>
 
 
                                     div.collapse.my-2(id=`reviews-slider-${bus.slug}`)
@@ -233,10 +298,10 @@ block content
                                             </div>
                                         </div>
                                                                     
-
+                                    //- seats
                                     div.collapse.my-2(id=`seat-slider-${bus.slug}`)
-                                        <div class="container d-flex justify-content-between grid gap-4">
-                                            <div class="col-3 custom-border py-2 row rounded">
+                                        <div class="container d-flex flex-column flex-md-row justify-content-between grid gap-4">
+                                            <div class="col-10 col-md-3 custom-border py-2 row rounded">
                                                 <div class="d-flex justify-content-around">
                                                     <div class="container">
                                                         <div class="row">
@@ -319,7 +384,7 @@ block content
                                             </div>
 
                                             //- booking page
-                                            <div class="col-9 custom-border py-3 row rounded">
+                                            <div class="col-md-9 custom-border px-2 px-md-0 py-3 row rounded">
                                                 <div class="h6">Boarding & Dropping</div>
 
                                                 <div>  

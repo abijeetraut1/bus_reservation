@@ -10,8 +10,11 @@ const {
 const { bookedSeat } = require("./admin_panel/admin_panel");
 
 exports.home = (req, res) => {
+    const user = res.locals.user;
+
     res.render("./user/home.pug", {
-        title: "Home"
+        title: "Home",
+        user: user
     });
 }
 

@@ -1,6 +1,7 @@
 const database = require("../model/index");
 const users = database.users;
 
+const {Sequelize, QueryTypes} = require("sequelize");
 const bcrypt = require("bcrypt");
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
@@ -73,6 +74,8 @@ exports.signup = async (req, res) => {
 
 // login
 exports.login = async (req, res) => {
+    console.log(req.body)
+
     const {
         phone,
         password
@@ -99,16 +102,14 @@ exports.login = async (req, res) => {
 exports.isLoggedIn = async (req, res, next) => {
     if (req.cookies.jwt) {
         const id = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
-        const findUser = await users.findOne({
-            where: {
-                id: id.id
-            },
-            attributes: {
-                excludes: ["createdAt", "updatedAt"]
-            }
+        console.log(id)
+        const findUser = await database.sequelize.query(`SELECT users.name, users.role FROM users WHERE id = '${id.id}'`, {
+            type: QueryTypes.SELECT
         })
 
-        res.locals.user = findUser;
+        console.log(findUser)
+
+        res.locals.user = findUser[0];
     }
     next();
 }
