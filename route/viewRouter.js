@@ -6,6 +6,8 @@ const adminPanel = require("./../controller/admin_panel/admin_panel")
 
 router.get("/", viewController.home);
 router.get("/search", viewController.search);
+router.get("/login", viewController.login);
+router.get("/register", viewController.register);
 
 
 // admin panel 

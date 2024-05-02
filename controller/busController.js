@@ -8,7 +8,8 @@ const busModel = database.bus;
 
 const {
     QueryTypes,
-    Sequelize
+    Sequelize,
+    TINYINT
 } = require('sequelize');
 
 const locations = ['damak', 'urlabari', 'manglabare', 'pathri', 'bhaunne', 'laxmimarga', 'belbari', 'lalbhitti', 'khorsane', 'birathchowk', 'gothgaon', 'itahari'];
@@ -25,6 +26,8 @@ exports.registerBus = async (req, res) => {
         req.files.forEach(el => {
             image.push(el.filename);
         });
+
+        console.log(image)
 
         // Extracting request body variables
         const {
@@ -55,6 +58,39 @@ exports.registerBus = async (req, res) => {
             wifi,
         } = req.body;
 
+        const daysOfWeek = [
+            { day: 'Sunday', value: sunday },
+            { day: 'Monday', value: monday },
+            { day: 'Tuesday', value: tuesday },
+            { day: 'Wednesday', value: wednesday },
+            { day: 'Thursday', value: thursday },
+            { day: 'Friday', value: friday },
+            { day: 'Saturday', value: saturday }
+        ];
+
+        const facilitiesArr = [
+            { name: 'ac', value: ac },
+            { name: 'blanket', value: blanket },
+            { name: 'busTracking', value: busTracking },
+            { name: 'cctv', value: cctv },
+            { name: 'chargingPoint', value: chargingPoint },
+            { name: 'movie', value: movie },
+            { name: 'noSmoking', value: noSmoking },
+            { name: 'sos', value: sos },
+            { name: 'washroom', value: washroom },
+            { name: 'waterBottle', value: waterBottle },
+            { name: 'wifi', value: wifi }
+        ];
+
+        const days = JSON.stringify(daysOfWeek); 
+        const facilities = JSON.stringify(facilitiesArr);
+
+        const createTable = "CREATE TABLE IF NOT EXISTS buses (id INT AUTO_INCREMENT PRIMARY KEY, busNumber INT, busName VARCHAR(100), ticketPrice INT, imageJSON JSON, startLocation VARCHAR(100), endLocation VARCHAR(100), stopLocationJSON JSON, journeyStartTime TIME, totalSeats INT, days JSON, facilities JSON, slug VARCHAR(100))";
+
+        await database.sequelize.query(createTable, {
+            type: Sequelize.QueryTypes.RAW
+        })
+
         // Check if busNumber already exists
         const busNumberExists = await database.sequelize.query(`SELECT busNumber from buses WHERE busNumber = ${busNumber}`, {
             type: Sequelize.QueryTypes.RAW,
@@ -81,7 +117,7 @@ exports.registerBus = async (req, res) => {
         const imageJSON = JSON.stringify(image);
 
         // Prepare INSERT query
-        const insertDataQuery = `INSERT INTO buses (busNumber, busName, ticketPrice, image, startLocations, endLocation, stopLocations, journeyStartTime, totalSeats, sunday, monday, tuesday, wednesday, thursday, friday, saturday, ac, blanket, busTracking, cctv, chargingPoint, movie, noSmoking, sos, washroom, waterBottle, wifi, slug) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        const insertDataQuery = `INSERT INTO buses (busNumber, busName, ticketPrice, imageJSON, startLocation, endLocation, stopLocationJSON, journeyStartTime, totalSeats, days, facilities, slug) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
         // Insert data
         await database.sequelize.query(insertDataQuery, {
@@ -96,24 +132,8 @@ exports.registerBus = async (req, res) => {
                 stopLocationJSON,
                 journeyStartTime,
                 totalSeats,
-                sunday,
-                monday,
-                tuesday,
-                wednesday,
-                thursday,
-                friday,
-                saturday,
-                ac,
-                blanket,
-                busTracking,
-                cctv,
-                chargingPoint,
-                movie,
-                noSmoking,
-                sos,
-                washroom,
-                waterBottle,
-                wifi,
+                days,
+                facilities,
                 busSlug
             ]
         });
@@ -125,7 +145,6 @@ exports.registerBus = async (req, res) => {
         return statusFunc(res, 500, "Internal server error.");
     }
 }
-
 
 
 exports.setTravellingDate = async (req, res) => {

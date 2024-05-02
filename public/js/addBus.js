@@ -1,5 +1,7 @@
 $(document).ready(function () {
-    $("#register-bus").click(async () => {
+    $("#register-bus").click(async (el) => {
+        el.preventDefault();
+
         const busName = $("#bus-name").val();
         const busNumber = $("#bus-number").val();
         const ticketPrice = $("#ticket-price").val();
@@ -7,6 +9,7 @@ $(document).ready(function () {
         const endLocation = $("#endLocation").val();
         const totalSeats = $("#total-seats").val();
         const journeyStartTime = $("#journey-start-time").val();
+
         const sunday = $("#sunday").prop("checked");
         const monday = $("#monday").prop("checked");
         const tuesday = $("#tuesday").prop("checked");
@@ -14,6 +17,7 @@ $(document).ready(function () {
         const thursday = $("#thursday").prop("checked");
         const friday = $("#friday").prop("checked");
         const saturday = $("#saturday").prop("checked");
+        
         const acValue = $("#ac").prop("checked");
         const blanketValue = $("#blanket").prop("checked");
         const busTrackingValue = $("#bus_tracking").prop("checked");

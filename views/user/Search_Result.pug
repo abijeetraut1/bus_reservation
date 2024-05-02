@@ -6,10 +6,33 @@ block content
             rotate: 90deg;
         }
 
-    <div class="container my-5">
+
+        .custom-border{
+            border: 1px solid #afafaf;
+            border-radius: 4px;
+        }
+        .image-section{
+            height: 40vh;
+            width: 100vw;
+            display: flex;
+            align-items:center;     
+            justify-content: center;       
+        }
+
+        .image-section::before{
+            content: " ";
+            background: url("./images/bus_search_2.jpg") no-repeat center center / cover;
+            position: absolute;
+            left: 0px;
+            height: 40vh;
+            width: 100vw;
+            z-index: -1;
+        }
+
+    <div class="image-section container mb-3">
         <div class="row">
             <div class="d-flex justify-content-center ">
-                <div class="d-flex grid gap-2 p-2 rounded bg-white">
+                <div class="d-flex grid gap-2 p-3 px-4 rounded bg-white">
                     <div>
                         <input class="rounded px-3 py-1" type="text" name="" id="" placeholder="Location">
                     </div>
@@ -30,7 +53,7 @@ block content
     <section id="desktop-ticket-booking" class="container my-2">
         <div class="row">
             <div class=" col-2 d-flex flex-column grid gap-2 ">
-                <div class="border p-3">
+                <div class="custom-border p-3">
                     <div class="h6">Facility</div>
                     <div>
                         <div class="d-flex grid gap-3 align-items-center">
@@ -60,7 +83,7 @@ block content
                     </div>
                 </div>
 
-                <div class="border p-3">
+                <div class="custom-border p-3">
                     <div class="h6">Vehicle</div>
                     <div>
                         <div class="d-flex grid gap-3 align-items-center">
@@ -79,7 +102,7 @@ block content
 
             <div class="col-10 grid gap-3">
                 <div>
-                    <div class="container border p-2">
+                    <div class="container custom-border p-2">
                         <div class="row">
                             <div class="col-md-5">Service Provider</div>
                             <div class="col-md-1">Rating</div>
@@ -94,7 +117,7 @@ block content
                     <div class="container p-0">
                         if(buses)
                             each bus in buses
-                                <div class="border my-2 p-3 ">
+                                <div class="custom-border my-2 p-3 ">
                                     <div class="row">
                                         <div class="col-5">
                                             div.h5= bus.busName
@@ -136,9 +159,9 @@ block content
                                         <div class="col-1">19: 00</div>
                                         div(class="col-1 d-flex align-items-start grid gap-1")
                                             span= bus.bookedSeats
-                                            span(style="font-size: small;")= "[" + bus.noOfSeats + "]"
+                                            span(style="font-size: small;")= "[" + bus.totalSeats + "]"
                                         div(class="col-1 d-flex align-items-start grid gap-1")
-                                            span#base-price= bus.price
+                                            span#base-price= bus.ticketPrice
                                             span(style="font-size: small;") NPR                                       
 
                                     </div>
@@ -172,7 +195,7 @@ block content
 
                                     div.collapse.my-2(id=`reviews-slider-${bus.slug}`)
                                         <div class="d-flex flex-column grid gap-1 px-3">
-                                            <div class="border py-3 row rounded">
+                                            <div class="custom-border py-3 row rounded">
                                                 <div class="col-11">
                                                     <div class="h6">Hari Ram</div>
                                                     <div class="h6 text-secondary">Gareman Travels</div>
@@ -185,7 +208,7 @@ block content
                                                 </div>
                                             </div>
 
-                                            <div class="border py-3 row rounded">
+                                            <div class="custom-border py-3 row rounded">
                                                 <div class="col-11">
                                                     <div class="h6">Hari Ram</div>
                                                     <div class="h6 text-secondary">Gareman Travels</div>
@@ -201,52 +224,19 @@ block content
 
                                     div.collapse.my-2(id=`facility-slider-${bus.slug}`)
                                         <div class="d-flex flex-column grid gap-1 ">
-
-                                            <div class="border d-flex grid gap-4 py-3 px-3 align-items-center">
-                                                <div>
-                                                    <img src="./images/icons/facility/blanket.svg" alt="">
-                                                </div>
-                                                <div>
-                                                    <img src="./images/icons/facility/bus_tracking.svg" alt="">
-                                                </div>
-                                                <div>
-                                                    <img src="./images/icons/facility/cctv.svg" alt="">
-                                                </div>
-                                                <div>
-                                                    <img src="./images/icons/facility/chargin_point.svg" alt="">
-                                                </div>
-                                                <div>
-                                                    <img src="./images/icons/facility/food-svgrepo-com.svg" alt="">
-                                                </div>
-                                                <div>
-                                                    <img src="./images/icons/facility/movie.svg" alt="">
-                                                </div>
-                                                <div>
-                                                    <img src="./images/icons/facility/no-smoking.svg" alt="">
-                                                </div>
-                                                <div>
-                                                    <img src="./images/icons/facility/sos.svg" alt="">
-                                                </div>
-                                                <div>
-                                                    <img src="./images/icons/facility/washroom.svg" alt="">
-                                                </div>
-                                                <div>
-                                                    <img src="./images/icons/facility/water_bottle.svg" alt="">
-                                                </div>
-                                                <div>
-                                                    <img src="./images/icons/facility/wifi.svg" alt="">
-                                                </div>
-                                                <div>
-                                                    <img src="./images/icons/facility/ac.svg" alt="">
-                                                </div>
+                                            <div class="custom-border d-flex grid gap-4 py-3 px-3 align-items-center">
+                                                each faciliti in JSON.parse(bus.facilities)
+                                                    - if(faciliti.value == "true")
+                                                        <div>
+                                                            img(src=`./images/icons/facility/${faciliti.name}.svg` alt="")
+                                                        </div>                                                    
                                             </div>
-
                                         </div>
                                                                     
 
                                     div.collapse.my-2(id=`seat-slider-${bus.slug}`)
                                         <div class="container d-flex justify-content-between grid gap-4">
-                                            <div class="col-3 border py-2 row rounded">
+                                            <div class="col-3 custom-border py-2 row rounded">
                                                 <div class="d-flex justify-content-around">
                                                     <div class="container">
                                                         <div class="row">
@@ -256,13 +246,13 @@ block content
                                                                     <div class="my-2 col-10">
                                                                         <div class="d-flex flex-wrap justify-content-end">
                                                                             <div>
-                                                                                <div class="seat-height-width border rounded" style="background: red; color: white;" title="Driver">DR</div>
+                                                                                <div class="seat-height-width custom-border rounded" style="background: red; color: white;" title="Driver">DR</div>
                                                                             </div>
                                                                         </div>
 
                                                                         <div class="d-flex rounded">
                                                                             <div>
-                                                                                <div class="seat-height-width border rounded" style="background: red; color: white;" title="Conductor">CR</div>
+                                                                                <div class="seat-height-width custom-border rounded" style="background: red; color: white;" title="Conductor">CR</div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -278,6 +268,7 @@ block content
                                                                         user-select: none;
                                                                     }
 
+
                                                                     .active{
                                                                         background-color: #27d327;
                                                                         color: white;
@@ -292,32 +283,32 @@ block content
                                                                 //- passenger seat
                                                                 <div class="my-2 justiy-content-evenly d-flex justify-content-between">
                                                                     <div class="col-5 d-flex flex-wrap grid gap-1 justify-content-start">
-                                                                        - for(let i = 0; i <= ((bus.noOfSeats) - 5) /2 ; i++)
+                                                                        - for(let i = 0; i <= ((bus.totalSeats) - 5) /2 ; i++)
                                                                             <div>
-                                                                                div(class=`avl-seat seat-height-width border rounded p-1 ${seatA ? seatA.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : "" : ""}`   value=`${"A" + (i+1)}`)= "A" + (i+1)
+                                                                                div(class=`avl-seat seat-height-width custom-border rounded p-1 ${seatA ? seatA.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : "" : ""}`   value=`${"A" + (i+1)}`)= "A" + (i+1)
                                                                             </div>                                   
                                                                     </div>
 
                                                                     <div class="col-5 d-flex flex-wrap grid gap-1 justify-content-start">
-                                                                        - for(let i = 0; i <= ((bus.noOfSeats) - 5)/2; i++)
+                                                                        - for(let i = 0; i <= ((bus.totalSeats) - 5)/2; i++)
                                                                             <div>
-                                                                                div(class=`avl-seat seat-height-width border rounded p-1 ${seatB ? seatB.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : "": ""}` value=`${"B" + (i+1)} : ""`)= "B" + (i+1)
+                                                                                div(class=`avl-seat seat-height-width custom-border rounded p-1 ${seatB ? seatB.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : "": ""}` value=`${"B" + (i+1)} : ""`)= "B" + (i+1)
                                                                             </div>
                                                                     </div>
                                                                 </div>    
                                                                 
                                                                 //- 37 - 5 = 32 /2 = 16 
                                                                 <div class="d-flex flex-wrap justiy-content-evenly col-12 grid gap-1">
-                                                                    - var backSeatCalculation = Math.round(((bus.noOfSeats - 5) / 2));
+                                                                    - var backSeatCalculation = Math.round(((bus.totalSeats - 5) / 2));
 
                                                                     - for(let i = backSeatCalculation+1; i <= backSeatCalculation + 3; i++)
                                                                         <div>
-                                                                            div(class=`avl-seat seat-height-width border rounded ${seatA ? seatA.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : "" : ""}` value=`${"A" + backSeatCalculation + (i)}`)= "A" + parseInt(i)
+                                                                            div(class=`avl-seat seat-height-width custom-border rounded ${seatA ? seatA.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : "" : ""}` value=`${"A" + backSeatCalculation + (i)}`)= "A" + parseInt(i)
                                                                         </div>
 
                                                                     - for(let i = backSeatCalculation +1; i <= backSeatCalculation + 2; i++)
                                                                         <div>
-                                                                            div(class=`avl-seat seat-height-width border rounded ${seatB ? seatB.includes(JSON.stringify(i)) ? "reserved bookedTicket" : "" : ""}` value=`${"B" + backSeatCalculation + (i)}`)= "B" + parseInt(i)
+                                                                            div(class=`avl-seat seat-height-width custom-border rounded ${seatB ? seatB.includes(JSON.stringify(i)) ? "reserved bookedTicket" : "" : ""}` value=`${"B" + backSeatCalculation + (i)}`)= "B" + parseInt(i)
                                                                         </div>                                    
                                                                 </div>
                                                             </div>
@@ -328,7 +319,7 @@ block content
                                             </div>
 
                                             //- booking page
-                                            <div class="col-9 border py-3 row rounded">
+                                            <div class="col-9 custom-border py-3 row rounded">
                                                 <div class="h6">Boarding & Dropping</div>
 
                                                 <div>  
@@ -343,11 +334,11 @@ block content
                                                     <div class="col-11">
                                                         <div class="d-flex flex-column grid gap-4">  
                                                             <div class="d-flex justify-content-between align-items-center">
-                                                                div= bus.stopLocation[0]
+                                                                div= from
                                                                 <div>12:00</div>
                                                             </div>
                                                             <div class="d-flex justify-content-between align-items-center">
-                                                                div= bus.stopLocation[(bus.stopLocation.length) - 1]
+                                                                div= to
                                                                 <div>12:00</div>
                                                             </div>                                                    
                                                         </div>                                                 

@@ -7,6 +7,7 @@ const {
     QueryTypes,
     Sequelize
 } = require('sequelize');
+const { bookedSeat } = require("./admin_panel/admin_panel");
 
 exports.home = (req, res) => {
     res.render("./user/home.pug", {
@@ -46,7 +47,7 @@ exports.search = async (req, res) => {
 
     // search all the buses
     const searchResult = await database.sequelize.query(
-        'SELECT  buses.id,  buses.busName, buses.stopLocation, buses.price, buses.busNumber, buses.isAcAvailable, buses.isWaterProvidable, buses.isBlanketProvidable, buses.isCharginPointAvailable, buses.isCCTVavailable, buses.acceptMobileTicket, buses.noOfSeats, buses.slug FROM buses ', {
+        'SELECT  buses.id, buses.busName, buses.stopLocationJSON, buses.ticketPrice, buses.busNumber, buses.facilities, buses.totalSeats, buses.slug FROM buses ', {
             type: QueryTypes.SELECT,
         });
 
@@ -60,8 +61,11 @@ exports.search = async (req, res) => {
     let arrangedSeatA;
     let arrangedSeatB;
 
+    if(searchResult.length === 0) return;
+
+
     Promise.all(searchResult.map(async el => {
-            el.stopLocation = JSON.parse(el.stopLocation)
+            el.stopLocation = JSON.parse(el.stopLocationJSON)
 
             // only select those field which contains those 2 locations
             if (el.stopLocation.includes(fromLocation) && el.stopLocation.includes(toLocation) === true) {
@@ -71,13 +75,15 @@ exports.search = async (req, res) => {
                     });
 
                     el.bookedSeats = checkSeat.length;
+                    console.log(bookedSeats)
 
                     // 2024_12_12_2221_kankai_bus
                     console.log(date)
                     const seatArr = await database.sequelize.query(`SELECT seatNo FROM ${date.replaceAll("-", "_") + "_"  + el.slug.replaceAll("-", "_")}`, {
                         type: QueryTypes.SELECT
                     })
-
+                
+                    if(seatArr.length === 0) return res.send("hello world");
                     const seatA = [];
                     const seatB = [];
 
@@ -101,11 +107,25 @@ exports.search = async (req, res) => {
                 ratings: sumRate,
                 title: toLocation,
                 seatA: arrangedSeatA,
-                seatB: arrangedSeatB
+                seatB: arrangedSeatB,
+                from: fromLocation,
+                to: toLocation
             })
         })
         .catch(err => {
             // Handle error if any of the promises fail
             console.error("Error:", err);
         });
+}
+
+exports.login = (req, res) => {
+    res.render("./login.pug", {
+        title: "Login",
+    })
+}
+
+exports.register = (req, res) => {
+    res.render("./register.pug", {
+        title: "Register",
+    })
 }
