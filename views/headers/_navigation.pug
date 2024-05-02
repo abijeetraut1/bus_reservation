@@ -12,7 +12,7 @@
         //- Right Section Links
         <div class="collapse navbar-collapse" id="navbarResponsiveButtons">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                each nav in [{title: "Tickets", link:"/tickets"}, {title: "Contact", link:"/contact"}, {title: "About us", link:"/about"}]
+                each nav in [{title: "Contact", link:"/contact"}, {title: "About us", link:"/about"}]
                     <li class="nav-item">
                         a(class="nav-link" href=`${nav.link}`)= nav.title
                     </li>
@@ -31,15 +31,18 @@
                             | Sign up
                         </button>
 
-                if(user.role === "owner")
+                else if(user.role === "owner")
                     a(href="/admin/dashboard")
-                        button(data-mdb-ripple-init type="button" class="btn px-3 me-2" style="text-transform: capitalize;") Dashboard
+                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Dashboard
 
-                if(user.role === "conductor" || user.role === "driver")
+                else if(user.role === "conductor" || user.role === "driver")
                     a(href="/checkTickets")
-                        button(data-mdb-ripple-init type="button" class="btn px-3 me-2" style="text-transform: capitalize;") Check Ticket
+                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Check Ticket
 
                 if(user)
+                    a(href="/ticket")
+                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Ticket
+
                     a(href="/logout") 
                         <button data-mdb-ripple-init type="button" class="btn btn-primary me-3">
                             | Log out

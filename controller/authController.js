@@ -216,3 +216,4 @@ exports.generate_password_forget_code = async (req, res, next) => {
         statusFunc(res, 400, "please enter account number");
     }
 }
+

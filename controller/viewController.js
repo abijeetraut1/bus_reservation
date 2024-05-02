@@ -19,6 +19,11 @@ exports.home = (req, res) => {
 }
 
 
+exports.logout = async(req, res) => {
+    res.clearCookie('jwt');
+
+    res.redirect("/");
+}
 
 function ArrangeSeat(seatArr) {
     for (let i = 0; i < seatArr.length - 1; i++) {
@@ -132,3 +137,4 @@ exports.register = (req, res) => {
         title: "Register",
     })
 }
+

@@ -11,6 +11,8 @@ router.get("/", viewController.home);
 router.get("/search", viewController.search);
 router.get("/login", viewController.login);
 router.get("/register", viewController.register);
+router.get("/logout", viewController.logout);
+
 
 
 // admin panel 
