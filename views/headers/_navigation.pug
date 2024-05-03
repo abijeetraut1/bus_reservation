@@ -1,12 +1,12 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary" style="z-index: 100;">
     <div class="container">
         //- Logo
-        <a class="navbar-brand me-2" href="/">
+        <a style="font-weight: 700;" class="navbar-brand me-2" href="/">
             | Swift Bus
         </a>
 
         <button data-mdb-collapse-init class="navbar-toggler" type="button" data-mdb-target="#navbarResponsiveButtons" aria-controls="navbarResponsiveButtons" aria-expanded="false" aria-label="Toggle navigation">
-            <i class="fas fa-bars"></i>
+            img(src="./../../images/icons/hamburger.svg", alt="")
         </button>
 
         //- Right Section Links
@@ -34,20 +34,30 @@
                 else if(user.role === "owner")
                     a(href="/admin/dashboard")
                         button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Dashboard
+                    a(href="/admin/worker-account")
+                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Account
+                    a(href="/admin/add-bus")
+                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Add Bus
+                    a(href="/admin/update-bus")
+                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Update Bus                        
+                    a(href="/admin/records")
+                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Records
+
 
                 else if(user.role === "conductor" || user.role === "driver")
                     a(href="/checkTickets")
                         button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Check Ticket
 
-                if(user)
-                    a(href="/ticket")
-                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Ticket
 
+                if(user)
+                    if(user.role === "user")
+                        a(href="/ticket")
+                            button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Ticket
+                    
                     a(href="/logout") 
                         <button data-mdb-ripple-init type="button" class="btn btn-primary me-3">
                             | Log out
-                        </button>
-                                
+                        </button>           
             </div>
         </div>
     </div>

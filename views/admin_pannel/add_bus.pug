@@ -1,10 +1,16 @@
-extends ./../headers/AdminBase.pug
+extends ../headers/base
 
 block content
-    .container-fluid.pt-4.px-4
-        .container-fluid.p-5.admin-container.col-md-6.border.rounded.shadow
+    style.
+        .custom-border{
+            border: 1px solid #afafaf;
+            border-radius: 4px;
+        }
+
+    .container-fluid.pt-4.px-3
+        .container-fluid.p-3.p-md-5.admin-container.col-md-6.custom-border.rounded.shadow-lg
             div#bus_registration_details
-                <div class="mb-3 d-flex grid gap-3"> 
+                <div class="mb-3 d-flex flex-column flex-md-row grid gap-3"> 
                     <div>
                         <label for="bus-name" class="form-label h6">Name</label>
                         <input type="text" class="form-control" id="bus-name" placeholder="Trivent Bus">
@@ -19,7 +25,7 @@ block content
                     </div>                    
                 </div>                       
 
-                <div class="mb-3 d-flex grid gap-3">
+                <div class="mb-3 d-flex flex-column flex-md-row grid gap-3">
                     <div>
                         <label for="ticket-price" class="form-label h6">Price</label>
                         <input type="number" class="form-control" id="ticket-price" placeholder="1200" />
@@ -31,7 +37,7 @@ block content
                     </div>                    
                 </div>                
 
-                <div class="d-flex grid gap-3 mb-3">
+                <div class="d-flex grid flex-column flex-md-row gap-3 mb-3">
                     <div>
                         <label for="startLocation" class="form-label h6">Start Location</label>
                         <input type="text" class="form-control" id="startLocation" placeholder="Kakarbhitta" />
@@ -46,12 +52,31 @@ block content
                     </div>                        
                 </div>
 
+                style.
+                    .day-wrapper{
+                        width: 10vw;
+                    }
+                    @media screen and (max-width: 767px){
+                        .day-wrapper{
+                            width: 30vw;
+                        }
+                    }
+
+                    .facility-wrapper{
+                        width: 20vw;
+                    }
+                    @media screen and (max-width: 767px){
+                        .facility-wrapper{
+                            width: 50%;
+                        }
+                    }                    
+
                 <div class="d-flex flex-column mb-3">
                     <label class="form-label h6">Days</label>
 
-                    div.d-flex.grid.gap-3
+                    div.d-flex.grid.gap-3.flex-wrap
                         each days in ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
-                            <div style="width: 10vw;">
+                            <div class="day-wrapper">
                                 <div class="h6 d-flex grid gap-2 align-items-center">
                                     input(type="checkbox" id=`${days}` class="days" style="user-select: none")
                                     label(for=`${days}`)= (days.replaceAll("_", " "))[0].toUpperCase() + (days.replaceAll("_", " ")).slice(1, days.length)
@@ -73,8 +98,8 @@ block content
                     <label for="facilities" class="form-label h6">Facilities</label>
 
                     <div class="facility-container"> <!-- Use col-md-6 for medium screens -->
-                        each facility in ["ac", "blanket", "bus_tracking", "cctv", "charging_point", "movie", "no-smoking", "sos", "washroom", "water_bottle", "wifi"]
-                            <div class="d-flex grid gap-3 align-items-space justify-content-between" style="width: 10vw;">
+                        each facility in ["ac", "blanket", "busTracking", "cctv", "chargingPoint", "movie", "noSmoking", "sos", "washroom", "waterBottle", "wifi"]
+                            <div class="d-flex grid gap-3 align-items-space justify-content-between facility-wrapper">
                                 div.h6.d-flex.justify-content-center.flex-row.grid.gap-3(style="user-select: none")
                                     input(type="checkbox" id=`${facility}`)
                                     label(for=`${facility}`)= (facility.replaceAll("_", " "))[0].toUpperCase() + (facility.replaceAll("_", " ")).slice(1, facility.length)
@@ -85,7 +110,7 @@ block content
                 </div>      
 
                 <div class="mb-3">
-                    <button id="register-bus" class="rounded py-2 px-5" style="border: none; outline: none; background-color: #5B575A; color: white;">Register Bus</button>
+                    <button id="register-bus" class="bg-primary rounded py-2 px-5 w-100" style="border: none; outline: none; color: white;">Register Bus</button>
                 </div>
 
     script(src="../../js/addBus.js")

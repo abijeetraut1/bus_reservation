@@ -8,8 +8,7 @@ const busModel = database.bus;
 
 const {
     QueryTypes,
-    Sequelize,
-    TINYINT
+    Sequelize
 } = require('sequelize');
 
 const locations = ['damak', 'urlabari', 'manglabare', 'pathri', 'bhaunne', 'laxmimarga', 'belbari', 'lalbhitti', 'khorsane', 'birathchowk', 'gothgaon', 'itahari'];
@@ -21,6 +20,8 @@ function extractLocationIndex(locations, checkLocation) {
 
 exports.registerBus = async (req, res) => {
     try {
+        const user = res.locals.user.id;
+
         // Adding image name in array
         let image = [];
         req.files.forEach(el => {
@@ -85,7 +86,7 @@ exports.registerBus = async (req, res) => {
         const days = JSON.stringify(daysOfWeek); 
         const facilities = JSON.stringify(facilitiesArr);
 
-        const createTable = "CREATE TABLE IF NOT EXISTS buses (id INT AUTO_INCREMENT PRIMARY KEY, busNumber INT, busName VARCHAR(100), ticketPrice INT, imageJSON JSON, startLocation VARCHAR(100), endLocation VARCHAR(100), stopLocationJSON JSON, journeyStartTime TIME, totalSeats INT, days JSON, facilities JSON, slug VARCHAR(100))";
+        const createTable = "CREATE TABLE IF NOT EXISTS buses (id INT AUTO_INCREMENT PRIMARY KEY, user INT, busNumber INT, busName VARCHAR(100), ticketPrice INT, imageJSON JSON, startLocation VARCHAR(100), endLocation VARCHAR(100), stopLocationJSON JSON, journeyStartTime TIME, totalSeats INT, days JSON, facilities JSON, slug VARCHAR(100))";
 
         await database.sequelize.query(createTable, {
             type: Sequelize.QueryTypes.RAW
@@ -117,12 +118,13 @@ exports.registerBus = async (req, res) => {
         const imageJSON = JSON.stringify(image);
 
         // Prepare INSERT query
-        const insertDataQuery = `INSERT INTO buses (busNumber, busName, ticketPrice, imageJSON, startLocation, endLocation, stopLocationJSON, journeyStartTime, totalSeats, days, facilities, slug) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        const insertDataQuery = `INSERT INTO buses (user, busNumber, busName, ticketPrice, imageJSON, startLocation, endLocation, stopLocationJSON, journeyStartTime, totalSeats, days, facilities, slug) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
         // Insert data
         await database.sequelize.query(insertDataQuery, {
             type: Sequelize.QueryTypes.INSERT,
             replacements: [
+                user,
                 busNumber,
                 busName,
                 ticketPrice,

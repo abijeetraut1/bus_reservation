@@ -17,9 +17,10 @@ router.get("/logout", viewController.logout);
 
 // admin panel 
 router.get("/admin/dashboard", authController.isLoggedIn, adminPanel.addBus);
-router.get("/admin/addBus", adminPanel.addBus);
+router.get("/admin/add-bus", adminPanel.addBus);
 router.get("/admin/bookedseat", adminPanel.bookedSeat);
 router.get("/admin/income", adminPanel.income);
 router.get("/admin/worker-account", adminPanel.createWorkersAccount);
+router.get("/admin/update-bus", adminPanel.update_bus);
 
 module.exports = router;

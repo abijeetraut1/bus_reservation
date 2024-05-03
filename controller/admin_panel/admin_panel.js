@@ -36,3 +36,10 @@ exports.createWorkersAccount = async(req, res) => {
         title: "Worker Account",
     })
 }
+
+
+exports.update_bus = async(req, res) => {
+    res.render("./admin_pannel/update_bus.pug", {
+        title: "Update Bus",
+    })
+}
