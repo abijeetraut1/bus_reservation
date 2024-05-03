@@ -13,6 +13,8 @@ const upload = multer({
     storage
 });
 
+router.use(authController.isLoggedIn);
+
 router.post("/register-bus", /*authController.isLoggedIn,*/ upload.array("busImage"), busController.registerBus);
 router.post("/setdate", busController.setTravellingDate);
 router.post("/:slug/reserve-seat", authController.isLoggedIn, busController.reserveSeat);

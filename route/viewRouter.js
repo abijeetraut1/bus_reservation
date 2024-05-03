@@ -14,9 +14,13 @@ router.get("/register", viewController.register);
 router.get("/logout", viewController.logout);
 
 
+router.post('/create-checkout-session/:slug', viewController.checkout_session);
 
 // admin panel 
-router.get("/admin/dashboard", authController.isLoggedIn, adminPanel.addBus);
+router.use(authController.isOwnerLoggedIn);
+
+router.get("/admin/dashboard", adminPanel.addBus);
+router.get("/admin/show-all-bus", adminPanel.show_all_bus);
 router.get("/admin/add-bus", adminPanel.addBus);
 router.get("/admin/bookedseat", adminPanel.bookedSeat);
 router.get("/admin/income", adminPanel.income);

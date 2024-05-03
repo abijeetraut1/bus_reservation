@@ -33,21 +33,24 @@
 
                 else if(user.role === "owner")
                     a(href="/admin/dashboard")
-                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Dashboard
+                        button(data-mdb-ripple-init type="button" class="btn me-2") Dashboard
                     a(href="/admin/worker-account")
-                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Account
+                        button(data-mdb-ripple-init type="button" class="btn me-2") Account
                     a(href="/admin/add-bus")
-                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Add Bus
+                        button(data-mdb-ripple-init type="button" class="btn me-2") Add bus
                     a(href="/admin/update-bus")
-                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Update Bus                        
+                        button(data-mdb-ripple-init type="button" class="btn me-2") Update bus                        
                     a(href="/admin/records")
-                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Records
-
+                        button(data-mdb-ripple-init type="button" class="btn me-2") Records
+                    a(href="/admin/show-all-bus")
+                        button(data-mdb-ripple-init type="button" class="btn me-2") Buses
 
                 else if(user.role === "conductor" || user.role === "driver")
-                    a(href="/checkTickets")
-                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Check Ticket
+                    a(href="/check-tickets")
+                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Check ticket
 
+                    a(href="/host-location")
+                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Host Location
 
                 if(user)
                     if(user.role === "user")

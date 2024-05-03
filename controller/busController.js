@@ -228,7 +228,7 @@ exports.reserveSeat = async (req, res) => {
         //     return statusFunc(res, 400, "cannot reserve seat on the past dates");
         // } 
 
-        const userId = 1;
+        const userId = res.locals.user.id;
 
         const tableName = `${year}_${month}_${day}_${slug.replaceAll("-", "_")}`;
 

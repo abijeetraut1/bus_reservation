@@ -29,8 +29,16 @@ block content
                     <input type="password" class="form-control" id="worker-password-confirm"  required>
                 </div>
 
+                <div class="mb-3">
+                    <label for="select-bus" class="form-label h6">Select Bus</label>
 
-                <button type="submit" id="create-worker-account" class="btn btn-primary">Submit</button>
+                    <select class="form-select" id="select-bus" aria-label="Default select">
+                        each bus in buses
+                            option(value=`${bus.id}` selected)= bus.busName
+                    </select>
+                </div>
+
+                <button type="submit" id="create-worker-account" class="btn btn-primary w-100">Submit</button>
             </form>
 
     script(src="../../js/createWorkerAccount.js") 

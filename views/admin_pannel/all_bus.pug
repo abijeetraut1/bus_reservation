@@ -1,0 +1,29 @@
+extends ../headers/base
+
+block content
+    section.py-5.container
+
+        table.table.table-striped.table-hover
+            tr
+                th S.N
+                th Bus Name
+                th Bus Number
+                th Price
+                th Start Location
+                th End Location
+                th Seats
+                th Facilities
+                
+            each bus, i in buses
+                tr
+                    td= i+1
+                    td= bus.busName
+                    td= bus.busNumber
+                    td= bus.ticketPrice
+                    td= bus.startLocation
+                    td= bus.endLocation
+                    td= bus.totalSeats
+                    td.d-flex.flex-wrap.grid.gap-2
+                        each facility in JSON.parse(bus.facilities)
+                            if(facility.value === "true")
+                                span(style="text-transform: capitalize;")= facility.name

@@ -8,6 +8,8 @@ const {
     Sequelize
 } = require('sequelize');
 const { bookedSeat } = require("./admin_panel/admin_panel");
+const stripe = require('stripe')('sk_test_51PCFKESCr9yQB7OIgWwuHwRQyvpBv5NDU0D6QrQtDvtoD99P3jHoo3bShnAjMiSjxPdwTzDKLTaEpVZaOVifJec000loBuXI73');
+
 
 exports.home = (req, res) => {
     const user = res.locals.user;
@@ -138,3 +140,29 @@ exports.register = (req, res) => {
     })
 }
 
+// payment section not working
+const YOUR_DOMAIN = 'http://localhost:8000';
+
+exports.checkout_session = async (req, res) => {
+    const busSlug = req.params.slug;
+    
+    const busPrice = await database.sequelize.query(`SELECT buses.ticketPrice FROM buses WHERE slug = '${busSlug}'`, {
+        type: QueryTypes.SELECT
+    });
+
+    console.log(busPrice)
+    if(!busPrice) res.render("Not_Found.pug");
+    
+    const session = await stripe.checkout.sessions.create({
+        line_items: [{
+            // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+            price: busPrice.map(el => el.ticketPrice),
+            quantity: 1,
+        }, ],
+        mode: 'payment',
+        success_url: `${YOUR_DOMAIN}`,
+        cancel_url: `${YOUR_DOMAIN}`,
+    });
+
+    res.redirect(303, session.url);
+}
