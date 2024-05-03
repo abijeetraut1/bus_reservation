@@ -26,6 +26,9 @@ module.exports = (sequelize, Sequelize) => {
         role:{
             type: Sequelize.ENUM("user", "owner", "driver", "conductor", "super-admin"),
         },
+        busId:{
+            type: Sequelize.INTEGER,
+        },
         password: {
             type: Sequelize.STRING,
             allowNull: false

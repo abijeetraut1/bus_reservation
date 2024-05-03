@@ -57,10 +57,13 @@ exports.update_bus = async (req, res) => {
 
 exports.show_all_bus = async (req, res) => {
     const userId = res.locals.user.id;
+    console.log(userId)
 
-    const buses = await database.sequelize.query(`SELECT * FROM buses WHERE buses.user = '${userId}'`, {
+    const buses = await database.sequelize.query(`SELECT buses.busName, buses.busNumber, buses.ticketPrice, buses.startLocation, buses.endLocation, buses.totalSeats, buses.facilities FROM buses WHERE buses.user = '${userId}' `, {
         type: QueryTypes.SELECT,
     })
+
+    console.log(buses)
 
     res.render("./admin_pannel/all_bus.pug", {
         title: "All Bus",

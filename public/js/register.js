@@ -2,6 +2,7 @@ $(document).ready(async function () {
 
     $("#register-button").click(async (el) => {
         el.preventDefault();
+        console.log("first")
 
         const username = $("#username").val();
         const phone = $("#contact-number").val();

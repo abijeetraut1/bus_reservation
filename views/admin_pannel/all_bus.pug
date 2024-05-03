@@ -23,6 +23,7 @@ block content
                     td= bus.startLocation
                     td= bus.endLocation
                     td= bus.totalSeats
+
                     td.d-flex.flex-wrap.grid.gap-2
                         each facility in JSON.parse(bus.facilities)
                             if(facility.value === "true")

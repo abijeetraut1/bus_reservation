@@ -4,6 +4,7 @@ $(document).ready(function () {
         const phone = $("#worker-number").val();
         const name = $("#worker-name").val();
         const password = $("#worker-password").val();
+        const bus = $("#select-bus").val();
 
         const createWorkerAccount = await axios({
             method: "POST",
@@ -11,7 +12,8 @@ $(document).ready(function () {
             data: {
                 phone,
                 name,
-                password
+                password,
+                bus
             }
         })
 

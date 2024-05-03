@@ -39,7 +39,8 @@ exports.signup = async (req, res) => {
     const {
         phone,
         name,
-        password
+        password,
+        bus
     } = req.body;
 
     if(!phone || !name || !password){
@@ -65,11 +66,16 @@ exports.signup = async (req, res) => {
         role: req.query.role,
         password: await bcrypt.hash(password, 12),
         isActive: true,
+        busId: bus,
         isVerified: false,
         verificationCode: code,
     })
 
-    createRefreshToken(res, signup);
+    if(req.query.role === "conductor" || req.query.role === "driver"){
+        statusFunc(res, 200, "created");
+    }else{
+        createRefreshToken(res, signup);
+    }
 }
 
 // login
@@ -121,7 +127,8 @@ exports.isOwnerLoggedIn = async (req, res, next) => {
             type: QueryTypes.SELECT
         })
         
-        if(findUser[0].role !== "owner") return res.render("./not_found.pug", {title: "Not Found"})
+        // if(!findUser[0]) return;
+        // if(findUser[0].role !== "owner") return res.render("./not_found.pug", {title: "Not Found"})
 
         res.locals.user = findUser[0];
     }
