@@ -128,7 +128,7 @@ block content
                                             <div class="d-flex d-md-none flex-column">  
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div class="h6">Price</div>
-                                                    div#ticket-price= bus.ticketPrice
+                                                    div#ticket-price-mobile= bus.ticketPrice
                                                 </div>
                                             </div>
                                                                                         
@@ -216,35 +216,35 @@ block content
                                             <div class="d-flex flex-column">  
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div class="h6">Seat</div>
-                                                    div(class="d-flex grid gap-1" id="seats")= bus.totalSeats
+                                                    div(class="d-flex grid gap-1")= bus.totalSeats
                                                 </div>
                                             </div> 
 
                                             <div class="d-flex flex-column">  
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div class="h6">Price</div>
-                                                    div#ticket-price= bus.ticketPrice
+                                                    div= bus.ticketPrice
                                                 </div>
                                             </div>
                                             
                                             <div class="d-flex flex-column">  
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div class="h6">Bus Number</div>
-                                                    div(id="ticket-quantity")= bus.busNumber
+                                                    div= bus.busNumber
                                                 </div>                                                        
                                             </div>   
 
                                             <div class="d-flex flex-column">  
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div class="h6">point: </div>
-                                                    div(id="net-price")=  bus.stopLocation.length
+                                                    div=  bus.stopLocation.length
                                                 </div>                                                        
                                             </div> 
 
                                             <div class="d-flex flex-column">  
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div class="h6">Type: </div>
-                                                    div(id="net-price") Bus
+                                                    div Bus
                                                 </div>                                                   
                                             </div>    
 
@@ -252,7 +252,7 @@ block content
                                             <div class="d-flex flex-column">  
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div class="h6">Company: </div>
-                                                    div(id="net-price") Ram Travel
+                                                    div Ram Travel
                                                 </div>                                                   
                                             </div>                                                                                                                                                                                                                                              
                                         </div>
@@ -301,14 +301,14 @@ block content
                                     //- seats
                                     div.collapse.my-2(id=`seat-slider-${bus.slug}`)
                                         <div class="container d-flex flex-column flex-md-row justify-content-between grid gap-4">
-                                            <div class="col-10 col-md-3 custom-border py-2 row rounded">
+                                            <div class="col-md-3 custom-border py-2 row rounded">
                                                 <div class="d-flex justify-content-around">
                                                     <div class="container">
                                                         <div class="row">
                                                             <div class="col-12">
                                                                 //- driver and conduction seat
                                                                 div.
-                                                                    <div class="my-2 col-10">
+                                                                    <div class="my-2 col-12 col-md-10">
                                                                         <div class="d-flex flex-wrap justify-content-end">
                                                                             <div>
                                                                                 <div class="seat-height-width custom-border rounded" style="background: red; color: white;" title="Driver">DR</div>
@@ -333,6 +333,13 @@ block content
                                                                         user-select: none;
                                                                     }
 
+                                                                    @media screen and (max-width: 767px){
+                                                                        .seat-height-width{
+                                                                            height: 50px;
+                                                                            width: 50px;
+                                                                        }                                                                        
+                                                                    }
+
 
                                                                     .active{
                                                                         background-color: #27d327;
@@ -347,33 +354,33 @@ block content
 
                                                                 //- passenger seat
                                                                 <div class="my-2 justiy-content-evenly d-flex justify-content-between">
-                                                                    <div class="col-5 d-flex flex-wrap grid gap-1 justify-content-start">
+                                                                    <div class="col-5 d-flex flex-wrap grid gap-1 justify-content-around">
                                                                         - for(let i = 0; i <= ((bus.totalSeats) - 5) /2 ; i++)
                                                                             <div>
                                                                                 div(class=`avl-seat seat-height-width custom-border rounded p-1 ${seatA ? seatA.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : "" : ""}`   value=`${"A" + (i+1)}`)= "A" + (i+1)
                                                                             </div>                                   
                                                                     </div>
 
-                                                                    <div class="col-5 d-flex flex-wrap grid gap-1 justify-content-start">
+                                                                    <div class="col-5 d-flex flex-wrap grid gap-1 justify-content-around">
                                                                         - for(let i = 0; i <= ((bus.totalSeats) - 5)/2; i++)
                                                                             <div>
-                                                                                div(class=`avl-seat seat-height-width custom-border rounded p-1 ${seatB ? seatB.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : "": ""}` value=`${"B" + (i+1)} : ""`)= "B" + (i+1)
+                                                                                div(class=`avl-seat seat-height-width custom-border rounded p-1 ${seatB ? seatB.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : "": ""}` value=`${"B" + (i+1)}`)= "B" + (i+1)
                                                                             </div>
                                                                     </div>
                                                                 </div>    
                                                                 
                                                                 //- 37 - 5 = 32 /2 = 16 
-                                                                <div class="d-flex flex-wrap justiy-content-evenly col-12 grid gap-1">
+                                                                <div class="d-flex flex-wrap justiy-content-around col-12 grid gap-1">
                                                                     - var backSeatCalculation = Math.round(((bus.totalSeats - 5) / 2));
 
                                                                     - for(let i = backSeatCalculation+1; i <= backSeatCalculation + 3; i++)
                                                                         <div>
-                                                                            div(class=`avl-seat seat-height-width custom-border rounded ${seatA ? seatA.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : "" : ""}` value=`${"A" + backSeatCalculation + (i)}`)= "A" + parseInt(i)
+                                                                            div(class=`avl-seat seat-height-width custom-border rounded ${seatA ? seatA.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : "" : ""}` value=`${"A" + i}`)= "A" + parseInt(i)
                                                                         </div>
 
                                                                     - for(let i = backSeatCalculation +1; i <= backSeatCalculation + 2; i++)
                                                                         <div>
-                                                                            div(class=`avl-seat seat-height-width custom-border rounded ${seatB ? seatB.includes(JSON.stringify(i)) ? "reserved bookedTicket" : "" : ""}` value=`${"B" + backSeatCalculation + (i)}`)= "B" + parseInt(i)
+                                                                            div(class=`avl-seat seat-height-width custom-border rounded ${seatB ? seatB.includes(JSON.stringify(i)) ? "reserved bookedTicket" : "" : ""}` value=`${"B" + i}`)= "B" + parseInt(i)
                                                                         </div>                                    
                                                                 </div>
                                                             </div>
@@ -450,17 +457,17 @@ block content
                                                         <hr/>
                                                     </div>
                                                     
-                                                    <div class="d-flex flex-column">  
+                                                    <div class="d-flex mb-2 flex-column">  
                                                         <div class="d-flex justify-content-between align-items-center">
                                                             <div class="h6">Net Price</div>
                                                             <div id="net-price">0</div>
                                                         </div>                                                        
-                                                    </div>                                                                                                                                                        
+                                                    </div>                                                                                                                          
                                                 </div>
 
                                                 <div class="col-12 ">
                                                     div.d-flex.justify-content-end 
-                                                        <button type="button" class="btn btn-primary py-2 px-4">Reserve Seat</button>
+                                                        <button type="button" class="w-100 btn btn-primary py-2 px-4">Reserve Seat</button>
                                                 </div>
                                             </div>
 

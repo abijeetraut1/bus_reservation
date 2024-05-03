@@ -25,19 +25,21 @@ $(document).ready(function () {
             } else {
                 if (count === 3) return alert("cannot reserve more then 3 seat a time");                
                 element.classList.add("active");
+                console.log(element)
+
                 seatsArr.push($(element).attr("value"));
                 count++;
                 
                 $("#ticket-quantity").text(seatsArr.length)   
             }
 
+            console.log(baseTicketPrice * seatsArr.length)
             $("#ticket-price").text(baseTicketPrice * seatsArr.length)
             $("#net-price").text(baseTicketPrice * seatsArr.length);
 
 
-            $("#seats").html( seatsArr.map(el => "<span>"+ el +"</span>") )
-
-            
+            $("#seats").html( seatsArr.map(el => `<span> ${el} </span>`) )
+            console.log(seatsArr)
         });
 
     })
