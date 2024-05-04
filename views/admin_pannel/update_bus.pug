@@ -1,3 +1,134 @@
 extends ../headers/base
 
 block content
+    style.
+        .custom-border{
+            border: 1px solid #afafaf;
+            border-radius: 4px;
+        }
+
+    .container-fluid.pt-4.px-3
+        .container-fluid.d.flex.flex-column.p-3.p-md-5.admin-container.custom-border.rounded.shadow-lg.d-flex.col-md-6
+            div.d-flex.align-items-end.grid.gap-2
+                <div class="mb-3">
+                    <label for="select-bus" class="form-label h6">Select Bus</label>
+                    <select class="form-select w-100" id="select-bus" aria-label="Default select">
+                        each bus in buses
+                            option(value=`${bus.id}` selected)= bus.busName
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <button id="extract-bus-data" class="bg-primary rounded py-2 px-5 w-100" style="border: none; outline: none; color: white;">Update</button>
+                </div>
+
+            div
+                hr
+
+            div#bus_registration_details
+                <div class="mb-3 d-flex flex-column flex-md-row grid gap-3"> 
+                    <div>
+                        <label for="bus-name" class="form-label h6">Name</label>
+                        <input type="text" class="form-control" id="bus-name" placeholder="Trivent Bus">
+                    </div>
+                    <div>
+                        <label for="bus-number" class="form-label h6">Bus Number</label>
+                        <input type="number" class="form-control" id="bus-number" placeholder="1234">
+                    </div>
+                    <div>
+                        <label for="total-seats" class="form-label h6">Seats Count</label>
+                        <input type="number" class="form-control" id="total-seats" placeholder="36" />
+                    </div>                    
+                </div>                       
+
+                <div class="mb-3 d-flex flex-column flex-md-row grid gap-3">
+                    <div>
+                        <label for="ticket-price" class="form-label h6">Price</label>
+                        <input type="number" class="form-control" id="ticket-price" placeholder="1200" />
+                    </div>
+
+                    <div>
+                        <label for="bus-images" class="form-label h6">Bus Images</label>
+                        <input class="form-control" type="file" id="bus-images" accept="image/*" multiple>
+                    </div>                    
+                </div>                
+
+                <div class="d-flex grid flex-column flex-md-row gap-3 mb-3">
+                    <div>
+                        <label for="startLocation" class="form-label h6">Start Location</label>
+                        <input type="text" class="form-control" id="startLocation" placeholder="Kakarbhitta" />
+                    </div>  
+                    <div >
+                        <label for="endLocation" class="form-label h6">End Location</label>
+                        <input type="text" class="form-control" id="endLocation" placeholder="Kathmandu" />
+                    </div>
+                    <div>
+                        <label for="journey-start-time" class="form-label h6">Journey Start Time</label>
+                        <input type="time" class="form-control" id="journey-start-time">
+                    </div>                        
+                </div>
+
+                style.
+                    .day-wrapper{
+                        width: 10vw;
+                    }
+                    @media screen and (max-width: 767px){
+                        .day-wrapper{
+                            width: 30vw;
+                        }
+                    }
+
+                    .facility-wrapper{
+                        width: 20vw;
+                    }
+                    @media screen and (max-width: 767px){
+                        .facility-wrapper{
+                            width: 50%;
+                        }
+                    }                    
+
+                <div class="d-flex flex-column mb-3">
+                    <label class="form-label h6">Days</label>
+
+                    div.d-flex.grid.gap-3.flex-wrap
+                        each days in ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
+                            <div class="day-wrapper">
+                                <div class="h6 d-flex grid gap-2 align-items-center">
+                                    input(type="checkbox" id=`${days}` class="days" style="user-select: none")
+                                    label(for=`${days}`)= (days.replaceAll("_", " "))[0].toUpperCase() + (days.replaceAll("_", " ")).slice(1, days.length)
+                                </div>
+                            </div>
+                </div>
+
+                style.
+                    .facility-container{
+                        width: 100%;
+                        display: flex;
+                        flex-wrap: wrap;
+                        align-items: center;
+                        column-gap: 1rem;
+                        flex-direction: row;
+                    }
+
+                <div class="d-flex flex-column mb-3">
+                    <label for="facilities" class="form-label h6">Facilities</label>
+
+                    <div class="facility-container"> <!-- Use col-md-6 for medium screens -->
+                        each facility in ["ac", "blanket", "busTracking", "cctv", "chargingPoint", "movie", "noSmoking", "sos", "washroom", "waterBottle", "wifi"]
+                            <div class="d-flex grid gap-3 align-items-space justify-content-between facility-wrapper">
+                                div.h6.d-flex.justify-content-center.flex-row.grid.gap-3(style="user-select: none")
+                                    input(type="checkbox" class="facility" id=`${facility}`)
+                                    label(for=`${facility}`)= (facility.replaceAll("_", " "))[0].toUpperCase() + (facility.replaceAll("_", " ")).slice(1, facility.length)
+                                div
+                                    img(src=`../../images/icons/facility/${facility}.svg`,  height="18px" width="18px", alt=`${facility}`)
+                            </div>
+                    </div>
+                </div>      
+
+                <div class="mb-3">
+                    <button id="register-bus" class="bg-primary rounded py-2 px-5 w-100" style="border: none; outline: none; color: white;">Update Bus</button>
+                </div>
+
+
+    script(src="../../js/update_bus.js")
+    script(src="../../js/addBus.js")

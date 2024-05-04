@@ -59,31 +59,83 @@ exports.registerBus = async (req, res) => {
             wifi,
         } = req.body;
 
-        const daysOfWeek = [
-            { day: 'Sunday', value: sunday },
-            { day: 'Monday', value: monday },
-            { day: 'Tuesday', value: tuesday },
-            { day: 'Wednesday', value: wednesday },
-            { day: 'Thursday', value: thursday },
-            { day: 'Friday', value: friday },
-            { day: 'Saturday', value: saturday }
+        const daysOfWeek = [{
+                day: 'Sunday',
+                value: sunday
+            },
+            {
+                day: 'Monday',
+                value: monday
+            },
+            {
+                day: 'Tuesday',
+                value: tuesday
+            },
+            {
+                day: 'Wednesday',
+                value: wednesday
+            },
+            {
+                day: 'Thursday',
+                value: thursday
+            },
+            {
+                day: 'Friday',
+                value: friday
+            },
+            {
+                day: 'Saturday',
+                value: saturday
+            }
         ];
 
-        const facilitiesArr = [
-            { name: 'ac', value: ac },
-            { name: 'blanket', value: blanket },
-            { name: 'busTracking', value: busTracking },
-            { name: 'cctv', value: cctv },
-            { name: 'chargingPoint', value: chargingPoint },
-            { name: 'movie', value: movie },
-            { name: 'noSmoking', value: noSmoking },
-            { name: 'sos', value: sos },
-            { name: 'washroom', value: washroom },
-            { name: 'waterBottle', value: waterBottle },
-            { name: 'wifi', value: wifi }
+        const facilitiesArr = [{
+                name: 'ac',
+                value: ac
+            },
+            {
+                name: 'blanket',
+                value: blanket
+            },
+            {
+                name: 'busTracking',
+                value: busTracking
+            },
+            {
+                name: 'cctv',
+                value: cctv
+            },
+            {
+                name: 'chargingPoint',
+                value: chargingPoint
+            },
+            {
+                name: 'movie',
+                value: movie
+            },
+            {
+                name: 'noSmoking',
+                value: noSmoking
+            },
+            {
+                name: 'sos',
+                value: sos
+            },
+            {
+                name: 'washroom',
+                value: washroom
+            },
+            {
+                name: 'waterBottle',
+                value: waterBottle
+            },
+            {
+                name: 'wifi',
+                value: wifi
+            }
         ];
 
-        const days = JSON.stringify(daysOfWeek); 
+        const days = JSON.stringify(daysOfWeek);
         const facilities = JSON.stringify(facilitiesArr);
 
         const createTable = "CREATE TABLE IF NOT EXISTS buses (id INT AUTO_INCREMENT PRIMARY KEY, user INT, busNumber INT, busName VARCHAR(100), ticketPrice INT, imageJSON JSON, startLocation VARCHAR(100), endLocation VARCHAR(100), stopLocationJSON JSON, journeyStartTime TIME, totalSeats INT, days JSON, facilities JSON, slug VARCHAR(100))";
@@ -93,7 +145,7 @@ exports.registerBus = async (req, res) => {
         })
 
         // Check if busNumber already exists
-        const busNumberExists = await database.sequelize.query(`SELECT busNumber from buses WHERE busNumber = ${busNumber}`, {
+        const busNumberExists = await database.sequelize.query(`SELECT buses.busNumber from buses WHERE busNumber = ${busNumber}`, {
             type: Sequelize.QueryTypes.RAW,
         });
 
@@ -320,6 +372,140 @@ exports.allReservedSeat = async (req, res) => {
     } catch (err) {
         return statusFunc(res, 400, err);
     }
+}
+
+exports.getOneBus = async (req, res) => {
+    const busId = req.params.id;
+    console.log(busId)
+
+    const bus = await database.sequelize.query(`SELECT * FROM buses WHERE buses.id = '${busId}'`, {
+        type: QueryTypes.SELECT
+    })
+
+    statusFunc(res, 200, bus[0]);
+}
+
+exports.updateBus = async (req, res) => {
+    const busId = req.params.id;
+
+    console.log(req.body);
+    const {
+        busName,
+        busNumber,
+        startLocation,
+        endLocation,
+        journeyStartTime,
+        ticketPrice,
+        totalSeats,
+        sunday,
+        monday,
+        tuesday,
+        wednesday,
+        thursday,
+        friday,
+        saturday,
+        ac,
+        blanket,
+        busTracking,
+        cctv,
+        chargingPoint,
+        movie,
+        noSmoking,
+        sos,
+        washroom,
+        waterBottle,
+        wifi,
+    } = req.body;
+
+    const daysOfWeek = [{
+            day: 'Sunday',
+            value: sunday
+        },
+        {
+            day: 'Monday',
+            value: monday
+        },
+        {
+            day: 'Tuesday',
+            value: tuesday
+        },
+        {
+            day: 'Wednesday',
+            value: wednesday
+        },
+        {
+            day: 'Thursday',
+            value: thursday
+        },
+        {
+            day: 'Friday',
+            value: friday
+        },
+        {
+            day: 'Saturday',
+            value: saturday
+        }
+    ];
+
+    const facilitiesArr = [{
+            name: 'ac',
+            value: ac
+        },
+        {
+            name: 'blanket',
+            value: blanket
+        },
+        {
+            name: 'busTracking',
+            value: busTracking
+        },
+        {
+            name: 'cctv',
+            value: cctv
+        },
+        {
+            name: 'chargingPoint',
+            value: chargingPoint
+        },
+        {
+            name: 'movie',
+            value: movie
+        },
+        {
+            name: 'noSmoking',
+            value: noSmoking
+        },
+        {
+            name: 'sos',
+            value: sos
+        },
+        {
+            name: 'washroom',
+            value: washroom
+        },
+        {
+            name: 'waterBottle',
+            value: waterBottle
+        },
+        {
+            name: 'wifi',
+            value: wifi
+        }
+    ];
+
+    const days = JSON.stringify(daysOfWeek);
+    const facilities = JSON.stringify(facilitiesArr);
+
+    await database.sequelize.query(`UPDATE buses SET busName = ?, busNumber = ?, startLocation = ?, endLocation = ?, journeyStartTime = ?, ticketPrice = ?, totalSeats = ?, days = ?, facilities = ? WHERE id = ?`, {
+        type: QueryTypes.UPDATE,
+        replacements: [busName, busNumber, startLocation, endLocation, journeyStartTime, ticketPrice, totalSeats, days, facilities, busId]
+    })
+
+    statusFunc(res, 200, "updated table");
+}
+
+exports.deleteBus = async(req, res) => {
+
 }
 
 // generate qrCode based on the ticket

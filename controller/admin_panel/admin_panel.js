@@ -40,8 +40,6 @@ exports.createWorkersAccount = async (req, res) => {
         type: QueryTypes.SELECT,
     })
 
-    console.log(buses)
-
     res.render("./admin_pannel/createWorkersAccount.pug", {
         title: "Worker Account",
         buses: buses
@@ -50,8 +48,15 @@ exports.createWorkersAccount = async (req, res) => {
 
 
 exports.update_bus = async (req, res) => {
+    const user = res.locals.user.id;
+
+    const buses = await database.sequelize.query(`SELECT buses.id, buses.busName, buses.slug FROM buses WHERE buses.user = '${user}'`, {
+        type: QueryTypes.SELECT,
+    })
+
     res.render("./admin_pannel/update_bus.pug", {
         title: "Update Bus",
+        buses: buses
     })
 }
 
@@ -59,12 +64,11 @@ exports.show_all_bus = async (req, res) => {
     const userId = res.locals.user.id;
     console.log(userId)
 
-    const buses = await database.sequelize.query(`SELECT buses.busName, buses.busNumber, buses.ticketPrice, buses.startLocation, buses.endLocation, buses.totalSeats, buses.facilities FROM buses WHERE buses.user = '${userId}' `, {
+    const buses = await database.sequelize.query(`SELECT users.name, buses.busName, buses.busNumber, buses.id, buses.ticketPrice, buses.startLocation, buses.endLocation, buses.totalSeats, buses.facilities FROM buses JOIN users ON users.busId = buses.id WHERE buses.user = '${userId}' `, {
         type: QueryTypes.SELECT,
     })
 
-    console.log(buses)
-
+    
     res.render("./admin_pannel/all_bus.pug", {
         title: "All Bus",
         buses: buses
