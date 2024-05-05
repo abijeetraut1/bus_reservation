@@ -25,6 +25,6 @@ router.get("/admin/add-bus", adminPanel.addBus);
 router.get("/admin/bookedseat", adminPanel.bookedSeat);
 router.get("/admin/income", adminPanel.income);
 router.get("/admin/worker-account", adminPanel.createWorkersAccount);
-router.get("/admin/update-bus", adminPanel.update_bus);
+router.get("/admin/assistants", adminPanel.assistants);
 
 module.exports = router;

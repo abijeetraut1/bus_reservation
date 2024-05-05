@@ -5,6 +5,7 @@ async function busOperation(url) {
     const startLocation = $("#startLocation").val();
     const endLocation = $("#endLocation").val();
     const totalSeats = $("#total-seats").val();
+    const stopcut = $("#stop-cut-price").val();
     const journeyStartTime = $("#journey-start-time").val();
     
     const sunday = $("#sunday").prop("checked");
@@ -48,6 +49,7 @@ async function busOperation(url) {
     formData.append('endLocation', endLocation);
     formData.append('journeyStartTime', journeyStartTime);
     formData.append('totalSeats', totalSeats);
+    formData.append('stopCut', stopcut);
     formData.append('sunday', sunday);
     formData.append('monday', monday);
     formData.append('tuesday', tuesday);
@@ -77,11 +79,15 @@ async function busOperation(url) {
 
     // window.location.pathname === '/admin/update-bus' ? `/api/v1/bus/update-bus/${select}` :
     // `/api/v1/bus/register-bus`,
-    const uploadBusAzios = await axios({
+    const uploadBusAxios = await axios({
         method: "POST",
         url: `/api/v1/bus/${url}`,
         data: formData
     })
 
-    console.log(uploadBusAzios);
+    if(uploadBusAxios.data.status === "Success"){
+        window.location.reload();
+    }else{
+        alert("Failed to Upload data Please Reload! 🔮");
+    }
 }

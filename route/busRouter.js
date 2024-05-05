@@ -21,6 +21,7 @@ router.post("/:slug/reserve-seat", authController.isLoggedIn, busController.rese
 router.post("/:slug/rate-bus", authController.isLoggedIn, busReviewAndRatings.rateBus);
 router.get("/get-one-bus/:id", busController.getOneBus);
 router.post("/update-bus/:id", upload.array("busImage"), busController.updateBus);
+router.delete("/delete-bus/:id", upload.array("busImage"), busController.deleteBus);
 
 // router.get("/search/:fromLocation/:toLocation/:date", busController.searchBus);
 router.get("/:slug/allReservedSeats", authController.isLoggedIn, busController.allReservedSeat);

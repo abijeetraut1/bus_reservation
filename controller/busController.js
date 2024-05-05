@@ -39,6 +39,7 @@ exports.registerBus = async (req, res) => {
             busNumber,
             ticketPrice,
             totalSeats,
+            stopCut,
             sunday,
             monday,
             tuesday,
@@ -138,7 +139,7 @@ exports.registerBus = async (req, res) => {
         const days = JSON.stringify(daysOfWeek);
         const facilities = JSON.stringify(facilitiesArr);
 
-        const createTable = "CREATE TABLE IF NOT EXISTS buses (id INT AUTO_INCREMENT PRIMARY KEY, user INT, busNumber INT, busName VARCHAR(100), ticketPrice INT, imageJSON JSON, startLocation VARCHAR(100), endLocation VARCHAR(100), stopLocationJSON JSON, journeyStartTime TIME, totalSeats INT, days JSON, facilities JSON, slug VARCHAR(100))";
+        const createTable = "CREATE TABLE IF NOT EXISTS buses (id INT AUTO_INCREMENT PRIMARY KEY, user INT, busNumber INT, busName VARCHAR(100), ticketPrice INT, stopCut INT, imageJSON JSON, startLocation VARCHAR(100), endLocation VARCHAR(100), stopLocationJSON JSON, journeyStartTime TIME, totalSeats INT, days JSON, facilities JSON, slug VARCHAR(100))";
 
         await database.sequelize.query(createTable, {
             type: Sequelize.QueryTypes.RAW
@@ -170,7 +171,7 @@ exports.registerBus = async (req, res) => {
         const imageJSON = JSON.stringify(image);
 
         // Prepare INSERT query
-        const insertDataQuery = `INSERT INTO buses (user, busNumber, busName, ticketPrice, imageJSON, startLocation, endLocation, stopLocationJSON, journeyStartTime, totalSeats, days, facilities, slug) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        const insertDataQuery = `INSERT INTO buses (user, busNumber, busName, ticketPrice, stopCut, imageJSON, startLocation, endLocation, stopLocationJSON, journeyStartTime, totalSeats, days, facilities, slug) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
         // Insert data
         await database.sequelize.query(insertDataQuery, {
@@ -180,6 +181,7 @@ exports.registerBus = async (req, res) => {
                 busNumber,
                 busName,
                 ticketPrice,
+                stopCut,
                 imageJSON,
                 startLocation,
                 endLocation,
@@ -505,8 +507,17 @@ exports.updateBus = async (req, res) => {
 }
 
 exports.deleteBus = async(req, res) => {
+    const userData = res.locals.user.id;
+    const busToDelete = req.params.id;
+    
+    await database.sequelize.query(`DELETE FROM buses WHERE id = '${busToDelete}'`, {
+        type: QueryTypes.DELETE
+    })
 
+    statusFunc(res, 200, "deleted");
 }
+
+
 
 // generate qrCode based on the ticket
 exports.showAllTicket = async (req, res) => {

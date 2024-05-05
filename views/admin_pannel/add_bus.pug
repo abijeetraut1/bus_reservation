@@ -32,6 +32,11 @@ block content
                     </div>
 
                     <div>
+                        <label for="stop-cut-price" class="form-label h6">Stop Cut</label>
+                        <input type="number" class="form-control" id="stop-cut-price" placeholder="100" />
+                    </div>
+
+                    <div>
                         <label for="bus-images" class="form-label h6">Bus Images</label>
                         <input class="form-control" type="file" id="bus-images" accept="image/*" multiple>
                     </div>                    
@@ -110,7 +115,7 @@ block content
                 </div>      
 
                 <div class="mb-3">
-                    <button id="register-bus" class="bg-primary rounded py-2 px-5 w-100" style="border: none; outline: none; color: white;">Register Bus</button>
+                    button(id="register-bus"  class="bg-primary rounded py-2 px-5 w-100" onclick=`busOperation('register-bus')`, style="border: none; outline: none; color: white;") Register Bus
                 </div>
 
     script(src="../../js/addBus.js")

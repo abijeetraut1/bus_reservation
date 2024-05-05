@@ -104,6 +104,17 @@ exports.login = async (req, res) => {
     createRefreshToken(res, login);
 }
 
+exports.delete_user = async(req, res) => {
+    const userData = res.locals.user.id;
+    const userToDelete = req.params.id;
+    
+    await database.sequelize.query(`DELETE FROM users WHERE id = '${userToDelete}'`, {
+        type: QueryTypes.DELETE
+    })
+    console.log(userData, req.params.id)
+    statusFunc(res, 200, "deleted");
+}
+
 // login checker
 exports.isLoggedIn = async (req, res, next) => {
     if (req.cookies.jwt) {
@@ -113,7 +124,7 @@ exports.isLoggedIn = async (req, res, next) => {
             type: QueryTypes.SELECT
         })
 
-        console.log(findUser)
+        console.log("\n \n \n"+ findUser +"\n \n \n")
 
         res.locals.user = findUser[0];
     }

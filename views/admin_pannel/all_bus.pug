@@ -8,10 +8,6 @@ block content
             <div>
                 <button class="bg-primary rounded py-2 px-5" style="border: none; outline: none; color: white;" data-bs-toggle="modal" data-bs-target="#appoint">Appoint</button>
             </div>
-
-            <div>
-                <button class="bg-primary rounded py-2 px-5" style="border: none; outline: none; color: white;" data-bs-toggle="modal" data-bs-target="#addBus">Add Bus</button>
-            </div>
         </div>
 
         
@@ -103,6 +99,11 @@ block content
                                         </div>
 
                                         <div>
+                                            <label for="stop-cut-price" class="form-label h6">Stop Cut</label>
+                                            <input type="number" class="form-control" id="stop-cut-price" placeholder="100" />
+                                        </div>
+
+                                        <div>
                                             <label for="journey-start-time" class="form-label h6">Journey Start Time</label>
                                             <input type="time" class="form-control w-100" id="journey-start-time">
                                         </div>             
@@ -158,7 +159,7 @@ block content
 
                                     style.
                                         .facility-container{
-                                            width: 100%;
+                                            width: 20vw;
                                             display: flex;
                                             flex-wrap: wrap;
                                             align-items: center;
@@ -219,8 +220,10 @@ block content
                     td.fw-bold.text-primary(style="cursor: pointer;")
                         span(data-bs-toggle="modal" data-bs-target="#addBus" onclick=`check('${bus.id}')`)
                             | Edit              
-                    td.fw-bold.text-danger(style="cursor: pointer;" id="delete-bus-data" value=`${bus.id}`) Delete
+                    td.fw-bold.text-danger(style="cursor: pointer;" onclick=`deleteData('bus/delete-bus/${bus.id}')` id="delete-bus-data" value=`${bus.id}`) Delete
                 
 
     script(src="../../js/addBus.js")
     script(src="../../js/update_bus.js")
+    script(src="../../js/deleteAxios.js")
+    script(src="../../js/createWorkerAccount.js")

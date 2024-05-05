@@ -17,6 +17,7 @@ router.use(authController.isLoggedIn);
 
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
+router.delete("/delete-user/:id", authController.delete_user);
 
 router.patch("/change-number", authController.changeNumber)
 router.post("/profile-picture", upload.single("profile"), authController.uploadProfilePicture)

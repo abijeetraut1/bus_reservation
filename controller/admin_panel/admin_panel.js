@@ -27,6 +27,22 @@ exports.bookedSeat = async (req, res) => {
     })
 }
 
+exports.assistants = async (req, res) => {
+    const userId = res.locals.user.id;
+
+    const queryExec = `SELECT users.id, users.name, users.phoneNo, buses.busName, buses.busNumber, buses.startLocation, buses.endLocation, buses.totalSeats FROM buses JOIN users ON users.busId = buses.id WHERE buses.user = '${userId}'`;
+    
+    const assistants = await database.sequelize.query(queryExec, {
+        type: QueryTypes.SELECT,
+    })
+
+    console.log(assistants)
+
+    res.render("./admin_pannel/assistants.pug", {
+        title: "Assistants",
+        assistants: assistants
+    })
+}
 
 exports.income = async (req, res) => {
     res.render("./admin_pannel/income.pug", {
@@ -64,7 +80,7 @@ exports.show_all_bus = async (req, res) => {
     const userId = res.locals.user.id;
     console.log(userId)
 
-    const buses = await database.sequelize.query(`SELECT users.name, buses.busName, buses.busNumber, buses.id, buses.ticketPrice, buses.startLocation, buses.endLocation, buses.totalSeats, buses.facilities FROM buses JOIN users ON users.busId = buses.id WHERE buses.user = '${userId}' `, {
+    const buses = await database.sequelize.query(`SELECT buses.busName, buses.busNumber, buses.id, buses.ticketPrice, buses.startLocation, buses.endLocation, buses.totalSeats, buses.facilities FROM buses WHERE buses.user = '${userId}' `, {
         type: QueryTypes.SELECT,
     })
 

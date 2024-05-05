@@ -128,7 +128,7 @@ block content
                                             <div class="d-flex d-md-none flex-column">  
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div class="h6">Price</div>
-                                                    div#ticket-price-mobile= bus.ticketPrice
+                                                    div#ticket-price-mobile= bus.bus_fare
                                                 </div>
                                             </div>
                                                                                         
@@ -171,7 +171,7 @@ block content
                                             span= bus.bookedSeats
                                             span(style="font-size: small;")= "[" + bus.totalSeats + "]"
                                         div(class="col-md-1 d-none d-md-flex align-items-start grid gap-1")
-                                            span#base-price= bus.ticketPrice
+                                            span#base-price= bus.bus_fare
                                             span(style="font-size: small;") NPR                                       
 
                                     </div>
@@ -223,7 +223,7 @@ block content
                                             <div class="d-flex flex-column">  
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div class="h6">Price</div>
-                                                    div= bus.ticketPrice
+                                                    div= bus.bus_fare
                                                 </div>
                                             </div>
                                             

@@ -1,0 +1,29 @@
+extends ../headers/base
+
+block content
+    .container.my-5
+        table.table.table-striped.table-hover.shadow-lg
+            tr
+                th S.N
+                th Assist. Name
+                th Assist. Number
+                th Bus Name
+                th Bus Number
+                th Start Location
+                th End Location
+                th Seats
+                th Delete
+
+            each assistant, i in assistants
+                tr
+                    td= i+1
+                    td= assistant.name
+                    td= assistant.phoneNo
+                    td= assistant.busName
+                    td= assistant.busNumber
+                    td= assistant.startLocation
+                    td= assistant.endLocation
+                    td= assistant.totalSeats           
+                    td.fw-bold.text-danger(style="cursor: pointer;" onclick=`deleteData('user/delete-user/${assistant.id}')` id="delete-bus-data" value=`${assistant.id}`) Delete
+
+    script(src="../../js/deleteAxios.js")

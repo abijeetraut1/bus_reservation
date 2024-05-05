@@ -44,7 +44,6 @@ function ArrangeSeat(seatArr) {
 // searching the bus according to the bus location
 exports.search = async (req, res) => {
     console.log(req.query)
-
     const {
         from: fromLocation,
         to: toLocation,
@@ -60,6 +59,7 @@ exports.search = async (req, res) => {
         'SELECT  buses.id, buses.busName, buses.stopLocationJSON, buses.ticketPrice, buses.busNumber, buses.facilities, buses.totalSeats, buses.slug FROM buses ', {
             type: QueryTypes.SELECT,
         });
+
 
     // extract the id where the locations contains
     const LocationsContains = [];
@@ -79,10 +79,13 @@ exports.search = async (req, res) => {
 
             // only select those field which contains those 2 locations
             if (el.stopLocation.includes(fromLocation) && el.stopLocation.includes(toLocation) === true) {
+
                 try {
                     const checkSeat = await database.sequelize.query(`SELECT * FROM ${date.replaceAll("-", "_") + "_" + el.busNumber + "_" + el.busName.replaceAll(" ", "_") }`, {
                         type: QueryTypes.SELECT,
                     });
+
+                    console.log(el.ticketPrice)
 
                     el.bookedSeats = checkSeat.length;
                     console.log(bookedSeats)
@@ -106,6 +109,12 @@ exports.search = async (req, res) => {
                     // Handle error
                     el.bookedSeats = 0;
                 }
+
+                // ticket base price
+                const stop_per_price = el.ticketPrice / el.stopLocation.length;
+                const stop_raw_calc = Math.abs(el.stopLocation.indexOf(fromLocation) - el.stopLocation.indexOf(toLocation));
+                el.bus_fare = stop_raw_calc * stop_per_price;
+
                 LocationsContains.push(el);
             }
         })).then(() => {
