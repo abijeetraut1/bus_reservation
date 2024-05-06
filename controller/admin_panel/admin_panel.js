@@ -1,3 +1,4 @@
+const { statusFunc } = require("../../utils/statusFunc");
 const database = require("./../../model/index");
 const {
     sequelize,
@@ -27,11 +28,13 @@ exports.bookedSeat = async (req, res) => {
     })
 }
 
+
+
 exports.assistants = async (req, res) => {
     const userId = res.locals.user.id;
 
     const queryExec = `SELECT users.id, users.name, users.phoneNo, buses.busName, buses.busNumber, buses.startLocation, buses.endLocation, buses.totalSeats FROM buses JOIN users ON users.busId = buses.id WHERE buses.user = '${userId}'`;
-    
+
     const assistants = await database.sequelize.query(queryExec, {
         type: QueryTypes.SELECT,
     })
@@ -84,7 +87,7 @@ exports.show_all_bus = async (req, res) => {
         type: QueryTypes.SELECT,
     })
 
-    
+
     res.render("./admin_pannel/all_bus.pug", {
         title: "All Bus",
         buses: buses

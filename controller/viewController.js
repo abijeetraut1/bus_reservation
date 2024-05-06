@@ -7,7 +7,9 @@ const {
     QueryTypes,
     Sequelize
 } = require('sequelize');
-const { bookedSeat } = require("./admin_panel/admin_panel");
+const {
+    bookedSeat
+} = require("./admin_panel/admin_panel");
 const stripe = require('stripe')('sk_test_51PCFKESCr9yQB7OIgWwuHwRQyvpBv5NDU0D6QrQtDvtoD99P3jHoo3bShnAjMiSjxPdwTzDKLTaEpVZaOVifJec000loBuXI73');
 
 
@@ -21,7 +23,7 @@ exports.home = (req, res) => {
 }
 
 
-exports.logout = async(req, res) => {
+exports.logout = async (req, res) => {
     res.clearCookie('jwt');
 
     res.redirect("/");
@@ -68,73 +70,50 @@ exports.search = async (req, res) => {
         count: 0
     };
 
-    let arrangedSeatA;
-    let arrangedSeatB;
-
-    if(searchResult.length === 0) return;
+    if (searchResult.length === 0) return;
 
 
     Promise.all(searchResult.map(async el => {
-            el.stopLocation = JSON.parse(el.stopLocationJSON)
+        el.stopLocation = JSON.parse(el.stopLocationJSON)
 
-            // only select those field which contains those 2 locations
-            if (el.stopLocation.includes(fromLocation) && el.stopLocation.includes(toLocation) === true) {
+        // only select those field which contains those 2 locations
+        if (el.stopLocation.includes(fromLocation) && el.stopLocation.includes(toLocation) === true) {
 
-                try {
-                    const checkSeat = await database.sequelize.query(`SELECT * FROM ${date.replaceAll("-", "_") + "_" + el.busNumber + "_" + el.busName.replaceAll(" ", "_") }`, {
-                        type: QueryTypes.SELECT,
-                    });
+            LocationsContains.push(el);
+        }
+    })).then(async () => {
+        for(const el of LocationsContains){
+            const checkSeat = await database.sequelize.query(`SELECT seatNo FROM ${date.replaceAll("-", "_") + "_" + el.busNumber + "_" + el.busName.replaceAll(" ", "_") }`, {
+                type: QueryTypes.SELECT,
+            });
 
-                    console.log(el.ticketPrice)
+            el.bookedSeats = checkSeat.length;
+            if(checkSeat.length === 0) return res.send("hello world");
+            const seatA = [];
+            const seatB = [];
 
-                    el.bookedSeats = checkSeat.length;
-                    console.log(bookedSeats)
+            checkSeat.filter((el, i) => el.seatNo.startsWith("A") ? seatA.push(el.seatNo.slice(1, el.seatNo.length)) : seatB.push(el.seatNo.slice(1, el.seatNo.length)));
+            el.seatA = ArrangeSeat(seatA);
+            el.seatB = ArrangeSeat(seatB);
+            
+            const stop_per_price = el.ticketPrice / el.stopLocation.length;
+            const stop_raw_calc = Math.abs(el.stopLocation.indexOf(fromLocation) - el.stopLocation.indexOf(toLocation));
+            el.bus_fare = stop_raw_calc * stop_per_price;
+        }
 
-                    // 2024_12_12_2221_kankai_bus
-                    console.log(date)
-                    const seatArr = await database.sequelize.query(`SELECT seatNo FROM ${date.replaceAll("-", "_") + "_"  + el.slug.replaceAll("-", "_")}`, {
-                        type: QueryTypes.SELECT
-                    })
-                
-                    if(seatArr.length === 0) return res.send("hello world");
-                    const seatA = [];
-                    const seatB = [];
 
-                    seatArr.filter((el, i) => el.seatNo.startsWith("A") ? seatA.push(el.seatNo.slice(1, el.seatNo.length)) : seatB.push(el.seatNo.slice(1, el.seatNo.length)));
-
-                    arrangedSeatA = ArrangeSeat(seatA);
-                    arrangedSeatB = ArrangeSeat(seatB);
-                    console.log(arrangedSeatA, arrangedSeatB)
-                } catch (err) {
-                    // Handle error
-                    el.bookedSeats = 0;
-                }
-
-                // ticket base price
-                const stop_per_price = el.ticketPrice / el.stopLocation.length;
-                const stop_raw_calc = Math.abs(el.stopLocation.indexOf(fromLocation) - el.stopLocation.indexOf(toLocation));
-                el.bus_fare = stop_raw_calc * stop_per_price;
-
-                LocationsContains.push(el);
-            }
-        })).then(() => {
-
-            // console.log(LocationsContains)
-            // statusFuncLength(res, 200, LocationsContains);
-            res.render("./user/Search_Result.pug", {
-                buses: LocationsContains,
-                ratings: sumRate,
-                title: toLocation,
-                seatA: arrangedSeatA,
-                seatB: arrangedSeatB,
-                from: fromLocation,
-                to: toLocation
-            })
+        res.render("./user/Search_Result.pug", {
+            buses: LocationsContains,
+            ratings: sumRate,
+            title: toLocation,
+            from: fromLocation,
+            to: toLocation,
+            date: date
         })
-        .catch(err => {
-            // Handle error if any of the promises fail
-            console.error("Error:", err);
-        });
+    }).catch(err => {
+        // Handle error if any of the promises fail
+        console.error("Error:", err);
+    });
 }
 
 exports.login = (req, res) => {
@@ -154,14 +133,14 @@ const YOUR_DOMAIN = 'http://localhost:8000';
 
 exports.checkout_session = async (req, res) => {
     const busSlug = req.params.slug;
-    
+
     const busPrice = await database.sequelize.query(`SELECT buses.ticketPrice FROM buses WHERE slug = '${busSlug}'`, {
         type: QueryTypes.SELECT
     });
 
     console.log(busPrice)
-    if(!busPrice) res.render("Not_Found.pug");
-    
+    if (!busPrice) res.render("Not_Found.pug");
+
     const session = await stripe.checkout.sessions.create({
         line_items: [{
             // Provide the exact Price ID (for example, pr_1234) of the product you want to sell

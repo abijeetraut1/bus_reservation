@@ -282,6 +282,9 @@ exports.reserveSeat = async (req, res) => {
         //     return statusFunc(res, 400, "cannot reserve seat on the past dates");
         // } 
 
+
+        console.log(seatno)
+
         const userId = res.locals.user.id;
 
         const tableName = `${year}_${month}_${day}_${slug.replaceAll("-", "_")}`;
@@ -298,7 +301,7 @@ exports.reserveSeat = async (req, res) => {
         })
 
         // finding the seat no to check the bus total seats
-        const busSeat = await database.sequelize.query(`SELECT buses.id, buses.noOfSeats FROM buses WHERE slug = ?`, {
+        const busSeat = await database.sequelize.query(`SELECT buses.id, buses.totalSeats FROM buses WHERE slug = ?`, {
             type: QueryTypes.SELECT,
             replacements: [slug]
         })
@@ -325,11 +328,12 @@ exports.reserveSeat = async (req, res) => {
             return statusFunc(res, 400, "seat is already booked");
         }
 
-
         // inserting the data
-        await database.sequelize.query(`INSERT INTO ${tableName} (seatNo, userId, busid, isTicketChecked, passengerCurrentLocation, passengerDestination) values (?, ?, ?, ?, ?, ?)`, {
-            type: QueryTypes.RAW,
-            replacements: [seatno, userId, busSeat[0].id, 0, passengerCurrentLocation, passengerDestination]
+        seatno.forEach(async el => {
+            await database.sequelize.query(`INSERT INTO ${tableName} (seatNo, userId, busid, isTicketChecked, passengerCurrentLocation, passengerDestination) values (?, ?, ?, ?, ?, ?)`, {
+                type: QueryTypes.RAW,
+                replacements: [el, userId, busSeat[0].id, 0, passengerCurrentLocation, passengerDestination]
+            });
         })
 
         statusFunc(res, 200, `seat no: ${seatno} by userid: ${userId}`)
