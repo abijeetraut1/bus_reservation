@@ -4,7 +4,7 @@ const router = express.Router();
 const authController = require("./../controller/authController");
 const driveController = require("./../controller/driverController") 
 
-router.patch("/checkTicket", authController.isLoggedIn, driveController.checkTicket)
+router.get("/checkTicket", driveController.checkTicket);
 
 
 module.exports = router;

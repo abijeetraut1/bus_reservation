@@ -44,7 +44,7 @@ $(document).ready(function () {
 });
 
 
-async function book_seats(bus_slug, from, to, date) {
+async function book_seats(bus_slug, from, to, date, bus_fare) {
     console.log(bus_slug, from, to, date)
     const seats = seatsArr;
     const year = date.split("-")[0];
@@ -60,15 +60,10 @@ async function book_seats(bus_slug, from, to, date) {
             passengerDestination: to,
             year: year,
             month: month,
-            day: day
+            day: day,
+            price: bus_fare
         }
     })
 
     console.log(book_seat_request)
-}
-// seatno,
-// year,
-// month,
-// day,
-// passengerCurrentLocation,
-// passengerDestination
+};

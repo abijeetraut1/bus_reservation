@@ -124,8 +124,6 @@ exports.isLoggedIn = async (req, res, next) => {
             type: QueryTypes.SELECT
         })
 
-        console.log("\n \n \n"+ findUser +"\n \n \n")
-
         res.locals.user = findUser[0];
     }
     next();

@@ -1,0 +1,132 @@
+extends ../headers/base
+
+block content
+
+    style.
+        .card {
+            width: 30%;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        @media screen and (max-width : 767px){
+            .card {
+                width: 100%;            
+            }
+        }
+        .card-header {
+            border: 2px solid #afafaf;
+            border-bottom: 2px dotted #afafaf;
+            border-radius: 10px 10px 0 0;
+            position: relative;
+        }
+        .card-header:before, .card-header:after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: #fff;
+            border-radius: 100%;
+            bottom: -12px;
+            border: 2px solid #afafaf;
+            box-sizing: border-box;
+        }
+        .card-header:before { 
+            left: -13px;
+        }
+        .card-header:after {
+            right: -13px;
+        }
+        .card-body {
+            border: 2px solid #afafaf;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+        }
+
+    div.container
+        div.d-block.d-md-flex.flex-wrap.grid.gap-3.my-5
+            each ticket in tickets 
+                <div id="ticket" class="card" >
+                    <div class="card-header bg-primary rounded text-white d-flex justify-content-between align-items-center">
+                        div.d-flex.grid.gap-1
+                            p.h6= ticket.busName
+                            p.h6= "(" + ticket.busNumber + ")"
+                        div 
+                            p.h6= ticket.seatNo                
+                    </div>
+                    <div class="card-body">
+                        div
+                            div.d-flex.grid.gap-2
+                                p.mb-1.fw-bold From
+                                p.mb-1.text-secondary= ticket.passengerCurrentLocation
+                            div.d-flex.grid.gap-2
+                                p.mb-1.fw-bold To
+                                p.mb-1.text-secondary= ticket.passengerDestination
+                            div.d-flex.grid.gap-2
+                                p.mb-1.fw-bold Date
+                                p.mb-1.text-secondary.d-flex
+                                    span= ticket.createAt.getFullYear() + "-"
+                                    span= ticket.createAt.getMonth() + "-"                   
+                                    span= ticket.createAt.getDay()                            
+
+                            div.d-flex.grid.gap-2
+                                - const id = ticket.slug + "-" + ticket.seatNo
+                                button(class="bg-primary rounded py-2 px-5 w-100" onclick=`QrTicket('${id}', '${ticket.seatNo}', '${ticket.slug}')` style="border: none; outline: none; color: white;" data-bs-toggle="modal" data-bs-target="#appoint") Ticket
+
+                                <div class="modal fade" id="appoint" tabindex="-1" aria-labelledby="appointLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="addBusLabel">Ticket </h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+
+                                            div(class="modal-body" id=`${id}-download-ticket`)
+                                                h5 Swift Bus
+                                                p.mb-1.text-secondary.d-flex.grid.gap-2   
+                                                    span= ticket.createAt.getFullYear() + "-"
+                                                    span= ticket.createAt.getMonth() + "-"                   
+                                                    span= ticket.createAt.getDay()
+
+                                                div
+                                                    hr
+                                                div
+                                                    div.d-flex.grid.gap-2
+                                                        p.mb-1.fw-bold From
+                                                        p.mb-1.text-secondary= ticket.passengerCurrentLocation
+                                                    
+                                                    div.d-flex.grid.gap-2
+                                                        p.mb-1.fw-bold To
+                                                        p.mb-1.text-secondary= ticket.passengerDestination
+
+                                                    div(id=`${id}`)
+
+                                            div.modal-header
+                                                button(class="bg-primary rounded py-2 px-5 w-100" style="border: none; outline: none; color: white;" onclick=`downloadTicket('${id}')` data-bs-toggle="modal" data-bs-target="#appoint") Download
+                                        </div>
+                                    </div>
+                                </div>
+
+                    </div>
+                </div>
+        div#ticket
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js" integrity="sha512-NFUcDlm4V+a2sjPX7gREIXgCSFja9cHtKPOL1zj6QhnE0vcY695MODehqkaGYTLyL2wxe/wtr4Z49SvqXq12UQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    script.
+        function QrTicket(id, seatNo, BusSlug){
+            $(`#${id}`).qrcode(`${window.location.host}/checkTicket/${BusSlug}/${seatNo}`);
+        }
+
+        function downloadTicket(id){
+            console.log(id+"-download-ticket");
+            const element = document.getElementById(id+"-download-ticket");
+   
+            html2pdf()
+                .set({ html2canvas: { scale: 4 } })
+                .from(element)
+                .save();
+        }

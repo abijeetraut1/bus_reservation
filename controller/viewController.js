@@ -83,19 +83,24 @@ exports.search = async (req, res) => {
         }
     })).then(async () => {
         for(const el of LocationsContains){
-            const checkSeat = await database.sequelize.query(`SELECT seatNo FROM ${date.replaceAll("-", "_") + "_" + el.busNumber + "_" + el.busName.replaceAll(" ", "_") }`, {
-                type: QueryTypes.SELECT,
-            });
+            try{
 
-            el.bookedSeats = checkSeat.length;
-            if(checkSeat.length === 0) return res.send("hello world");
-            const seatA = [];
-            const seatB = [];
-
-            checkSeat.filter((el, i) => el.seatNo.startsWith("A") ? seatA.push(el.seatNo.slice(1, el.seatNo.length)) : seatB.push(el.seatNo.slice(1, el.seatNo.length)));
-            el.seatA = ArrangeSeat(seatA);
-            el.seatB = ArrangeSeat(seatB);
-            
+                const checkSeat = await database.sequelize.query(`SELECT seatNo FROM ${date.replaceAll("-", "_") + "_" + el.busNumber + "_" + el.busName.replaceAll(" ", "_") }`, {
+                    type: QueryTypes.SELECT,
+                });
+                
+                el.bookedSeats = checkSeat.length;
+                // if(checkSeat.length === 0) return;
+                const seatA = [];
+                const seatB = [];
+                
+                checkSeat.filter((el, i) => el.seatNo.startsWith("A") ? seatA.push(el.seatNo.slice(1, el.seatNo.length)) : seatB.push(el.seatNo.slice(1, el.seatNo.length)));
+                el.seatA = ArrangeSeat(seatA);
+                el.seatB = ArrangeSeat(seatB);
+            } catch(err) {
+                el.bookedSeat = 0;
+            }
+                
             const stop_per_price = el.ticketPrice / el.stopLocation.length;
             const stop_raw_calc = Math.abs(el.stopLocation.indexOf(fromLocation) - el.stopLocation.indexOf(toLocation));
             el.bus_fare = stop_raw_calc * stop_per_price;
@@ -119,6 +124,35 @@ exports.search = async (req, res) => {
 exports.login = (req, res) => {
     res.render("./login.pug", {
         title: "Login",
+    })
+}
+
+exports.tickets = async(req, res) => {
+    const user_id = res.locals.user.id;
+
+    // SHOW TABLES In mystudentdb WHERE Tables_in_mystudentdb= "employees";  
+    const tables = await database.sequelize.query(`SHOW TABLES IN bus_reservations WHERE Tables_in_bus_reservations NOT IN ('buses', 'users')`);
+    
+    console.log(tables[0])
+    const tickets = [];
+
+    for(const table of tables[0]){
+        const tableName = table.Tables_in_bus_reservations;
+        console.log(tableName)
+        const datas = await database.sequelize.query(`SELECT seatNo, passengerCurrentLocation, passengerDestination, createAt, buses.slug, buses.busName, buses.busNumber FROM ${table.Tables_in_bus_reservations} JOIN buses ON buses.id = ${table.Tables_in_bus_reservations}.busId WHERE userid = '${user_id}'`, {
+            type: QueryTypes.SELECT,
+        })
+        
+        for(const ticket of datas){
+            tickets.push(ticket);
+        }
+    };
+
+    console.log(tickets)
+
+    res.render("./user/tickets.pug", {
+        title: "Tickets",
+        tickets: tickets
     })
 }
 

@@ -274,7 +274,8 @@ exports.reserveSeat = async (req, res) => {
             month,
             day,
             passengerCurrentLocation,
-            passengerDestination
+            passengerDestination,
+            price
         } = req.body;
 
         // block the reservation on past dates
@@ -284,12 +285,13 @@ exports.reserveSeat = async (req, res) => {
 
 
         console.log(seatno)
+        console.log(req.body)
 
         const userId = res.locals.user.id;
 
         const tableName = `${year}_${month}_${day}_${slug.replaceAll("-", "_")}`;
 
-        const createTable = `CREATE TABLE IF NOT EXISTS ${tableName} (id INT AUTO_INCREMENT PRIMARY KEY, seatNo VARCHAR(3), userid INT, busid INT, isTicketChecked TINYINT(0) NOT NULL, passengerCurrentLocation varchar(100), passengerDestination varchar(100), createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
+        const createTable = `CREATE TABLE IF NOT EXISTS ${tableName} (id INT AUTO_INCREMENT PRIMARY KEY, seatNo VARCHAR(3), userid INT, busid INT, isTicketChecked TINYINT(0) NOT NULL, passengerCurrentLocation varchar(100), passengerDestination varchar(100), price INT, createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
 
         // created table
         await database.sequelize.query(createTable, {
@@ -329,10 +331,11 @@ exports.reserveSeat = async (req, res) => {
         }
 
         // inserting the data
+        console.log(seatno)
         seatno.forEach(async el => {
-            await database.sequelize.query(`INSERT INTO ${tableName} (seatNo, userId, busid, isTicketChecked, passengerCurrentLocation, passengerDestination) values (?, ?, ?, ?, ?, ?)`, {
-                type: QueryTypes.RAW,
-                replacements: [el, userId, busSeat[0].id, 0, passengerCurrentLocation, passengerDestination]
+            await database.sequelize.query(`INSERT INTO ${tableName} (seatNo, userId, busid, isTicketChecked, passengerCurrentLocation, passengerDestination, price) values (?, ?, ?, ?, ?, ?, ?)`, {
+                type: QueryTypes.INSERT,
+                replacements: [el, userId, busSeat[0].id, 0, passengerCurrentLocation, passengerDestination, price]
             });
         })
 
