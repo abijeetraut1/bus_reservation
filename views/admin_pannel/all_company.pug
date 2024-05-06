@@ -1,0 +1,56 @@
+extends ../headers/base
+
+block content
+    style.
+        .custom-border{
+            border: 1px solid #afafaf;
+        }
+
+        .custom-width{
+            width: 16.5vw;
+            box-shadow: 3px 2px #afafaf;
+        }
+
+        @media screen and (max-width: 768px){
+            .custom-width{
+                width: 100%;
+            }
+        }
+
+
+
+    .container.my-4
+        div.d-flex.flex-column.flex-md-row.grid.gap-2.flex-wrap
+            div.custom-width.d-flex.grid.gap-3.custom-border.p-2.rounded.align-items-center
+                div.bg-success.rounded.p-4
+                    img(src="../../images/icons/company.svg", alt="")
+                div
+                    h5.text-success.fs-4 Total Company
+                    h5.text-secondary= totalCompany   
+
+        div
+            table.table.table-striped.table-hover.shadow-lg.my-4
+                tr
+                    th S.N
+                    th Company
+                    th Company Number
+                    th Bus Number
+                    th Bus Name
+                    th Start Location
+                    th End Location
+                    th Total Seat
+                    th Price
+                
+                each company, i in companys
+                    tr
+                        td= i + 1                   
+                        td= company.name    
+                        td= company.phoneNo            
+                        td= company.busNumber                   
+                        td= company.name                   
+                        td= company.busName                   
+                        td= company.startLocation                   
+                        td= company.endLocation                   
+                        td= company.totalSeats   
+                        td= company.price                 
+                    

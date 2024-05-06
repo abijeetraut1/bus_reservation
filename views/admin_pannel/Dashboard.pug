@@ -1,0 +1,72 @@
+extends ../headers/base
+
+block content
+    style.
+        .custom-border{
+            border: 1px solid #afafaf;
+        }
+
+        .custom-width{
+            width: 16.5vw;
+            box-shadow: 3px 2px #afafaf;
+        }
+
+        @media screen and (max-width: 768px){
+            .custom-width{
+                width: 100%;
+            }
+        }
+
+
+
+    .container.my-4
+        div.d-flex.flex-column.flex-md-row.grid.gap-2.flex-wrap
+            div.custom-width.d-flex.grid.gap-3.custom-border.p-2.rounded.align-items-center
+                div.bg-success.rounded.p-4
+                    img(src="../../images/icons/seat.svg", alt="")
+                div
+                    h5.text-success.fs-4 Total Booked
+                    h5.text-secondary= totalBookedSeat
+
+            div.custom-width.d-flex.grid.gap-3.custom-border.p-2.rounded.align-items-center
+                div.bg-success.rounded.p-4
+                    img(src="../../images/icons/rupee.svg", alt="")
+                div
+                    h5.text-success.fs-4 Total Income
+                    h5.text-secondary= totalIncomeGenerated
+
+            div.custom-width.d-flex.grid.gap-3.custom-border.p-2.rounded.align-items-center
+                div.bg-success.rounded.p-4
+                    img(src="../../images/icons/company.svg", alt="")
+                div
+                    h5.text-success.fs-4 Total Company
+                    h5.text-secondary= totalCompany   
+
+            div.custom-width.d-flex.grid.gap-3.custom-border.p-2.rounded.align-items-center
+                div.bg-success.rounded.p-4
+                    img(src="../../images/icons/bus.svg", alt="")
+                div
+                    h5.text-success.fs-4 Total Buses
+                    h5.text-secondary= busesLength  
+
+        div
+            table.table.table-striped.table-hover.shadow-lg.my-4
+                tr
+                    th S.N
+                    th Bus Name
+                    th User Name
+                    th Seat No
+                    th CurrentLocation
+                    th Destination
+                    th Price
+                
+                each ticket, i in userBookedSeat
+                    tr
+                        td= i + 1                   
+                        td= ticket.busName                   
+                        td= ticket.name                   
+                        td= ticket.seatNo                   
+                        td= ticket.passengerCurrentLocation                   
+                        td= ticket.passengerDestination                   
+                        td= ticket.price                   
+                    

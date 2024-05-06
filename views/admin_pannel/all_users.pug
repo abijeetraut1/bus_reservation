@@ -1,0 +1,46 @@
+extends ../headers/base
+
+block content
+    style.
+        .custom-border{
+            border: 1px solid #afafaf;
+        }
+
+        .custom-width{
+            width: 16.5vw;
+            box-shadow: 3px 2px #afafaf;
+        }
+
+        @media screen and (max-width: 768px){
+            .custom-width{
+                width: 100%;
+            }
+        }
+
+
+
+    .container.my-4
+        div.d-flex.flex-column.flex-md-row.grid.gap-2.flex-wrap
+            div.custom-width.d-flex.grid.gap-3.custom-border.p-2.rounded.align-items-center
+                div.bg-success.rounded.p-4
+                    img(src="../../images/icons/person.svg", alt="")
+                div
+                    h5.text-success.fs-4 Total Booked
+                    h5.text-secondary= users.length
+
+        div
+            table.table.table-striped.table-hover.shadow-lg.my-4
+                tr
+                    th S.N
+                    th Name
+                    th Number
+                    th Role
+                    
+                
+                each user, i in users
+                    tr
+                        td= i + 1                   
+                        td= user.name    
+                        td= user.phoneNo            
+                        td= user.role             
+                                        

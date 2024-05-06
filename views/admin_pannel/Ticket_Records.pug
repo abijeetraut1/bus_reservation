@@ -1,0 +1,94 @@
+extends ../headers/base
+
+block content
+    style.
+        .custom-border{
+            border: 1px solid #afafaf;
+        }   
+
+    .container  
+        div.my-5
+            each table in tables
+                div.rounded.custom-border.p-2.w-100
+                    div.p-2
+                        span= table.tableName
+
+                    div.d-flex.justify-content-between
+                        <div class="col-2 custom-border rounded p-2">
+                            //- driver and conduction seat
+                            div
+                                <div class="my-2 col-12 col-md-10">
+                                    <div class="d-flex flex-wrap justify-content-end">
+                                        <div>
+                                            <div class="seat-height-width custom-border rounded" style="background: red; color: white;" title="Driver">DR</div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex rounded">
+                                        <div>
+                                            <div class="seat-height-width custom-border rounded" style="background: red; color: white;" title="Conductor">CR</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            style.
+                                .seat-height-width{
+                                    height: 35px;
+                                    width: 35px;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    cursor: pointer;
+                                    user-select: none;
+                                }
+                                @media screen and (max-width: 767px){
+                                    .seat-height-width{
+                                        height: 50px;
+                                        width: 50px;
+                                    }                                                                        
+                                }
+                                .active{
+                                    background-color: #27d327;
+                                    color: white;
+                                }
+                                .reserved{
+                                    background: orange;
+                                    color: white;
+                                    cursor: not-allowed;
+                                }
+
+                            //- passenger seat  
+                            <div class="my-2 justiy-content-evenly d-flex justify-content-between">
+                                <div class="col-5 d-flex flex-wrap grid gap-1 justify-content-around">
+                                    - for(let i = 0; i <= ((table.totalSeat) - 5) /2 ; i++)
+                                        <div>
+                                            div(class=`avl-seat seat-height-width custom-border rounded p-1 ${table.seatA ? table.seatA.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : "" : ""}`   value=`${"A" + (i+1)}`)= "A" + (i+1)
+                                        </div>                                   
+                                </div>
+                                <div class="col-5 d-flex flex-wrap grid gap-1 justify-content-around">
+                                    - for(let i = 0; i <= ((table.totalSeat) - 5)/2; i++)
+                                        <div>
+                                            div(class=`avl-seat seat-height-width custom-border rounded p-1 ${table.seatB ? table.seatB.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : "": ""}` value=`${"B" + (i+1)}`)= "B" + (i+1)
+                                        </div>
+                                </div>
+                            </div>    
+
+                            //- 37 - 5 = 32 /2 = 16 
+                            <div class="d-flex flex-wrap justiy-content-around col-12 grid gap-1">
+                                - var backSeatCalculation = Math.round(((table.totalSeat - 5) / 2));
+                                - for(let i = backSeatCalculation+1; i <= backSeatCalculation + 3; i++)
+                                    <div>
+                                        div(class=`avl-seat seat-height-width custom-border rounded ${table.seatA ? table.seatA.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : "" : ""}` value=`${"A" + i}`)= "A" + parseInt(i)
+                                    </div>
+                                - for(let i = backSeatCalculation +1; i <= backSeatCalculation + 2; i++)
+                                    <div>
+                                        div(class=`avl-seat seat-height-width custom-border rounded ${table.seatB ? table.seatB.includes(JSON.stringify(i)) ? "reserved bookedTicket" : "" : ""}` value=`${"B" + i}`)= "B" + parseInt(i)
+                                    </div>                                    
+                            </div>
+                        </div>
+
+                        <div class="col-9 custom-border rounded p-2 d-flex flex-column grid gap-1">
+                            each user in table.ticketer
+                                div.d-flex.custom-border.rounded.p-2.grid.gap-3
+                                    span= user.name
+                                    span= user.seatNo
+                        </div>
