@@ -16,6 +16,9 @@
                     <li class="nav-item">
                         a(class="nav-link" href=`${nav.link}`)= nav.title
                     </li>
+                <li class="nav-item">
+                    p(class="nav-link") Abijeet Raut
+                </li>                    
             </ul>
 
             //- Left Slide NAvs 
@@ -50,7 +53,7 @@
                         button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Listed Company
                     a(href="/admin/all-users")
                         button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") All Users
-                    a(href="/admin/travel-records")
+                    a(href="/admin/ticket-records")
                         button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Records            
 
                 else if(user.role === "conductor" || user.role === "driver")
