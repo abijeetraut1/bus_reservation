@@ -9,24 +9,60 @@ const {
 
 exports.addBus = (req, res) => {
     res.render("./admin_pannel/add_bus.pug", {
-        title: "Add Bus"
+        title: "Add Bus",
+        name: res.locals.user.name
     })
 }
 
 
 exports.bookedSeat = async (req, res) => {
-    const bus = {
-        noOfSeats: 32
+    const userId = res.locals.user.id;
+
+
+    const tables = await database.sequelize.query(`SHOW TABLES IN bus_reservations WHERE Tables_in_bus_reservations NOT IN ('buses', 'users')`, {
+        type: QueryTypes.SHOWTABLES
+    });
+
+    const dataArr = [];
+    for (const table of tables) {
+        const tableData = await database.sequelize.query(`SELECT seatNo, busid FROM ${table}`, {
+            type: QueryTypes.SELECT
+        })
+
+        console.log(table)
+
+        const userData = await database.sequelize.query(`SELECT users.name, ${table}.seatNo, ${table}.busId, ${table}.passengerCurrentLocation, ${table}.passengerDestination, ${table}.isTicketChecked FROM ${table} JOIN users ON users.id = ${table}.userid `, {
+            type: QueryTypes.SELECT
+        })
+
+
+        const seatNo = await database.sequelize.query(`SELECT totalSeats FROM buses WHERE buses.id = ${tableData[0].busid}`, {
+            type: QueryTypes.SELECT,
+        })
+
+        const seatA = [];
+        const seatB = [];
+
+        tableData.filter((el, i) => el.seatNo.startsWith("A") ? seatA.push(el.seatNo.slice(1, el.seatNo.length)) : seatB.push(el.seatNo.slice(1, el.seatNo.length)));
+
+        table.seatA = ArrangeSeat(seatA);
+        table.seatB = ArrangeSeat(seatB);
+
+        dataArr.push({
+            tableName: table,
+            totalSeat: seatNo[0].totalSeats,
+            seatA: seatA,
+            seatB: seatB,
+            ticketer: userData,
+            name: res.locals.user.name
+
+        })
     }
 
-    const seatA = ["1", "2", "3", "4", "17"];
-    const seatB = ["1", "2", "3", "4", "15"];
-
-    res.render("./admin_pannel/bookedSeat.pug", {
-        title: "Booked Seats",
-        bus: bus,
-        seatA,
-        seatB
+    console.log(dataArr)
+    res.render("./admin_pannel/Ticket_Records.pug", {
+        title: "Records",
+        tables: dataArr
     })
 }
 
@@ -45,13 +81,15 @@ exports.assistants = async (req, res) => {
 
     res.render("./admin_pannel/assistants.pug", {
         title: "Assistants",
-        assistants: assistants
+        assistants: assistants,
+        name: res.locals.user.name
     })
 }
 
 exports.income = async (req, res) => {
     res.render("./admin_pannel/income.pug", {
-        title: "Income"
+        title: "Income",
+        name: res.locals.user.name
     })
 }
 
@@ -63,7 +101,8 @@ exports.createWorkersAccount = async (req, res) => {
 
     res.render("./admin_pannel/createWorkersAccount.pug", {
         title: "Worker Account",
-        buses: buses
+        buses: buses,
+        name: res.locals.user.name
     })
 }
 
@@ -100,6 +139,7 @@ exports.show_all_bus = async (req, res) => {
 
 exports.dashboard = async (req, res) => {
     const userId = res.locals.user.id;
+    const username = res.locals.user.name;
 
     const busesCompany = await database.sequelize.query("SELECT * FROM users WHERE users.role = 'owner'", {
         type: QueryTypes.SELECT
@@ -155,7 +195,8 @@ exports.dashboard = async (req, res) => {
         busesLength: busesLength,
         totalBookedSeat: totalBookedSeat,
         totalIncomeGenerated: totalIncome,
-        userBookedSeat: bookedSeats
+        userBookedSeat: bookedSeats,
+        name: res.locals.user.name
     })
 }
 
@@ -176,7 +217,8 @@ exports.listed_company = async (req, res) => {
     res.render("./admin_pannel/all_company.pug", {
         title: "Companys",
         totalCompany: totalCompany,
-        companys: busesCompanyList
+        companys: busesCompanyList,
+        name: res.locals.user.name
     })
 };
 
@@ -187,7 +229,8 @@ exports.all_users = async (req, res) => {
 
     res.render("./admin_pannel/all_users.pug", {
         title: "users",
-        users: users
+        users: users,
+        name: res.locals.user.name
     })
 };
 
@@ -221,7 +264,7 @@ exports.ticket_records = async (req, res) => {
         })
 
 
-        const seatNo = await database.sequelize.query(`SELECT totalSeats FROM buses WHERE buses.id = ${tableData[0].busid}`,{
+        const seatNo = await database.sequelize.query(`SELECT totalSeats FROM buses WHERE buses.id = ${tableData[0].busid}`, {
             type: QueryTypes.SELECT,
         })
 
@@ -232,19 +275,21 @@ exports.ticket_records = async (req, res) => {
 
         table.seatA = ArrangeSeat(seatA);
         table.seatB = ArrangeSeat(seatB);
-        
+
         dataArr.push({
             tableName: table,
             totalSeat: seatNo[0].totalSeats,
             seatA: seatA,
             seatB: seatB,
-            ticketer: userData
+            ticketer: userData,
+            
         })
     }
 
     console.log(dataArr)
     res.render("./admin_pannel/Ticket_Records.pug", {
         title: "Records",
-        tables: dataArr
+        tables: dataArr,
+        name: res.locals.user.name
     })
 }

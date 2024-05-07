@@ -18,7 +18,9 @@ exports.home = (req, res) => {
 
     res.render("./user/home.pug", {
         title: "Home",
-        user: user
+        user: user,
+        name: res.locals.user.name
+
     });
 }
 
@@ -82,25 +84,25 @@ exports.search = async (req, res) => {
             LocationsContains.push(el);
         }
     })).then(async () => {
-        for(const el of LocationsContains){
-            try{
+        for (const el of LocationsContains) {
+            try {
 
                 const checkSeat = await database.sequelize.query(`SELECT seatNo FROM ${date.replaceAll("-", "_") + "_" + el.busNumber + "_" + el.busName.replaceAll(" ", "_") }`, {
                     type: QueryTypes.SELECT,
                 });
-                
+
                 el.bookedSeats = checkSeat.length;
                 // if(checkSeat.length === 0) return;
                 const seatA = [];
                 const seatB = [];
-                
+
                 checkSeat.filter((el, i) => el.seatNo.startsWith("A") ? seatA.push(el.seatNo.slice(1, el.seatNo.length)) : seatB.push(el.seatNo.slice(1, el.seatNo.length)));
                 el.seatA = ArrangeSeat(seatA);
                 el.seatB = ArrangeSeat(seatB);
-            } catch(err) {
+            } catch (err) {
                 el.bookedSeat = 0;
             }
-                
+
             const stop_per_price = el.ticketPrice / el.stopLocation.length;
             const stop_raw_calc = Math.abs(el.stopLocation.indexOf(fromLocation) - el.stopLocation.indexOf(toLocation));
             el.bus_fare = stop_raw_calc * stop_per_price;
@@ -113,7 +115,8 @@ exports.search = async (req, res) => {
             title: toLocation,
             from: fromLocation,
             to: toLocation,
-            date: date
+            date: date,
+            name: res.locals.user.name
         })
     }).catch(err => {
         // Handle error if any of the promises fail
@@ -127,23 +130,23 @@ exports.login = (req, res) => {
     })
 }
 
-exports.tickets = async(req, res) => {
+exports.tickets = async (req, res) => {
     const user_id = res.locals.user.id;
 
     // SHOW TABLES In mystudentdb WHERE Tables_in_mystudentdb= "employees";  
     const tables = await database.sequelize.query(`SHOW TABLES IN bus_reservations WHERE Tables_in_bus_reservations NOT IN ('buses', 'users')`);
-    
+
     console.log(tables[0])
     const tickets = [];
 
-    for(const table of tables[0]){
+    for (const table of tables[0]) {
         const tableName = table.Tables_in_bus_reservations;
         console.log(tableName)
         const datas = await database.sequelize.query(`SELECT seatNo, passengerCurrentLocation, passengerDestination, createAt, buses.slug, buses.busName, buses.busNumber FROM ${table.Tables_in_bus_reservations} JOIN buses ON buses.id = ${table.Tables_in_bus_reservations}.busId WHERE userid = '${user_id}'`, {
             type: QueryTypes.SELECT,
         })
-        
-        for(const ticket of datas){
+
+        for (const ticket of datas) {
             tickets.push(ticket);
         }
     };
@@ -152,7 +155,8 @@ exports.tickets = async(req, res) => {
 
     res.render("./user/tickets.pug", {
         title: "Tickets",
-        tickets: tickets
+        tickets: tickets,
+        name: res.locals.user.name
     })
 }
 

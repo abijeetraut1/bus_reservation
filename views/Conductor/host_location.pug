@@ -1,0 +1,42 @@
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title= title
+
+        link(rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css")
+        link(rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css")
+
+        style.
+            * {
+                margin: 0;
+                padding: 0;
+            }
+
+            #map {
+                height: 50rem;
+                width: 100%;
+            }
+
+            #directions {
+                position: absolute;
+                width: 30%;
+                max-height: 50%;
+                right: 20px;
+                top: 20px;
+                overflow-y: auto; /* Show a scrollbar if needed */
+                background: rgb(194, 29, 29);
+                font-family: Arial, Helvetica, Verdana;
+                line-height: 1.5;
+                font-size: 14px;
+                padding: 10px;
+            }        
+    body 
+
+        div#map
+        h1 Your Shareing Your Location
+
+        script(src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js")
+        script(src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js")
+
+        script(src="./../js/tracker.js") 

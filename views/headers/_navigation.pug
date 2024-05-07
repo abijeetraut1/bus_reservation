@@ -13,7 +13,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsiveButtons">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    span(class="nav-link" style="font-weight: 600;") Abijeet Raut
+                    span(class="nav-link" style="font-weight: 600;")= name ? name : ""
                 </li> 
                 each nav in [{title: "Contact", link:"/contact"}, {title: "About us", link:"/about"}]
                     <li class="nav-item">
@@ -23,7 +23,35 @@
 
             //- Left Slide NAvs 
             <div class="d-flex align-items-center">
-                if(!user)
+                if(user)
+                    if(user.role === "owner")
+                        a(href="/owner/dashboard")
+                            button(data-mdb-ripple-init type="button" class="btn me-2") Dashboard
+                        a(href="/owner/add-bus")
+                            button(data-mdb-ripple-init type="button" class="btn me-2") Add bus
+                        a(href="/owner/assistants")
+                            button(data-mdb-ripple-init type="button" class="btn me-2") Assistants                        
+                        a(href="/owner/records")
+                            button(data-mdb-ripple-init type="button" class="btn me-2") Records
+                        a(href="/owner/show-all-bus")
+                            button(data-mdb-ripple-init type="button" class="btn me-2") Buses
+
+                    else if(user.role === "super-admin")
+                        a(href="/admin/dashboard")
+                            button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Dashboard                                      
+                        a(href="/admin/listed-company")
+                            button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Listed Company
+                        a(href="/admin/all-users")
+                            button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") All Users
+                        a(href="/admin/ticket-records")
+                            button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Records            
+
+                    else if(user.role === "conductor" || user.role === "driver")
+                        a(href="/check-tickets")
+                            button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Check ticket
+                        a(href="/host-location")
+                            button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Host Location
+                else                                             
                     a(href="/login") 
                         <button data-mdb-ripple-init type="button" class="btn px-3 me-2">
                             | Login
@@ -33,35 +61,6 @@
                         <button data-mdb-ripple-init type="button" class="btn btn-primary me-3">
                             | Sign up
                         </button>
-
-                else if(user.role === "owner")
-                    a(href="/admin/dashboard")
-                        button(data-mdb-ripple-init type="button" class="btn me-2") Dashboard
-                    a(href="/admin/add-bus")
-                        button(data-mdb-ripple-init type="button" class="btn me-2") Add bus
-                    a(href="/admin/assistants")
-                        button(data-mdb-ripple-init type="button" class="btn me-2") Assistants                        
-                    a(href="/admin/records")
-                        button(data-mdb-ripple-init type="button" class="btn me-2") Records
-                    a(href="/admin/show-all-bus")
-                        button(data-mdb-ripple-init type="button" class="btn me-2") Buses
-
-                else if(user.role === "super-admin")
-                    a(href="/admin/dashboard")
-                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Dashboard                                      
-                    a(href="/admin/listed-company")
-                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Listed Company
-                    a(href="/admin/all-users")
-                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") All Users
-                    a(href="/admin/ticket-records")
-                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Records            
-
-                else if(user.role === "conductor" || user.role === "driver")
-                    a(href="/check-tickets")
-                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Check ticket
-
-                    a(href="/host-location")
-                        button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Host Location
 
                 if(user)
                     if(user.role === "user")

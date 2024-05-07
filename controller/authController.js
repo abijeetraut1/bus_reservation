@@ -119,12 +119,14 @@ exports.delete_user = async(req, res) => {
 exports.isLoggedIn = async (req, res, next) => {
     if (req.cookies.jwt) {
         const id = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
-        console.log(id)
+        // console.log(id)
         const findUser = await database.sequelize.query(`SELECT users.id, users.name, users.role FROM users WHERE id = '${id.id}'`, {
             type: QueryTypes.SELECT
         })
 
         res.locals.user = findUser[0];
+    }else{
+        res.redirect("/login");
     }
     next();
 }
@@ -138,6 +140,22 @@ exports.isOwnerLoggedIn = async (req, res, next) => {
         
         // if(!findUser[0]) return;
         if(findUser[0].role !== "owner") return res.render("./not_found.pug", {title: "Not Found"})
+
+        res.locals.user = findUser[0];
+    }
+    next();
+}
+
+exports.isDriverLoggedIn = async (req, res, next) => {
+    if (req.cookies.jwt) {
+        const id = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
+        const findUser = await database.sequelize.query(`SELECT users.id, users.name, users.role FROM users WHERE id = '${id.id}'`, {
+            type: QueryTypes.SELECT
+        })
+        
+        console.log(findUser)
+        // if(!findUser[0]) return;
+        // if(findUser[0].role !== "conductor" || findUser[0].role !== "driver") return res.render("./not_found.pug", {title: "Not Found"})
 
         res.locals.user = findUser[0];
     }
