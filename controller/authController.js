@@ -137,7 +137,23 @@ exports.isOwnerLoggedIn = async (req, res, next) => {
         })
         
         // if(!findUser[0]) return;
-        // if(findUser[0].role !== "owner") return res.render("./not_found.pug", {title: "Not Found"})
+        if(findUser[0].role !== "owner") return res.render("./not_found.pug", {title: "Not Found"})
+
+        res.locals.user = findUser[0];
+    }
+    next();
+}
+
+exports.isSuperAdminLoggedIn = async (req, res, next) => {
+    if (req.cookies.jwt) {
+        const id = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
+        const findUser = await database.sequelize.query(`SELECT users.id, users.name, users.role FROM users WHERE id = '${id.id}'`, {
+            type: QueryTypes.SELECT
+        })
+        
+        // if(!findUser[0]) return; super-admin
+
+        if(findUser[0].role !== "super-admin") return res.render("./not_found.pug", {title: "Not Found"})
 
         res.locals.user = findUser[0];
     }

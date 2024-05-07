@@ -19,20 +19,20 @@ router.get("/tickets", viewController.tickets);
 router.post('/create-checkout-session/:slug', viewController.checkout_session);
 
 // admin panel 
-router.use(authController.isOwnerLoggedIn);
+// router.use(authController.isOwnerLoggedIn);
 
-router.get("/admin/dashboard", adminPanel.dashboard);
-router.get("/admin/listed-company", adminPanel.listed_company);
-router.get("/admin/all-users", adminPanel.all_users);
-router.get("/admin/ticket-records", adminPanel.ticket_records);
+router.get("/admin/dashboard", authController.isSuperAdminLoggedIn, adminPanel.dashboard);
+router.get("/admin/listed-company", authController.isSuperAdminLoggedIn, adminPanel.listed_company);
+router.get("/admin/all-users", authController.isSuperAdminLoggedIn, adminPanel.all_users);
+router.get("/admin/ticket-records", authController.isSuperAdminLoggedIn, adminPanel.ticket_records);
 
-router.get("/owner/show-all-bus", adminPanel.show_all_bus);
-router.get("/owner/add-bus", adminPanel.addBus);
-router.get("/owner/bookedseat", adminPanel.bookedSeat);
-router.get("/owner/income", adminPanel.income);
-router.get("/owner/worker-account", adminPanel.createWorkersAccount);
-router.get("/owner/assistants", adminPanel.assistants);
-router.get("/checkTicket/:bus/:seat", driverController.checkTicket);
+router.get("/owner/show-all-bus", authController.isOwnerLoggedIn, adminPanel.show_all_bus);
+router.get("/owner/add-bus", authController.isOwnerLoggedIn, adminPanel.addBus);
+router.get("/owner/bookedseat", authController.isOwnerLoggedIn, adminPanel.bookedSeat);
+router.get("/owner/income", authController.isOwnerLoggedIn, adminPanel.income);
+router.get("/owner/worker-account", authController.isOwnerLoggedIn, adminPanel.createWorkersAccount);
+router.get("/owner/assistants", authController.isOwnerLoggedIn, adminPanel.assistants);
+router.get("/checkTicket/:bus/:seat", authController.isOwnerLoggedIn, driverController.checkTicket);
 
 
 module.exports = router;

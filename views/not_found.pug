@@ -11,6 +11,7 @@ block content
             justify-content: center;
             align-items: center;
             height: 100vh;
+            width: 100vw;
             position: absolute;
             top: 0px;
 
@@ -19,24 +20,22 @@ block content
             text-align: center;
         }
         button {
-            background-color: #5B575A;
+            background-color: #0B5ED7;
             color: white;
             border: none;
             padding: 10px 20px;
             cursor: pointer;
             font-size: 16px;
             margin-top: 20px;
+            border-radius: 10px;
         }
-        button:hover {
-            background-color: #d73254;
-        }
-
     .container
         .content
             h1 Route Not Found
             h1.route
             p The page you are looking for does not exist.
-            button(onclick="redirectToHome()" class="rounded") Go to Home Page
+            button(onclick="redirectToHome()" class="rounded bg-primary") Go to Home Page
+
     script.
         const route = document.querySelector(".route");
         route.innerText = window.location.pathname;

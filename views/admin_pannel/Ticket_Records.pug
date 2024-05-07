@@ -15,10 +15,10 @@ block content
         div.my-5
             each table in tables
                 div.rounded.custom-border.p-2.w-100
-                    div.p-2
-                        span.h4= table.tableName.replaceAll("_", " ")
+                    div.col-md-2.d-inline-flex.gap-1
+                        p.text-decoration-none.py-3.text-black.h6= table.tableName.replaceAll("_", " ")
 
-                    div.d-flex.grid.gap-1
+                    div.collapse.d-flex.flex-column.flex-md-row.grid.gap-1
                         <div class="col-2 custom-border rounded p-2">
                             //- driver and conduction seat
                             div
@@ -34,7 +34,6 @@ block content
                                         </div>
                                     </div>
                                 </div>
-
                             style.
                                 .seat-height-width{
                                     height: 35px;
@@ -60,7 +59,6 @@ block content
                                     color: white;
                                     cursor: not-allowed;
                                 }
-
                             //- passenger seat  
                             <div class="my-2 justiy-content-evenly d-flex justify-content-between">
                                 <div class="col-5 d-flex flex-wrap grid gap-1 justify-content-around">
@@ -76,7 +74,6 @@ block content
                                         </div>
                                 </div>
                             </div>    
-
                             //- 37 - 5 = 32 /2 = 16 
                             <div class="d-flex flex-wrap justiy-content-around col-12 grid gap-1">
                                 - var backSeatCalculation = Math.round(((table.totalSeat - 5) / 2));
@@ -90,7 +87,6 @@ block content
                                     </div>                                    
                             </div>
                         </div>
-
                         <div class="col-10 custom-border rounded p-2 d-flex flex-row flex-wrap grid gap-1">
                             table.table.table-striped.table-hover.shadow-lg.my-4
                                 tr
@@ -100,7 +96,6 @@ block content
                                     th passengerCurrentLocation
                                     th passengerDestination
                                     th Checked
-
                                 each user, i in table.ticketer
                                     tr
                                         td= i + 1
