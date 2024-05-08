@@ -38,5 +38,15 @@ html(lang="en")
 
         script(src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js")
         script(src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js")
-
+        script(src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous")
         script(src="./../js/tracker.js") 
+        script.
+            const socket = io();
+            socket.emit('chat message', "helll");
+
+            io.on('connection', (socket) => {
+                socket.on('chat message', (msg) => {
+                    console.log('message: ' + msg);
+                });
+            });
+        

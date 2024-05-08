@@ -5,15 +5,16 @@ const viewController = require("./../controller/viewController")
 const adminPanel = require("./../controller/admin_panel/admin_panel")
 const authController = require("./../controller/authController")
 const driverController = require("./../controller/driverController")
+const catchAsync = require("./../utils/catchAsync")
 
-// router.use(authController.isLoggedIn);
+router.use(authController.isLoggedIn);
 
-router.get("/", viewController.home);
-router.get("/search", viewController.search);
-// router.get("/login", viewController.login);
-router.get("/register", viewController.register);
-router.get("/logout", viewController.logout);
-router.get("/tickets", viewController.tickets);
+router.get("/", catchAsync(viewController.home));
+router.get("/search", catchAsync(viewController.search));
+router.get("/login", catchAsync(viewController.login));
+router.get("/register", catchAsync(viewController.register));
+router.get("/logout", catchAsync(viewController.logout));
+router.get("/tickets", catchAsync(viewController.tickets));
 
 
 // admin panel 
@@ -33,7 +34,7 @@ router.get("/owner/assistants", authController.isOwnerLoggedIn, adminPanel.assis
 
 
 router.get("/checkTicket/:bus/:seat", authController.isDriverLoggedIn, driverController.checkTicket);
-// router.get("/host-location", authController.isDriverLoggedIn, driverController.currentBusLocations);
+// router.get("/host-location", driverController.host_location);
 // router.get("/get-location", driverController.getCurrentBusPosition);
 
 

@@ -1,6 +1,7 @@
 navigator.geolocation.getCurrentPosition(getCurrentLocation);
 
 function getCurrentLocation(position) {
+    
     let {
         longitude,
         latitude

@@ -5,6 +5,7 @@ const {
     QueryTypes
 } = require("sequelize");
 
+
 exports.checkTicket = async (req, res) => {
     const {
         bus,
@@ -19,3 +20,22 @@ exports.checkTicket = async (req, res) => {
     res.redirect("/");
 }
 
+
+
+exports.getCurrentBusPosition = async (req, res) => {
+    io.emit('some-event', "data"); // Emit an event to all connected clients
+    res.send('Response');
+    
+    // res.render("./Conductor/host_location.pug", {
+    //     user: "hello"
+    // })
+}
+
+
+// Express route handler
+exports.host_location = async (req, res) => {
+    
+    res.render("./Conductor/host_location.pug", {
+        user: "hello"
+    });
+};

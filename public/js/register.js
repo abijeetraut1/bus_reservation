@@ -1,5 +1,3 @@
-
-
 async function register() {
     const username = $("#username").val();
     const phone = $("#contact-number").val();
@@ -10,7 +8,7 @@ async function register() {
 
     const loginData = await axios({
         method: "POST",
-        url: "/api/v1/user/signup",
+        url: "/api/v1/user/signup?role=user",
         data: {
             phone: phone,
             name: username,
@@ -21,7 +19,7 @@ async function register() {
 
     if (loginData.data.status === "Success") {
         alert("register")
-        
+        window.location.href = "/";
     } else {
         console.log(loginData)
     }

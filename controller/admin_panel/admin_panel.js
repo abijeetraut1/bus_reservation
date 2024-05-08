@@ -139,7 +139,6 @@ exports.show_all_bus = async (req, res) => {
 
 exports.dashboard = async (req, res) => {
     const userId = res.locals.user.id;
-    const username = res.locals.user.name;
 
     const busesCompany = await database.sequelize.query("SELECT * FROM users WHERE users.role = 'owner'", {
         type: QueryTypes.SELECT

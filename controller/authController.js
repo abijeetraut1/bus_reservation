@@ -74,20 +74,18 @@ exports.signup = async (req, res) => {
         isVerified: false,
         verificationCode: code,
     })
-
-    createRefreshToken(res, signup);
-
-    // if(req.query.role === "conductor" || req.query.role === "driver"){
-    //     statusFunc(res, 200, "created");
-    // }else{
-    // }
+    
+    if(req.query.role === "conductor" || req.query.role === "driver"){
+        statusFunc(res, 200, "created");
+    }else{
+        createRefreshToken(res, signup);
+    }
 }
 
 
 
 // login
 exports.login = async (req, res) => {
-    console.log(req.body)
 
     const {
         phone,
@@ -130,6 +128,8 @@ exports.isLoggedIn = async (req, res, next) => {
         const findUser = await database.sequelize.query(`SELECT users.id, users.name, users.role FROM users WHERE id = '${id.id}'`, {
             type: QueryTypes.SELECT
         })
+
+        console.log(findUser)
 
         res.locals.user = findUser[0];
     }
