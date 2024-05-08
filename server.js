@@ -8,20 +8,20 @@ const io = socketIo(server);
 require("dotenv").config();
 
 
-io.on('connection', (socket) => {
-    console.log('user connected');
+// io.on('connection', (socket) => {
+//     console.log('user connected');
 
-    // Handle incoming messages
-    socket.on('chat message', (msg) => {
-        console.log('message: ' + msg);
-        io.emit('chat message', msg); // Broadcast message to all connected clients
-    });
+//     // Handle incoming messages
+//     socket.on('chat message', (msg) => {
+//         console.log('message: ' + msg);
+//         io.emit('chat message', msg); // Broadcast message to all connected clients
+//     });
 
-    // Handle disconnections
-    socket.on('disconnect', () => {
-        console.log('User disconnected');
-    });
-});
+//     // Handle disconnections
+//     socket.on('disconnect', () => {
+//         console.log('User disconnected');
+//     });
+// });
 
 
 server.listen(port, () => {

@@ -10,7 +10,7 @@ const driverController = require("./../controller/driverController")
 
 router.get("/", viewController.home);
 router.get("/search", viewController.search);
-router.get("/login", viewController.login);
+// router.get("/login", viewController.login);
 router.get("/register", viewController.register);
 router.get("/logout", viewController.logout);
 router.get("/tickets", viewController.tickets);
@@ -33,8 +33,8 @@ router.get("/owner/assistants", authController.isOwnerLoggedIn, adminPanel.assis
 
 
 router.get("/checkTicket/:bus/:seat", authController.isDriverLoggedIn, driverController.checkTicket);
-router.get("/host-location", authController.isDriverLoggedIn, driverController.currentBusLocations);
-router.get("/get-location", driverController.getCurrentBusPosition);
+// router.get("/host-location", authController.isDriverLoggedIn, driverController.currentBusLocations);
+// router.get("/get-location", driverController.getCurrentBusPosition);
 
 
 module.exports = router;

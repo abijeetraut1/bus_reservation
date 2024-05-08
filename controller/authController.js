@@ -1,7 +1,10 @@
 const database = require("../model/index");
 const users = database.users;
 
-const {Sequelize, QueryTypes} = require("sequelize");
+const {
+    Sequelize,
+    QueryTypes
+} = require("sequelize");
 const bcrypt = require("bcrypt");
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
@@ -13,6 +16,7 @@ require('dotenv').config();
 const createRefreshToken = (res, userData) => {
     const id = userData.id;
     const token = jwtToken(id);
+    console.log(token)
 
     res.cookie("jwt", token, {
         expires: new Date(
@@ -71,12 +75,15 @@ exports.signup = async (req, res) => {
         verificationCode: code,
     })
 
-    if(req.query.role === "conductor" || req.query.role === "driver"){
-        statusFunc(res, 200, "created");
-    }else{
-        createRefreshToken(res, signup);
-    }
+    createRefreshToken(res, signup);
+
+    // if(req.query.role === "conductor" || req.query.role === "driver"){
+    //     statusFunc(res, 200, "created");
+    // }else{
+    // }
 }
+
+
 
 // login
 exports.login = async (req, res) => {
@@ -104,10 +111,10 @@ exports.login = async (req, res) => {
     createRefreshToken(res, login);
 }
 
-exports.delete_user = async(req, res) => {
+exports.delete_user = async (req, res) => {
     const userData = res.locals.user.id;
     const userToDelete = req.params.id;
-    
+
     await database.sequelize.query(`DELETE FROM users WHERE id = '${userToDelete}'`, {
         type: QueryTypes.DELETE
     })
@@ -125,8 +132,6 @@ exports.isLoggedIn = async (req, res, next) => {
         })
 
         res.locals.user = findUser[0];
-    }else{
-        res.redirect("/login");
     }
     next();
 }
@@ -137,9 +142,11 @@ exports.isOwnerLoggedIn = async (req, res, next) => {
         const findUser = await database.sequelize.query(`SELECT users.id, users.name, users.role FROM users WHERE id = '${id.id}'`, {
             type: QueryTypes.SELECT
         })
-        
+
         // if(!findUser[0]) return;
-        if(findUser[0].role !== "owner") return res.render("./not_found.pug", {title: "Not Found"})
+        if (findUser[0].role !== "owner") return res.render("./not_found.pug", {
+            title: "Not Found"
+        })
 
         res.locals.user = findUser[0];
     }
@@ -152,7 +159,7 @@ exports.isDriverLoggedIn = async (req, res, next) => {
         const findUser = await database.sequelize.query(`SELECT users.id, users.name, users.role FROM users WHERE id = '${id.id}'`, {
             type: QueryTypes.SELECT
         })
-        
+
         console.log(findUser)
         // if(!findUser[0]) return;
         // if(findUser[0].role !== "conductor" || findUser[0].role !== "driver") return res.render("./not_found.pug", {title: "Not Found"})
@@ -168,10 +175,12 @@ exports.isSuperAdminLoggedIn = async (req, res, next) => {
         const findUser = await database.sequelize.query(`SELECT users.id, users.name, users.role FROM users WHERE id = '${id.id}'`, {
             type: QueryTypes.SELECT
         })
-        
+
         // if(!findUser[0]) return; super-admin
 
-        if(findUser[0].role !== "super-admin") return res.render("./not_found.pug", {title: "Not Found"})
+        if (findUser[0].role !== "super-admin") return res.render("./not_found.pug", {
+            title: "Not Found"
+        })
 
         res.locals.user = findUser[0];
     }
@@ -273,11 +282,10 @@ exports.generate_password_forget_code = async (req, res, next) => {
         } else {
             const code = Math.floor(Math.random() * (process.env.MAX_GENERATION - process.env.MIN_GENERATION + 1) + process.env.MIN_GENERATION);
             passwordForgetUser.verificationCode = code;
-            passwordForgetUser.save();      
+            passwordForgetUser.save();
         }
         statusFunc(res, 200, "verification code send to :" + req.body.phoneno);
-    }else{
+    } else {
         statusFunc(res, 400, "please enter account number");
     }
 }
-

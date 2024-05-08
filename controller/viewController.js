@@ -19,8 +19,6 @@ exports.home = (req, res) => {
     res.render("./user/home.pug", {
         title: "Home",
         user: user,
-        name: res.locals.user.name
-
     });
 }
 
@@ -116,7 +114,6 @@ exports.search = async (req, res) => {
             from: fromLocation,
             to: toLocation,
             date: date,
-            name: res.locals.user.name
         })
     }).catch(err => {
         // Handle error if any of the promises fail
@@ -124,11 +121,11 @@ exports.search = async (req, res) => {
     });
 }
 
-exports.login = (req, res) => {
-    res.render("./login.pug", {
-        title: "Login",
-    })
-}
+// exports.login = (req, res) => {
+//     res.render("./login.pug", {
+//         title: "Login",
+//     })
+// }
 
 exports.tickets = async (req, res) => {
     const user_id = res.locals.user.id;
@@ -156,7 +153,6 @@ exports.tickets = async (req, res) => {
     res.render("./user/tickets.pug", {
         title: "Tickets",
         tickets: tickets,
-        name: res.locals.user.name
     })
 }
 

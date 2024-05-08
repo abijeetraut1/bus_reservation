@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cookieParser = require("cookie-parser");
 const path = require("path")
+var cors = require('cors')
 
 // setting up the view engine
 app.set('view engine', 'pug');
@@ -19,11 +20,15 @@ const viewRouter = require("./route/viewRouter");
 app.use(express.json({
     extends: true
 }));
+
+app.use(cors())
 app.use(cookieParser());
 
 
-// router setup
 
+
+
+// router setup
 app.use("/", viewRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/bus", busRouter)
@@ -34,5 +39,6 @@ app.use("*", (req, res) => {
         title: "Not Found"
     });
 })
+
 
 module.exports = app;
