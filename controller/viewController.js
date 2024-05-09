@@ -20,7 +20,7 @@ exports.home = (req, res) => {
     res.render("./user/home.pug", {
         title: "Home",
         user: user,
-        name: res.locals.user.name
+         
     });
 }
 
@@ -105,9 +105,13 @@ exports.search = async (req, res) => {
 
             const stop_per_price = el.ticketPrice / el.stopLocation.length;
             const stop_raw_calc = Math.abs(el.stopLocation.indexOf(fromLocation) - el.stopLocation.indexOf(toLocation));
-            el.bus_fare = stop_raw_calc * stop_per_price;
+            
+            console.log(stop_raw_calc)
+            el.bus_fare = Math.floor(stop_raw_calc * stop_per_price);
+            
         }
 
+        // console.log(LocationsContains)
 
         res.render("./user/Search_Result.pug", {
             buses: LocationsContains,
@@ -116,7 +120,7 @@ exports.search = async (req, res) => {
             from: fromLocation,
             to: toLocation,
             date: date,
-            name: res.locals.user.name
+             
         })
     }).catch(err => {
         // Handle error if any of the promises fail
@@ -156,13 +160,19 @@ exports.tickets = async (req, res) => {
     res.render("./user/tickets.pug", {
         title: "Tickets",
         tickets: tickets,
-        name: res.locals.user.name
+         
     })
 }
 
 exports.register = (req, res) => {
     res.render("./register.pug", {
         title: "Register",
+    })
+}
+
+exports.signup_as_company = (req, res) => {
+    res.render("./Sign_as_company.pug", {
+        title: "Register Company",
     })
 }
 

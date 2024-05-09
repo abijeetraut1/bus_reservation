@@ -11,8 +11,9 @@ router.use(authController.isLoggedIn);
 
 router.get("/", catchAsync(viewController.home));
 router.get("/search", catchAsync(viewController.search));
-router.get("/login", catchAsync(viewController.login));
-router.get("/register", catchAsync(viewController.register));
+router.get("/login", viewController.login);
+router.get("/register", viewController.register);
+router.get("/signup-as-company", viewController.register);
 router.get("/logout", catchAsync(viewController.logout));
 router.get("/tickets", catchAsync(viewController.tickets));
 
@@ -25,6 +26,7 @@ router.get("/admin/listed-company", authController.isSuperAdminLoggedIn, adminPa
 router.get("/admin/all-users", authController.isSuperAdminLoggedIn, adminPanel.all_users);
 router.get("/admin/ticket-records", authController.isSuperAdminLoggedIn, adminPanel.ticket_records);
 
+router.get("/owner/dashboard", authController.isOwnerLoggedIn, adminPanel.companydashboard);
 router.get("/owner/show-all-bus", authController.isOwnerLoggedIn, adminPanel.show_all_bus);
 router.get("/owner/add-bus", authController.isOwnerLoggedIn, adminPanel.addBus);
 router.get("/owner/records", authController.isOwnerLoggedIn, adminPanel.bookedSeat);

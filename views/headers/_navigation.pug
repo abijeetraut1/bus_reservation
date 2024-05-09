@@ -63,6 +63,11 @@
                             | Sign up
                         </button>
 
+                    a(href="/signup-as-company") 
+                        <button data-mdb-ripple-init type="button" class="btn btn-primary me-3">
+                            | Sign up as Company
+                        </button>                        
+
                 if(user)
                     if(user.role === "user")
                         a(href="/tickets")

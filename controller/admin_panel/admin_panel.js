@@ -135,6 +135,68 @@ exports.show_all_bus = async (req, res) => {
     })
 }
 
+exports.companydashboard = async (req, res) => {
+    const userId = res.locals.user.id;
+
+    const busesCompany = await database.sequelize.query(`SELECT * FROM users WHERE users.role = 'owner' WHERE users.id = ${userId}`, {
+        type: QueryTypes.SELECT
+    })
+
+    const buses = await database.sequelize.query("SELECT id FROM buses", {
+        type: QueryTypes.SELECT
+    })
+
+    const busesLength = buses.length;
+    const totalCompany = busesCompany.length;
+    const tables = await database.sequelize.query(`SHOW TABLES IN bus_reservations WHERE Tables_in_bus_reservations NOT IN ('buses', 'users')`, {
+        type: QueryTypes.SHOWTABLES
+    });
+
+    var totalBookedSeat = 0;
+    var totalIncome = 0;
+
+
+    for (const table of tables) {
+        const buses = await database.sequelize.query(`SELECT price FROM ${table}`, {
+            type: QueryTypes.SHOWTABLES
+        });
+        totalBookedSeat += buses.length;
+
+        for (const ticket of buses) {
+            totalIncome += ticket.price;
+        }
+    }
+
+    var bookedSeats = []; // Changed variable name to bookedSeats
+
+    for (const table of tables) {
+
+        // Use a different variable name here
+        const seats = await database.sequelize.query(`SELECT ${table}.id, ${table}.busid, ${table}.price, ${table}.passengerCurrentLocation, ${table}.passengerDestination, ${table}.seatNo, users.name FROM ${table} JOIN users ON users.id = ${table}.userid WHERE ${table}.userid = users.id`, {
+            type: QueryTypes.SELECT
+        });
+
+        for (const seat of seats) {
+            const busName = await database.sequelize.query(`SELECT buses.busName FROM buses WHERE buses.id = '${seat.busid}'`, {
+                type: QueryTypes.SELECT
+            });
+
+            seat.busName = busName[0].busName;
+            bookedSeats.push(seat);
+        }
+    }
+
+    res.render("./admin_pannel/Dashboard.pug", {
+        title: "Dashboard",
+        totalCompany: totalCompany,
+        busesLength: busesLength,
+        totalBookedSeat: totalBookedSeat,
+        totalIncomeGenerated: totalIncome,
+        userBookedSeat: bookedSeats,
+        name: res.locals.user.name
+    })
+}
+
 
 
 exports.dashboard = async (req, res) => {
