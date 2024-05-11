@@ -9,22 +9,22 @@ block content
                         <h1 class="poppins-black text-white">Seamless Travel</h1>
                         <h1 class="poppins-semibold text-white"> Reserve Your Seat, Enjoy the Ride! </h1>
                     </div>
-                    <div class="d-flex flex-column flex-md-row flex-lg-row grid gap-2 p-3 px-4 rounded bg-white">
+                    <form class="d-flex flex-column flex-md-row flex-lg-row grid gap-2 p-3 px-4 rounded bg-white">
                         <div>
-                            <input id="from-location" class="rounded px-3 py-1" type="text" name="" value="laxmimarga" placeholder="Location">
+                            <input id="from-location" class="rounded px-3 py-1" type="text" name="" value="laxmimarga" placeholder="Location" required>
                         </div>
                         <div>
-                            <input id="to-location" class="rounded px-3 py-1" type="text" name="" value="khorsane" placeholder="Destionation">
+                            <input id="to-location" class="rounded px-3 py-1" type="text" name="" value="khorsane" placeholder="Destionation" required>
                         </div>
                         <div>
-                            <input id="travel-date" class="rounded px-3 py-1" type="date" name="" value="2024-04-10" placeholder="">
+                            <input id="travel-date" class="rounded px-3 py-1" type="date" name="" value="2024-04-10" placeholder="" required>
                         </div>
                         <div>
                             <button id="search-button" class="bg-primary text-white rounded py-1 px-4">Submit</button>
                             //- <a href="/search">
                             //- </a>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
 
@@ -57,10 +57,61 @@ block content
         </div>
     </section>
 
+    <section class="bg-light py-3 py-md-5">
+        <div class="container">
+            <div class="row justify-content-md-center">
+                <div class="col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6">
+                    <h2 class="mb-4 display-5 text-black text-center">Contact</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row justify-content-lg-center">
+                <div class="col-12 col-lg-9">
+                    <div class="bg-white border rounded shadow-sm overflow-hidden">
+                        <form>
+                            <div class="row gy-4 gy-xl-5 p-4 p-xl-5">
+                            <div class="col-12">
+                                <label for="fullname" class="form-label text-black">Full Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="fullname" name="fullname" value="" required>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="email" class="form-label text-black">Email <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                <input type="email" class="form-control" id="email" name="email" value="" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="phone" class="form-label text-black">Phone Number</label>
+                                <div class="input-group">
+                                <input type="tel" class="form-control" id="phone" name="phone" value="">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label for="message" class="form-label text-black">Message <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="message" name="message" rows="3" required></textarea>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-grid">
+                                <button class="btn btn-primary btn-lg" onclick="contact_us()" type="submit">Submit</button>
+                                </div>
+                            </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
     style.
         .custom-padding{
             padding: 7rem 0;
         }
+        
 
     <footer class="bg-dark  text-white">
         <div class="container custom-padding">
@@ -92,12 +143,11 @@ block content
                 </div>
             </div>
         </div>
-        <div class="bg-secondary py-2">
+
+
+        <div class="bg-dark py-2">
             <div class="container text-center">
                 | &copy; 2024 Swift Bus 
-                <div class="mt-2">
-                    <a href="/contact" class="btn btn-outline-light">Contact Us</a>
-                </div>
             </div>
         </div>
     </footer>

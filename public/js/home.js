@@ -8,3 +8,7 @@ $(document).ready(function () {
         window.location.href = `/search?from=${fromLocation}&to=${toLocation}&date=${date}`;
     });
 });
+
+function contact_us(){
+    alert("contact_us send");
+}
