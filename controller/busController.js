@@ -264,6 +264,7 @@ exports.searchBus = async (req, res) => {
 
 // reserve the seat according to the bus location
 exports.reserveSeat = async (req, res) => {
+    
     try {
         const {
             slug

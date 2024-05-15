@@ -17,7 +17,7 @@ router.use(authController.isLoggedIn);
 
 router.post("/register-bus", /*authController.isLoggedIn,*/ upload.array("busImage"), busController.registerBus);
 router.post("/setdate", busController.setTravellingDate);
-router.post("/:slug/reserve-seat", authController.isLoggedIn, busController.reserveSeat);
+router.post("/:slug/reserve-seat", authController.isLoggedIn, authController.Authenticate_to_only_logged_user, busController.reserveSeat);
 router.post("/:slug/rate-bus", authController.isLoggedIn, busReviewAndRatings.rateBus);
 router.get("/get-one-bus/:id", busController.getOneBus);
 router.post("/update-bus/:id", upload.array("busImage"), busController.updateBus);

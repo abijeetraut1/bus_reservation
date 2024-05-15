@@ -35,16 +35,16 @@ block content
             <div class="d-flex justify-content-center ">
                 <div class="d-flex flex-column flex-md-row flex-lg-row grid gap-2 p-3 px-4 rounded bg-white">
                     <div>
-                        <input class="rounded px-3 py-1" type="text" name="" id="" placeholder="Location">
+                        <input class="form-control rounded px-3 py-1" type="text" name="" id="from-location" placeholder="Location">
                     </div>
                     <div>
-                        <input class="rounded px-3 py-1" type="text" name="" id="" placeholder="Destionation">
+                        <input class="form-control rounded px-3 py-1" type="text" name="" id="to-location" placeholder="Destionation">
                     </div>
                     <div>
-                        <input class="rounded px-3 py-1" type="date" name="" id="" placeholder="">
+                        <input class="form-control rounded px-3 py-1" type="date" name="" id="travel-date" placeholder="">
                     </div>
                     <div>
-                        <button class="bg-primary text-white rounded py-1 px-4">Submit</button>
+                        <button id="search-button" class="bg-primary text-white rounded py-1 px-4">Submit</button>
                     </div>
                 </div>
             </div>
@@ -99,7 +99,6 @@ block content
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <div class="col-12 col-md-10 grid gap-3">
@@ -508,3 +507,4 @@ block content
     </section>
 
     script(src="./js/Search_Result.js")
+    script(src="./js/home.js")

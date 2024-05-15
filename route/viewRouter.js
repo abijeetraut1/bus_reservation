@@ -21,19 +21,19 @@ router.get("/tickets", catchAsync(viewController.tickets));
 // admin panel 
 // router.use(authController.isOwnerLoggedIn);
 
-router.get("/admin/dashboard", authController.isSuperAdminLoggedIn, adminPanel.dashboard);
-router.get("/admin/listed-company", authController.isSuperAdminLoggedIn, adminPanel.listed_company);
-router.get("/admin/all-users", authController.isSuperAdminLoggedIn, adminPanel.all_users);
-router.get("/admin/ticket-records", authController.isSuperAdminLoggedIn, adminPanel.ticket_records);
+router.get("/admin/dashboard", authController.isSuperAdminLoggedIn, authController.Authenticate_to_only_logged_user, adminPanel.dashboard);
+router.get("/admin/listed-company", authController.isSuperAdminLoggedIn, authController.Authenticate_to_only_logged_user, adminPanel.listed_company);
+router.get("/admin/all-users", authController.isSuperAdminLoggedIn, authController.Authenticate_to_only_logged_user, adminPanel.all_users);
+router.get("/admin/ticket-records", authController.isSuperAdminLoggedIn, authController.Authenticate_to_only_logged_user, adminPanel.ticket_records);
 router.get("/admin/upload-ads", adminPanel.upload_ads);
 
-router.get("/owner/dashboard", authController.isOwnerLoggedIn, adminPanel.companydashboard);
-router.get("/owner/show-all-bus", authController.isOwnerLoggedIn, adminPanel.show_all_bus);
-router.get("/owner/add-bus", authController.isOwnerLoggedIn, adminPanel.addBus);
-router.get("/owner/records", authController.isOwnerLoggedIn, adminPanel.bookedSeat);
-router.get("/owner/income", authController.isOwnerLoggedIn, adminPanel.income);
-router.get("/owner/worker-account", authController.isOwnerLoggedIn, adminPanel.createWorkersAccount);
-router.get("/owner/assistants", authController.isOwnerLoggedIn, adminPanel.assistants);
+router.get("/owner/dashboard", authController.isOwnerLoggedIn, authController.Authenticate_to_only_logged_user, adminPanel.companydashboard);
+router.get("/owner/show-all-bus", authController.isOwnerLoggedIn, authController.Authenticate_to_only_logged_user, adminPanel.show_all_bus);
+router.get("/owner/add-bus", authController.isOwnerLoggedIn, authController.Authenticate_to_only_logged_user, adminPanel.addBus);
+router.get("/owner/records", authController.isOwnerLoggedIn, authController.Authenticate_to_only_logged_user, adminPanel.bookedSeat);
+router.get("/owner/income", authController.isOwnerLoggedIn, authController.Authenticate_to_only_logged_user, adminPanel.income);
+router.get("/owner/worker-account", authController.isOwnerLoggedIn, authController.Authenticate_to_only_logged_user, adminPanel.createWorkersAccount);
+router.get("/owner/assistants", authController.isOwnerLoggedIn, authController.Authenticate_to_only_logged_user, adminPanel.assistants);
 
 
 router.get("/checkTicket/:bus/:seat", authController.isDriverLoggedIn, driverController.checkTicket);

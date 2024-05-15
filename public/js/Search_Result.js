@@ -98,5 +98,10 @@ async function book_seats(bus_slug, from, to, date, bus_fare) {
         }
     })
 
-    console.log(book_seat_request)
+    if(book_seat_request.data.status === "Success"){
+        window.location.reload();
+    }else{
+        alert("Please Reload The Page");
+    }
+
 };

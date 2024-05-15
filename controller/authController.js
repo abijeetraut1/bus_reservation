@@ -47,7 +47,7 @@ exports.signup = async (req, res) => {
         bus
     } = req.body;
 
-    if(!phone || !name || !password){
+    if (!phone || !name || !password) {
         return statusFunc(res, 400, "you forget to insert the field");
     }
 
@@ -74,10 +74,10 @@ exports.signup = async (req, res) => {
         isVerified: false,
         verificationCode: code,
     })
-    
-    if(req.query.role === "conductor" || req.query.role === "driver"){
+
+    if (req.query.role === "conductor" || req.query.role === "driver") {
         statusFunc(res, 200, "created");
-    }else{
+    } else {
         createRefreshToken(res, signup);
     }
 }
@@ -132,6 +132,16 @@ exports.isLoggedIn = async (req, res, next) => {
         console.log(findUser)
 
         res.locals.user = findUser[0];
+    }
+    next();
+}
+
+exports.Authenticate_to_only_logged_user = async (req, res, next) => {
+    console.log(res.locals.user)
+    if (!(res.locals.user)) {
+        console.log(res.locals.user)
+
+        return res.redirect("/")
     }
     next();
 }

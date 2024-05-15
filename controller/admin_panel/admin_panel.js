@@ -40,6 +40,8 @@ exports.bookedSeat = async (req, res) => {
             type: QueryTypes.SELECT,
         })
 
+        console.log(seatNo)
+
         const seatA = [];
         const seatB = [];
 
@@ -55,7 +57,6 @@ exports.bookedSeat = async (req, res) => {
             seatB: seatB,
             ticketer: userData,
             name: res.locals.user.name
-
         })
     }
 
@@ -138,7 +139,7 @@ exports.show_all_bus = async (req, res) => {
 exports.companydashboard = async (req, res) => {
     const userId = res.locals.user.id;
 
-    const busesCompany = await database.sequelize.query(`SELECT * FROM users WHERE users.role = 'owner' WHERE users.id = ${userId}`, {
+    const busesCompany = await database.sequelize.query(`SELECT * FROM users WHERE users.role = 'owner' & users.id = ${userId}`, {
         type: QueryTypes.SELECT
     })
 
@@ -155,36 +156,39 @@ exports.companydashboard = async (req, res) => {
     var totalBookedSeat = 0;
     var totalIncome = 0;
 
-
     for (const table of tables) {
-        const buses = await database.sequelize.query(`SELECT price FROM ${table}`, {
+        const buses = await database.sequelize.query(`SELECT price FROM ${table} WHERE ${table}.userid = '${userId}'`, {
             type: QueryTypes.SHOWTABLES
         });
+
         totalBookedSeat += buses.length;
 
         for (const ticket of buses) {
-            totalIncome += ticket.price;
+            totalIncome += ticket;
         }
     }
 
     var bookedSeats = []; // Changed variable name to bookedSeats
 
     for (const table of tables) {
-
         // Use a different variable name here
-        const seats = await database.sequelize.query(`SELECT ${table}.id, ${table}.busid, ${table}.price, ${table}.passengerCurrentLocation, ${table}.passengerDestination, ${table}.seatNo, users.name FROM ${table} JOIN users ON users.id = ${table}.userid WHERE ${table}.userid = users.id`, {
+        const seats = await database.sequelize.query(`SELECT ${table}.id, ${table}.userid, ${table}.busid, ${table}.price, ${table}.passengerCurrentLocation, ${table}.passengerDestination, ${table}.seatNo, users.name FROM ${table} JOIN users ON users.id = ${table}.userid WHERE ${table}.userid = users.id `, {
             type: QueryTypes.SELECT
         });
 
         for (const seat of seats) {
-            const busName = await database.sequelize.query(`SELECT buses.busName FROM buses WHERE buses.id = '${seat.busid}'`, {
-                type: QueryTypes.SELECT
-            });
+            console.log(seat)
+            // const busName = await database.sequelize.query(`SELECT buses.busName FROM buses WHERE buses.id = '${seat.busid}'`, {
+            //     type: QueryTypes.SELECT
+            // });
 
-            seat.busName = busName[0].busName;
-            bookedSeats.push(seat);
+
+            // seat.busName = busName[0].busName;
+            // bookedSeats.push(seat);
+            // console.log(bookedSeats)
         }
     }
+
 
     res.render("./admin_pannel/Dashboard.pug", {
         title: "Dashboard",

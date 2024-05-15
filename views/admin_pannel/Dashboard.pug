@@ -35,12 +35,13 @@ block content
                     h5.text-success.fs-4 Total Income
                     h5.text-secondary= totalIncomeGenerated
 
-            div.custom-width.d-flex.grid.gap-3.custom-border.p-2.rounded.align-items-center
-                div.bg-success.rounded.p-4
-                    img(src="../../images/icons/company.svg", alt="")
-                div
-                    h5.text-success.fs-4 Total Company
-                    h5.text-secondary= totalCompany   
+            if(user.role === "super-admin")
+                div.custom-width.d-flex.grid.gap-3.custom-border.p-2.rounded.align-items-center
+                    div.bg-success.rounded.p-4
+                        img(src="../../images/icons/company.svg", alt="")
+                    div
+                        h5.text-success.fs-4 Total Company
+                        h5.text-secondary= totalCompany   
 
             div.custom-width.d-flex.grid.gap-3.custom-border.p-2.rounded.align-items-center
                 div.bg-success.rounded.p-4
@@ -49,21 +50,45 @@ block content
                     h5.text-success.fs-4 Total Buses
                     h5.text-secondary= busesLength
 
-        <div class="container mt-5">
-            <form class="mb-3" id="image-form">
-                <div class="mb-3">
-                    <label for="image-input" class="form-label">Choose an image to upload</label>
-                    <input class="form-control" onchange="onImageUpload()" type="file" id="image-input" accept="image/*">
-                </div>
-                <button type="submit" class="btn btn-primary">Upload</button>
-            </form>
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Uploaded Image</h5>
-                    <img id="image-display" class="img-fluid" alt="Uploaded Image">
+        if(user.role === "super-admin")
+            <div class="container mt-5">
+                <form class="mb-3" id="image-form">
+                    <div class="mb-3">
+                        <label for="image-input" class="form-label">Choose an image to upload</label>
+                        <input class="form-control" onchange="onImageUpload()" type="file" id="image-input" accept="image/*">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Uploaded Image</h5>
+                        <img id="image-display" class="img-fluid" alt="Uploaded Image">
+                    </div>
                 </div>
             </div>
-        </div>
+
+        //- 
+            div
+                table.table.table-striped.table-hover.shadow-lg.my-4
+                    tr
+                        th S.N
+                        th Bus Name
+                        th User Name
+                        th Seat No
+                        th CurrentLocation
+                        th Destination
+                        th Price 
+                    
+                    if(userBookedSeat)
+                        each ticket, i in userBookedSeat
+                            tr
+                                td= i + 1                   
+                                td= ticket.busName                   
+                                td= ticket.name                   
+                                td= ticket.seatNo                   
+                                td= ticket.passengerCurrentLocation                   
+                                td= ticket.passengerDestination                   
+                                td= ticket.price       
 
         script.
             async function onImageUpload(){
