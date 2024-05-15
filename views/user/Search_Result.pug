@@ -361,7 +361,7 @@ block content
                                                                 //- passenger seat
                                                                 <div class="my-2 justiy-content-evenly d-flex justify-content-between">
                                                                     <div class="col-5 d-flex flex-wrap grid gap-1 justify-content-around">
-                                                                        - for(let i = 0; i <= ((bus.totalSeats) - 5) /2 ; i++)
+                                                                        - for(let i = 0; i <= ((bus.totalSeats) - 5) /2; i++)
                                                                             <div>
                                                                                 
                                                                                 div(class=`avl-seat seat-height-width custom-border rounded p-1 ${bus.seatA ? bus.seatA.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : "" : ""}`   value=`${"A" + (i+1)}`)= "A" + (i+1)
@@ -371,7 +371,9 @@ block content
                                                                     <div class="col-5 d-flex flex-wrap grid gap-1 justify-content-around">
                                                                         - for(let i = 0; i <= ((bus.totalSeats) - 5)/2; i++)
                                                                             <div>
-                                                                                div(class=`avl-seat seat-height-width custom-border rounded p-1 ${bus.seatB ? bus.seatB.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : "": ""}` value=`${"B" + (i+1)}`)= "B" + (i+1)
+                                                                                //- bus.seatB = [ '27', '28', '29' ]
+                                                                                //- bus.seatB = undefined || null || []
+                                                                                div(class=`avl-seat seat-height-width custom-border rounded p-1 ${bus.seatB ? bus.seatB.includes( JSON.stringify(i+1) ) ? "reserved bookedTicket" : "": ""}` value=`${"B" + (i+1)}`)=    "B" + (i+1)
                                                                             </div>
                                                                     </div>
                                                                 </div>    

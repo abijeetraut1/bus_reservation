@@ -224,10 +224,12 @@ exports.dashboard = async (req, res) => {
         const buses = await database.sequelize.query(`SELECT price FROM ${table}`, {
             type: QueryTypes.SHOWTABLES
         });
-        totalBookedSeat += buses.length;
 
+        totalBookedSeat += buses.length;
+        
         for (const ticket of buses) {
-            totalIncome += ticket.price;
+            console.log(ticket)
+            totalIncome += ticket;
         }
     }
 
@@ -270,8 +272,6 @@ exports.listed_company = async (req, res) => {
     const busesCompanyList = await database.sequelize.query("SELECT users.name, users.phoneNo, buses.busNumber, buses.busName, buses.startLocation, buses.ticketPrice, buses.endLocation, buses.totalSeats FROM buses JOIN users ON buses.user = users.id", {
         type: QueryTypes.SELECT
     })
-
-    console.log(busesCompanyList)
 
     const totalCompany = busesCompany.length;
 
@@ -324,10 +324,12 @@ exports.ticket_records = async (req, res) => {
             type: QueryTypes.SELECT
         })
 
-
         const seatNo = await database.sequelize.query(`SELECT totalSeats FROM buses WHERE buses.id = ${tableData[0].busid}`, {
             type: QueryTypes.SELECT,
         })
+
+        console.log("he",tableData[0].busid)
+        console.log('first', seatNo)
 
         const seatA = [];
         const seatB = [];
@@ -343,14 +345,19 @@ exports.ticket_records = async (req, res) => {
             seatA: seatA,
             seatB: seatB,
             ticketer: userData,
-            
+
         })
     }
 
-    console.log(dataArr)
     res.render("./admin_pannel/Ticket_Records.pug", {
         title: "Records",
         tables: dataArr,
         name: res.locals.user.name
     })
 }
+
+exports.upload_ads = async (req, res) => {
+    res.render("./admin_pannel/upload_ads.pug", {
+        title: "Upload ADs"
+    });
+};

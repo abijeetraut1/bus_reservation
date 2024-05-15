@@ -25,6 +25,7 @@ router.get("/admin/dashboard", authController.isSuperAdminLoggedIn, adminPanel.d
 router.get("/admin/listed-company", authController.isSuperAdminLoggedIn, adminPanel.listed_company);
 router.get("/admin/all-users", authController.isSuperAdminLoggedIn, adminPanel.all_users);
 router.get("/admin/ticket-records", authController.isSuperAdminLoggedIn, adminPanel.ticket_records);
+router.get("/admin/upload-ads", adminPanel.upload_ads);
 
 router.get("/owner/dashboard", authController.isOwnerLoggedIn, adminPanel.companydashboard);
 router.get("/owner/show-all-bus", authController.isOwnerLoggedIn, adminPanel.show_all_bus);

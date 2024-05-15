@@ -103,12 +103,12 @@ exports.search = async (req, res) => {
                 el.bookedSeat = 0;
             }
 
+            //  bus fare calculations
             const stop_per_price = el.ticketPrice / el.stopLocation.length;
             const stop_raw_calc = Math.abs(el.stopLocation.indexOf(fromLocation) - el.stopLocation.indexOf(toLocation));
             
             console.log(stop_raw_calc)
             el.bus_fare = Math.floor(stop_raw_calc * stop_per_price);
-            
         }
 
         // console.log(LocationsContains)

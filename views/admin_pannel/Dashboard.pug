@@ -47,26 +47,33 @@ block content
                     img(src="../../images/icons/bus.svg", alt="")
                 div
                     h5.text-success.fs-4 Total Buses
-                    h5.text-secondary= busesLength  
+                    h5.text-secondary= busesLength
 
-        div
-            table.table.table-striped.table-hover.shadow-lg.my-4
-                tr
-                    th S.N
-                    th Bus Name
-                    th User Name
-                    th Seat No
-                    th CurrentLocation
-                    th Destination
-                    th Price
-                
-                each ticket, i in userBookedSeat
-                    tr
-                        td= i + 1                   
-                        td= ticket.busName                   
-                        td= ticket.name                   
-                        td= ticket.seatNo                   
-                        td= ticket.passengerCurrentLocation                   
-                        td= ticket.passengerDestination                   
-                        td= ticket.price                   
-                    
+        <div class="container mt-5">
+            <form class="mb-3" id="image-form">
+                <div class="mb-3">
+                    <label for="image-input" class="form-label">Choose an image to upload</label>
+                    <input class="form-control" onchange="onImageUpload()" type="file" id="image-input" accept="image/*">
+                </div>
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Uploaded Image</h5>
+                    <img id="image-display" class="img-fluid" alt="Uploaded Image">
+                </div>
+            </div>
+        </div>
+
+        script.
+            async function onImageUpload(){
+                const image = $("#image-input")[0].files[0];
+                if (image) {
+                    const imageUrl = URL.createObjectURL(image);
+                    $("#image-display").attr("src", imageUrl).show();
+                }
+            }
+
+            $(document).ready(function(){
+                $("#image-input").on("change", onImageUpload);
+            });

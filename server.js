@@ -19,6 +19,7 @@ const database = require("./model/index");
     const user = await database.sequelize.query("SELECT * FROM users WHERE users.role = 'super-admin'", {
         type: QueryTypes.SELECT
     });
+
     
     if (user.length == 0) {
 
@@ -38,8 +39,9 @@ const database = require("./model/index");
 
 
     }
-
 })();
+
+
 
 server.listen(port, () => {
     console.log("server is running at port: " + port);
