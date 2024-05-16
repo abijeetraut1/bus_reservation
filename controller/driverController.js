@@ -23,13 +23,14 @@ exports.checkTicket = async (req, res) => {
 exports.checkTicketPage = async (req, res) => {
     const userid = res.locals.user.id;
     
-    // const buses = await database.sequelize.query(`SELECT buses.slug FROM buses WHERE user.busId = ${}`)
+    
+    
     const new_Date = new Date();
     const Current_Date = new_Date.getFullYear() + "_" + (new_Date.getMonth() + 1) + "_" + new_Date.getDate();
     console.log(Current_Date);
 
     res.render("./Conductor/Tickets.pug", {
-        title: "Check Ticket"
+        title: `Check Ticket ${Current_Date.replaceAll("_", "-")}`
     })
 }
 
