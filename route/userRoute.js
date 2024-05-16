@@ -16,7 +16,7 @@ const upload = multer({
 router.use(authController.isLoggedIn);
 
 router.post("/signup", authController.signup);
-// router.post("/login", authController.login);
+router.post("/login", authController.login);
 router.delete("/delete-user/:id", authController.delete_user);
 
 router.patch("/change-number", authController.changeNumber)

@@ -1,7 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary" style="z-index: 100;">
     <div class="container">
         //- Logo
-        <a style="font-weight: 700;" class="navbar-brand me-2" href="/">
+        <a style="font-weight: 700;" class="navbar-brand me-2 d-flex align-items-center" href="/">
+            img(src="./../../images/favicon.png", height="20", alt="")
             | Swift Bus
         </a>
 
@@ -12,9 +13,10 @@
         //- Right Section Links
         <div class="collapse navbar-collapse" id="navbarResponsiveButtons">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                if(name)
+                if(user)
                     <li class="nav-item">
-                        span(class="nav-link" style="font-weight: 600;")= name
+                        span(class="nav-link" style="font-weight: 600; cursor: pointer; text-transform: capitalize;" title=`${user.role}`)= user.name
+                            span(style="position: relative; bottom: 10px; font-size: 12px;")= "[" + user.role + "]"
                     </li> 
                 each nav in [{title: "About us", link:"/about"}]
                     <li class="nav-item">

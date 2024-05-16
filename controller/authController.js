@@ -101,10 +101,12 @@ exports.login = async (req, res) => {
     if (login === null) {
         return statusFunc(res, 400, "Cannot Find User");
     }
+    console.log(login)
 
     if (!(await bcrypt.compare(password, login.password))) {
         return statusFunc(res, 400, "wrong email and password");
     }
+
 
     createRefreshToken(res, login);
 }

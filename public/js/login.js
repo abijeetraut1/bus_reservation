@@ -16,6 +16,7 @@ $(document).ready(async function () {
             }
         })
 
+        console.log(loginData)
         if (loginData.data.status === "Success") {
             console.log("login")
 
