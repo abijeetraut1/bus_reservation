@@ -1,6 +1,6 @@
 exports.statusFunc = (res, status, message) => {
     return res.status(status).json({
-        status: status > 400 ? "Failed" : "Success",
+        status: status >= 203 ? "Failed" : "Success",
         message
     })
 }

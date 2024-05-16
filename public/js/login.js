@@ -15,14 +15,14 @@ $(document).ready(async function () {
                 password: password
             }
         })
-
-        console.log(loginData)
+        
         if (loginData.data.status === "Success") {
             console.log("login")
 
             window.location.href = "/";
         }else{
-            alert("WRONG CREDIENTIELS")
+            console.log("hello")
+            $(".invalid-notation-hide").addClass("invalid-notation-show").removeClass("invalid-notation-hide")
         }
     })
 });

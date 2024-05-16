@@ -5,6 +5,12 @@ block content
         body{
             overflow: hidden;
         }
+        .invalid-notation-hide{
+            display: none;
+        }
+        .invalid-notation-show{
+            display: block;
+        }
     <section class="vh-100" style="background-color: #309AA8; position: absolute; top: 1px; width: 100%;">
         <div class="container py-3 h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
@@ -23,14 +29,16 @@ block content
 
                                         <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign into your account</h5>
 
-                                        <div data-mdb-input-init class="form-outline mb-4">
+                                        <div data-mdb-input-init class="form-outline mb-3">
                                             <label class="form-label" for="contact-number">Phone Number</label>
-                                            <input type="number" id="contact-number" class="form-control form-control-lg" min="9700000000" max="9899999999" />
+                                            <input type="number" id="contact-number" class="form-control form-control-lg" required />
+                                            span.text-danger.invalid-notation-hide Invalid Number
                                         </div>
 
-                                        <div data-mdb-input-init class="form-outline mb-4">
+                                        <div data-mdb-input-init class="form-outline mb-3">
                                             <label class="form-label" for="password">Password</label>
-                                            <input type="password" id="password" class="form-control form-control-lg" />
+                                            <input type="password" id="password" class="form-control form-control-lg" required/>
+                                            span.text-danger.invalid-notation-hide Invalid Password
                                         </div>
 
                                         <div class="pt-1 mb-4">
@@ -38,7 +46,7 @@ block content
                                         </div>
 
                                         <a class="small text-muted" href="#!">Forgot password?</a>
-                                        
+
                                         <p class="mb-5 pb-lg-2" style="color: #393f81;">Don't have an account? <a href="/register"
                                             | style="color: #393f81;">Register here</a></p>                                         
                                     </form>

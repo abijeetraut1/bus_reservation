@@ -13,7 +13,7 @@ router.get("/", catchAsync(viewController.home));
 router.get("/search", catchAsync(viewController.search));
 router.get("/login", viewController.login);
 router.get("/register", viewController.register);
-router.get("/signup-as-company", viewController.register);
+router.get("/signup-as-company", viewController.signup_as_company);
 router.get("/logout", catchAsync(viewController.logout));
 router.get("/tickets", catchAsync(viewController.tickets));
 
@@ -36,6 +36,7 @@ router.get("/owner/worker-account", authController.isOwnerLoggedIn, authControll
 router.get("/owner/assistants", authController.isOwnerLoggedIn, authController.Authenticate_to_only_logged_user, adminPanel.assistants);
 
 
+router.get("/check-tickets", authController.isDriverLoggedIn, driverController.checkTicketPage);
 router.get("/checkTicket/:bus/:seat", authController.isDriverLoggedIn, driverController.checkTicket);
 // router.get("/host-location", driverController.host_location);
 // router.get("/get-location", driverController.getCurrentBusPosition);

@@ -20,12 +20,24 @@ exports.checkTicket = async (req, res) => {
     res.redirect("/");
 }
 
+exports.checkTicketPage = async (req, res) => {
+    const userid = res.locals.user.id;
+    
+    // const buses = await database.sequelize.query(`SELECT buses.slug FROM buses WHERE user.busId = ${}`)
+    const new_Date = new Date();
+    const Current_Date = new_Date.getFullYear() + "_" + (new_Date.getMonth() + 1) + "_" + new_Date.getDate();
+    console.log(Current_Date);
+
+    res.render("./Conductor/Tickets.pug", {
+        title: "Check Ticket"
+    })
+}
 
 
 exports.getCurrentBusPosition = async (req, res) => {
     io.emit('some-event', "data"); // Emit an event to all connected clients
     res.send('Response');
-    
+
     // res.render("./Conductor/host_location.pug", {
     //     user: "hello"
     // })
@@ -34,7 +46,7 @@ exports.getCurrentBusPosition = async (req, res) => {
 
 // Express route handler
 exports.host_location = async (req, res) => {
-    
+
     res.render("./Conductor/host_location.pug", {
         user: "hello"
     });

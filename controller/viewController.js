@@ -170,6 +170,7 @@ exports.register = (req, res) => {
     })
 }
 
+
 exports.signup_as_company = (req, res) => {
     res.render("./Sign_as_company.pug", {
         title: "Register Company",

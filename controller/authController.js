@@ -59,7 +59,7 @@ exports.signup = async (req, res) => {
 
     if (checkUser) {
         console.log("user exists")
-        statusFunc(res, 400, "user already exist");
+        return statusFunc(res, 203, "user already exist");
     }
 
     const code = Math.floor(Math.random() * (process.env.MAX_GENERATION - process.env.MIN_GENERATION + 1) + process.env.MIN_GENERATION);
@@ -99,12 +99,12 @@ exports.login = async (req, res) => {
     })
 
     if (login === null) {
-        return statusFunc(res, 400, "Cannot Find User");
+        return statusFunc(res, 203, "Cannot Find User");
     }
     console.log(login)
 
     if (!(await bcrypt.compare(password, login.password))) {
-        return statusFunc(res, 400, "wrong email and password");
+        return statusFunc(res, 203, "wrong email and password");
     }
 
 

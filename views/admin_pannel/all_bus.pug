@@ -1,6 +1,14 @@
 extends ../headers/base
 
 block content
+    style.
+        .wrong-password-hide, .already-used-number-hide, .number-limit-hide{
+            display: none;
+        }
+
+        .wrong-password-show, .already-used-number-show, .number-limit-show{
+            display: block;
+        }    
 
     section.py-5.container
         
@@ -33,17 +41,20 @@ block content
                             <div class="mb-3">
                                 <label for="worker-number" class="form-label h6">Phone Number</label>
                                 <input type="number" class="form-control" id="worker-number" aria-describedby="emailHelp" min="9700000000" max="9899999999">
+                                div
+                                    span.text-danger.number-limit-hide Number Should be 10 Digits
+                                    span.text-danger.already-used-number-hide Number Already Used                                                            
                             </div>
                             <div class="mb-3">
                                 <label for="worker-password" class="form-label h6">Password</label>
                                 <input type="password" class="form-control" id="worker-password"  required>
+                                span.text-danger.wrong-password-hide Password Does Not Matched
                             </div>
-
-                            //- pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}" title="Password must contain at least one uppercase letter, one lowercase letter, and one digit, and be at least 8 characters long."
 
                             <div class="mb-3">
                                 <label for="worker-password-confirm" class="form-label h6">Password Confirm</label>
                                 <input type="password" class="form-control" id="worker-password-confirm"  required>
+                                span.text-danger.wrong-password-hide Password Does Not Matched
                             </div>
 
                             <div class="mb-3">
