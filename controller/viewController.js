@@ -146,7 +146,7 @@ exports.tickets = async (req, res) => {
     for (const table of tables[0]) {
         const tableName = table.Tables_in_bus_reservations;
         console.log(tableName)
-        const datas = await database.sequelize.query(`SELECT seatNo, passengerCurrentLocation, passengerDestination, createAt, buses.slug, buses.busName, buses.busNumber FROM ${table.Tables_in_bus_reservations} JOIN buses ON buses.id = ${table.Tables_in_bus_reservations}.busId WHERE userid = '${user_id}'`, {
+        const datas = await database.sequelize.query(`SELECT seatNo, passengerCurrentLocation, passengerDestination, ticketExpirationStatus, createAt, buses.slug, buses.busName, buses.busNumber FROM ${table.Tables_in_bus_reservations} JOIN buses ON buses.id = ${table.Tables_in_bus_reservations}.busId WHERE userid = '${user_id}'`, {
             type: QueryTypes.SELECT,
         })
 
