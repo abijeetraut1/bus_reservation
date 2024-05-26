@@ -291,8 +291,9 @@ exports.reserveSeat = async (req, res) => {
         const userId = res.locals.user.id;
 
         const tableName = `${year}_${month}_${day}_${slug.replaceAll("-", "_")}`;
-
-        const createTable = `CREATE TABLE IF NOT EXISTS ${tableName} (id INT AUTO_INCREMENT PRIMARY KEY, seatNo VARCHAR(3), userid INT, busid INT, isTicketChecked TINYINT(0) NOT NULL, passengerCurrentLocation varchar(100), passengerDestination varchar(100), price INT, createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
+        const expirationDate = `${year}-${month}-${day}`;
+        
+        const createTable = `CREATE TABLE IF NOT EXISTS ${tableName} (id INT AUTO_INCREMENT PRIMARY KEY, seatNo VARCHAR(3), userid INT, busid INT, isTicketChecked TINYINT(0) NOT NULL, passengerCurrentLocation varchar(100), passengerDestination varchar(100), price INT, ticketExpirationStatus TINYINT(1) DEFAULT 0, ticketExpirationDate DATE, createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
 
         // created table
         await database.sequelize.query(createTable, {
@@ -323,7 +324,6 @@ exports.reserveSeat = async (req, res) => {
         const ifSeatAvailable = await database.sequelize.query(`SELECT ${tableName}.seatNo FROM ${tableName} WHERE seatNo = '${seatno}'`, {
             type: QueryTypes.SELECT,
         })
-        // SELECT ${tableName}.seatNo FROM ${tableName} WHERE seatNo = ${seatno}
 
         console.log(ifSeatAvailable)
 
@@ -331,12 +331,11 @@ exports.reserveSeat = async (req, res) => {
             return statusFunc(res, 400, "seat is already booked");
         }
 
-        // inserting the data
-        console.log(seatno)
+        
         seatno.forEach(async el => {
-            await database.sequelize.query(`INSERT INTO ${tableName} (seatNo, userId, busid, isTicketChecked, passengerCurrentLocation, passengerDestination, price) values (?, ?, ?, ?, ?, ?, ?)`, {
+            await database.sequelize.query(`INSERT INTO ${tableName} (seatNo, userId, busid, isTicketChecked, passengerCurrentLocation, passengerDestination, price, ticketExpirationStatus, ticketExpirationDate) values (?, ?, ?, ?, ?, ?, ?, ?, ?)`, {
                 type: QueryTypes.INSERT,
-                replacements: [el, userId, busSeat[0].id, 0, passengerCurrentLocation, passengerDestination, price]
+                replacements: [el, userId, busSeat[0].id, 0, passengerCurrentLocation, passengerDestination, price, 0, expirationDate]
             });
         })
 
@@ -346,7 +345,6 @@ exports.reserveSeat = async (req, res) => {
         return console.error(err);
     }
 }
-
 
 
 // 23-07-14-kankai-1234
