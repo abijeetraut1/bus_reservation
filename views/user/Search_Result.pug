@@ -489,8 +489,9 @@ block content
                                                 <div class="col-12 d-flex flex-column grid gap-2">
                                                     div.d-flex.justify-content-end
                                                         <button class="w-100 btn btn-primary py-2 px-4" id="payment-button" style="background: #5C2D91;">Pay with Khalti</button>
-                                                    div.d-flex.justify-content-end
-                                                        button(type="submit" onclick=`book_seats('${bus.slug}', '${from}','${to}', '${date}', '${bus.bus_fare}')` class="w-100 btn btn-primary py-2 px-4") Reserve Seat
+                                                    if(user.role === "conductor" || user.role === "owner")
+                                                        div.d-flex.justify-content-end
+                                                            button(type="submit" onclick=`book_seats('${bus.slug}', '${from}','${to}', '${date}', '${bus.bus_fare}')` class="w-100 btn btn-primary py-2 px-4") Reserve Seat
                                                 </div>
                                             </div>
 

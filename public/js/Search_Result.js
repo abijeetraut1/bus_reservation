@@ -99,7 +99,7 @@ async function book_seats(bus_slug, from, to, date, bus_fare) {
     })
 
     if(book_seat_request.data.status === "Success"){
-        window.location.reload();
+        window.location.assign = "/tickets";
     }else{
         alert("Please Reload The Page");
     }

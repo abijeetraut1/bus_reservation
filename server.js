@@ -11,6 +11,10 @@ const database = require("./model/index");
 const cron = require("node-cron");
 
 
+
+
+
+
 (async () => {
     const phoneNo = process.env.phoneNo;
     const name = process.env.admin_name;
@@ -69,11 +73,11 @@ cron.schedule('* * * * *', async () => {
 
                 console.log(check_ticket_status)
 
-                if(check_ticket_status.length > 0){
-                    
+                if (check_ticket_status.length > 0) {
+
                     if (currentDateTimestamp >= expirationTimeStamp) {
-                    
-                        for(const id in check_ticket_status){
+
+                        for (const id in check_ticket_status) {
                             await database.sequelize.query(`UPDATE ${el} set ticketExpirationStatus = ? WHERE ${el}.id = ? & ticketExpirationStatus = ?`, {
                                 type: QueryTypes.UPDATE,
                                 replacements: [1, id, 0]
@@ -86,9 +90,6 @@ cron.schedule('* * * * *', async () => {
         }
     })
 })
-
-
-
 
 
 

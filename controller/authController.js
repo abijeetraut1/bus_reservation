@@ -125,6 +125,8 @@ exports.delete_user = async (req, res) => {
 // login checker
 exports.isLoggedIn = async (req, res, next) => {
     if (req.cookies.jwt) {
+        console.log(process.env.JWT_SECRET)
+        console.log(req.cookies)
         const id = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
         // console.log(id)
         const findUser = await database.sequelize.query(`SELECT users.id, users.name, users.role FROM users WHERE id = '${id.id}'`, {

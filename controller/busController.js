@@ -139,7 +139,24 @@ exports.registerBus = async (req, res) => {
         const days = JSON.stringify(daysOfWeek);
         const facilities = JSON.stringify(facilitiesArr);
 
-        const createTable = "CREATE TABLE IF NOT EXISTS buses (id INT AUTO_INCREMENT PRIMARY KEY, user INT, busNumber INT, busName VARCHAR(100), ticketPrice INT, stopCut INT, imageJSON JSON, startLocation VARCHAR(100), endLocation VARCHAR(100), stopLocationJSON JSON, journeyStartTime TIME, totalSeats INT, days JSON, facilities JSON, slug VARCHAR(100))";
+        const createTable = `CREATE TABLE IF NOT EXISTS buses (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user INT,
+            busNumber INT,
+            busName VARCHAR(100),
+            ticketPrice INT,
+            stopCut INT,
+            imageJSON JSON,
+            startLocation VARCHAR(100),
+            endLocation VARCHAR(100),
+            stopLocationJSON JSON,
+            journeyStartTime TIME,
+            totalSeats INT,
+            days JSON,
+            facilities JSON,
+            slug VARCHAR(100),
+            FOREIGN KEY (user) REFERENCES users(id)
+        )`;
 
         await database.sequelize.query(createTable, {
             type: Sequelize.QueryTypes.RAW
@@ -264,7 +281,7 @@ exports.searchBus = async (req, res) => {
 
 // reserve the seat according to the bus location
 exports.reserveSeat = async (req, res) => {
-    
+
     try {
         const {
             slug
@@ -292,8 +309,23 @@ exports.reserveSeat = async (req, res) => {
 
         const tableName = `${year}_${month}_${day}_${slug.replaceAll("-", "_")}`;
         const expirationDate = `${year}-${month}-${day}`;
-        
-        const createTable = `CREATE TABLE IF NOT EXISTS ${tableName} (id INT AUTO_INCREMENT PRIMARY KEY, seatNo VARCHAR(3), userid INT, busid INT, isTicketChecked TINYINT(0) NOT NULL, passengerCurrentLocation varchar(100), passengerDestination varchar(100), price INT, ticketExpirationStatus TINYINT(1) DEFAULT 0, ticketExpirationDate DATE, createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`;
+
+        const createTable = `
+            CREATE TABLE IF NOT EXISTS ${tableName} (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            seatNo VARCHAR(3),
+            userid INT,
+            busid INT,
+            isTicketChecked TINYINT(1) NOT NULL,
+            passengerCurrentLocation VARCHAR(100),
+            passengerDestination VARCHAR(100),
+            price INT,
+            ticketExpirationStatus TINYINT(1) DEFAULT 0,
+            ticketExpirationDate DATE,
+            createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (userid) REFERENCES Users(id),
+            FOREIGN KEY (busid) REFERENCES Buses(id)
+        );`;
 
         // created table
         await database.sequelize.query(createTable, {
@@ -331,7 +363,7 @@ exports.reserveSeat = async (req, res) => {
             return statusFunc(res, 400, "seat is already booked");
         }
 
-        
+
         seatno.forEach(async el => {
             await database.sequelize.query(`INSERT INTO ${tableName} (seatNo, userId, busid, isTicketChecked, passengerCurrentLocation, passengerDestination, price, ticketExpirationStatus, ticketExpirationDate) values (?, ?, ?, ?, ?, ?, ?, ?, ?)`, {
                 type: QueryTypes.INSERT,
@@ -512,10 +544,10 @@ exports.updateBus = async (req, res) => {
     statusFunc(res, 200, "updated table");
 }
 
-exports.deleteBus = async(req, res) => {
+exports.deleteBus = async (req, res) => {
     const userData = res.locals.user.id;
     const busToDelete = req.params.id;
-    
+
     await database.sequelize.query(`DELETE FROM buses WHERE id = '${busToDelete}'`, {
         type: QueryTypes.DELETE
     })
