@@ -45,7 +45,7 @@ const cron = require("node-cron");
 })();
 
 
-
+// runs every minutes
 cron.schedule('* * * * *', async () => {
     // SHOW TABLES IN bus_reservations WHERE Tables_in_bus_reservations NOT IN ('buses', 'users')
     const all_tables = await database.sequelize.query("SHOW TABLES IN bus_reservations WHERE Tables_in_bus_reservations NOT IN ('buses', 'users')", {
