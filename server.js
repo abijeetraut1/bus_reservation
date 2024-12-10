@@ -12,7 +12,7 @@ const cron = require("node-cron");
 
 
 
-
+console.log("Hello world")
 
 
 (async () => {
