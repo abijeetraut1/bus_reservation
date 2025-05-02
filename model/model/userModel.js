@@ -13,7 +13,7 @@ module.exports = (sequelize, Sequelize) => {
         profile: {
             type: Sequelize.STRING,
         },
-        verificationCode:{
+        verificationCode: {
             type: Sequelize.INTEGER,
         },
         isVerified: {
@@ -23,16 +23,18 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.BOOLEAN,
             allowNull: false,
         },
-        role:{
+        role: {
             type: Sequelize.ENUM("user", "owner", "driver", "conductor", "super-admin"),
         },
-        busId:{
+        busId: {
             type: Sequelize.INTEGER,
         },
         password: {
             type: Sequelize.STRING,
             allowNull: false
         }
+    }, {
+        timestamps: true // 
     })
 
     return userModel;

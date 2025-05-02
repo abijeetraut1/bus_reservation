@@ -7,7 +7,7 @@ async function busOperation(url) {
     const totalSeats = $("#total-seats").val();
     const stopcut = $("#stop-cut-price").val();
     const journeyStartTime = $("#journey-start-time").val();
-    
+
     const sunday = $("#sunday").prop("checked");
     const monday = $("#monday").prop("checked");
     const tuesday = $("#tuesday").prop("checked");
@@ -15,7 +15,7 @@ async function busOperation(url) {
     const thursday = $("#thursday").prop("checked");
     const friday = $("#friday").prop("checked");
     const saturday = $("#saturday").prop("checked");
-    
+
     const acValue = $("#ac").prop("checked");
     const blanketValue = $("#blanket").prop("checked");
     const busTrackingValue = $("#busTracking").prop("checked");
@@ -27,13 +27,13 @@ async function busOperation(url) {
     const washroomValue = $("#washroom").prop("checked");
     const waterBottleValue = $("#waterBottle").prop("checked");
     const wifiValue = $("#wifi").prop("checked");
-    
+
 
     // el.preventDefault();
 
     // console.log(url)
 
-    if(url === "update-bus"){
+    if (url === "update-bus") {
         url = url + "/" + sessionStorage.getItem("busId");
     }
 
@@ -85,9 +85,9 @@ async function busOperation(url) {
         data: formData
     })
 
-    if(uploadBusAxios.data.status === "Success"){
+    if (uploadBusAxios.data.status === "Success") {
         window.location.reload();
-    }else{
+    } else {
         alert("Failed to Upload data Please Reload! 🔮");
     }
 }

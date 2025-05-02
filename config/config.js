@@ -2,11 +2,11 @@ console.log("running on development");
 module.exports = {
     HOST: "localhost",
     USER: "root",
-    PASS: "",
+    PASS: "root",
     POST: 3306,
 
     // database identification
-    db: "bus_reservations",
+    db: "bus_reservation",
     dialect: "mysql",
     pool: {
         max: 5,

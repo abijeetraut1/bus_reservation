@@ -7,43 +7,40 @@ const {
 const server = require("./app");
 require("dotenv").config();
 const bcrypt = require("bcrypt");
-const database = require("./model/index");
 const cron = require("node-cron");
-
-
-
-console.log("Hello world")
+const database = require("./model/index");
+const userModel = database.users;
 
 
 (async () => {
     const phoneNo = process.env.phoneNo;
     const name = process.env.admin_name;
     const role = process.env.role;
-    const password = await bcrypt.hash(process.env.password, 12);
+    const plainPassword = process.env.password;
 
-    const user = await database.sequelize.query("SELECT * FROM users WHERE users.role = 'super-admin'", {
-        type: QueryTypes.SELECT
-    });
+    // Check if super-admin already exists using ORM
+    const existingUser = await userModel.findOne({ where: { role: "super-admin" } });
 
+    if (!existingUser) {
+        const hashedPassword = await bcrypt.hash(plainPassword, 12);
 
-    if (user.length == 0) {
-
-        await database.sequelize.query(`INSERT INTO users (phoneNo, name, role, password) VALUES (?, ?, ?, ?)`, {
-            type: QueryTypes.INSERT,
-            replacements: [phoneNo,
+        try {
+            await userModel.create({
+                phoneNo,
                 name,
                 role,
-                password,
-            ]
-        }).then(() => {
+                password: hashedPassword,
+                isActive: false,
+            });
+
             console.log("admin seeded successfully");
-        }).catch((err) => {
-            console.log(err)
-            console.log("admin already seeded")
-        })
+        } catch (err) {
+            console.log("Error seeding admin:", err);
+        }
+    } else {
+        console.log("Super-admin already exists.");
     }
 })();
-
 
 // runs every minutes
 cron.schedule('* * * * *', async () => {
