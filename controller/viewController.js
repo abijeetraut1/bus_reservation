@@ -20,7 +20,7 @@ exports.home = (req, res) => {
     res.render("./user/home.pug", {
         title: "Home",
         user: user,
-         
+
     });
 }
 
@@ -61,9 +61,10 @@ exports.search = async (req, res) => {
     // search all the buses
     const searchResult = await database.sequelize.query(
         'SELECT  buses.id, buses.busName, buses.stopLocationJSON, buses.ticketPrice, buses.busNumber, buses.facilities, buses.totalSeats, buses.slug FROM buses ', {
-            type: QueryTypes.SELECT,
-        });
+        type: QueryTypes.SELECT,
+    });
 
+    console.log(searchResult)
 
     // extract the id where the locations contains
     const LocationsContains = [];
@@ -75,57 +76,58 @@ exports.search = async (req, res) => {
     if (searchResult.length === 0) return;
 
 
-    Promise.all(searchResult.map(async el => {
-        el.stopLocation = JSON.parse(el.stopLocationJSON)
+    searchResult.map(async el => {
+        el.stopLocation = el.stopLocationJSON
 
         // only select those field which contains those 2 locations
         if (el.stopLocation.includes(fromLocation) && el.stopLocation.includes(toLocation) === true) {
 
             LocationsContains.push(el);
-        }
-    })).then(async () => {
-        for (const el of LocationsContains) {
-            try {
 
-                const checkSeat = await database.sequelize.query(`SELECT seatNo FROM ${date.replaceAll("-", "_") + "_" + el.busNumber + "_" + el.busName.replaceAll(" ", "_") }`, {
-                    type: QueryTypes.SELECT,
-                });
+            for (const el of LocationsContains) {
+                try {
 
-                el.bookedSeats = checkSeat.length;
-                // if(checkSeat.length === 0) return;
-                const seatA = [];
-                const seatB = [];
+                    const checkSeat = await database.sequelize.query(`SELECT seatNo FROM ${date.replaceAll("-", "_") + "_" + el.busNumber + "_" + el.busName.replaceAll(" ", "_")}`, {
+                        type: QueryTypes.SELECT,
+                    });
 
-                checkSeat.filter((el, i) => el.seatNo.startsWith("A") ? seatA.push(el.seatNo.slice(1, el.seatNo.length)) : seatB.push(el.seatNo.slice(1, el.seatNo.length)));
-                el.seatA = ArrangeSeat(seatA);
-                el.seatB = ArrangeSeat(seatB);
-            } catch (err) {
-                el.bookedSeat = 0;
+                    el.bookedSeats = checkSeat.length;
+                    // if(checkSeat.length === 0) return;
+                    const seatA = [];
+                    const seatB = [];
+
+                    checkSeat.filter((el, i) => el.seatNo.startsWith("A") ? seatA.push(el.seatNo.slice(1, el.seatNo.length)) : seatB.push(el.seatNo.slice(1, el.seatNo.length)));
+                    el.seatA = ArrangeSeat(seatA);
+                    el.seatB = ArrangeSeat(seatB);
+                } catch (err) {
+                    el.bookedSeat = 0;
+                }
+
+                //  bus fare calculations
+                const stop_per_price = el.ticketPrice / el.stopLocation.length;
+                const stop_raw_calc = Math.abs(el.stopLocation.indexOf(fromLocation) - el.stopLocation.indexOf(toLocation));
+
+                console.log(stop_raw_calc)
+                el.bus_fare = Math.floor(stop_raw_calc * stop_per_price);
             }
 
-            //  bus fare calculations
-            const stop_per_price = el.ticketPrice / el.stopLocation.length;
-            const stop_raw_calc = Math.abs(el.stopLocation.indexOf(fromLocation) - el.stopLocation.indexOf(toLocation));
-            
-            console.log(stop_raw_calc)
-            el.bus_fare = Math.floor(stop_raw_calc * stop_per_price);
+            // console.log(LocationsContains)
+
+            res.render("./user/Search_Result.pug", {
+                buses: LocationsContains,
+                ratings: sumRate,
+                title: toLocation,
+                from: fromLocation,
+                to: toLocation,
+                date: date,
+
+            })
         }
 
-        // console.log(LocationsContains)
 
-        res.render("./user/Search_Result.pug", {
-            buses: LocationsContains,
-            ratings: sumRate,
-            title: toLocation,
-            from: fromLocation,
-            to: toLocation,
-            date: date,
-             
-        })
-    }).catch(err => {
-        // Handle error if any of the promises fail
-        console.error("Error:", err);
-    });
+    })
+
+
 }
 
 exports.login = (req, res) => {
@@ -134,19 +136,25 @@ exports.login = (req, res) => {
     })
 }
 
+exports.track = (req, res) => {
+    res.render("./track.pug", {
+        title: "Track",
+    })
+}
+
 exports.tickets = async (req, res) => {
     const user_id = res.locals.user.id;
 
     // SHOW TABLES In mystudentdb WHERE Tables_in_mystudentdb= "employees";  
-    const tables = await database.sequelize.query(`SHOW TABLES IN bus_reservations WHERE Tables_in_bus_reservations NOT IN ('buses', 'users')`);
+    const tables = await database.sequelize.query(
+        `SHOW TABLES IN bus_reservation WHERE Tables_in_bus_reservation NOT IN ('buses', 'users')`,
+        { type: QueryTypes.SHOWTABLES }
+    );
 
-    console.log(tables[0])
     const tickets = [];
 
-    for (const table of tables[0]) {
-        const tableName = table.Tables_in_bus_reservations;
-        console.log(tableName)
-        const datas = await database.sequelize.query(`SELECT seatNo, passengerCurrentLocation, passengerDestination, ticketExpirationStatus, createAt, buses.slug, buses.busName, buses.busNumber FROM ${table.Tables_in_bus_reservations} JOIN buses ON buses.id = ${table.Tables_in_bus_reservations}.busId WHERE userid = '${user_id}'`, {
+    for (const table of tables) {
+        const datas = await database.sequelize.query(`SELECT seatNo, passengerCurrentLocation, passengerDestination, ticketExpirationStatus, createdAt, buses.slug, buses.busName, buses.busNumber FROM ${table} JOIN buses ON buses.id = ${table}.busId WHERE userid = '${user_id}'`, {
             type: QueryTypes.SELECT,
         })
 
@@ -160,7 +168,7 @@ exports.tickets = async (req, res) => {
     res.render("./user/tickets.pug", {
         title: "Tickets",
         tickets: tickets,
-         
+
     })
 }
 
@@ -195,7 +203,7 @@ exports.checkout_session = async (req, res) => {
             // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
             price: busPrice.map(el => el.ticketPrice),
             quantity: 1,
-        }, ],
+        },],
         mode: 'payment',
         success_url: `${YOUR_DOMAIN}`,
         cancel_url: `${YOUR_DOMAIN}`,

@@ -15,7 +15,8 @@ router.get("/login", viewController.login);
 router.get("/register", viewController.register);
 router.get("/signup-as-company", viewController.signup_as_company);
 router.get("/logout", catchAsync(viewController.logout));
-router.get("/tickets", catchAsync(viewController.tickets));
+router.get("/tickets", viewController.tickets);
+router.get("/track", viewController.track);
 
 
 // admin panel 

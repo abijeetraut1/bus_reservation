@@ -38,6 +38,6 @@ app.use("*", (req, res) => {
         title: "Not Found"
     });
 })
-
+    
 
 module.exports = app;

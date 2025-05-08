@@ -73,9 +73,9 @@ block content
                             div.d-flex.grid.gap-2
                                 p.mb-1.fw-bold Date
                                 p.mb-1.text-secondary.d-flex
-                                    span= ticket.createAt.getFullYear() + "-"
-                                    span= ticket.createAt.getMonth() + "-"                   
-                                    span= ticket.createAt.getDay()      
+                                    span= ticket.createdAt.getFullYear() + "-"
+                                    span= ticket.createdAt.getMonth() + "-"                   
+                                    span= ticket.createdAt.getDay()      
                             div.d-flex.grid.gap-2
                                 p.mb-1.fw-bold TicketStatus
                                 if(ticket.ticketExpirationStatus)
@@ -101,6 +101,8 @@ block content
                             div.d-flex.grid.gap-2
                                 - const id = ticket.slug + "-" + ticket.seatNo
                                 button(class="bg-primary rounded py-2 px-5 w-100" onclick=`QrTicket('${id}', '${ticket.seatNo}', '${ticket.slug}')` style="border: none; outline: none; color: white;" data-bs-toggle="modal" data-bs-target="#appoint") Ticket
+                                a(href="/track") 
+                                    button(class="bg-primary rounded py-2 px-5 w-100" style="border: none; outline: none; color: white;" ) Track
 
                                 <div class="modal fade" id="appoint" tabindex="-1" aria-labelledby="appointLabel" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -113,9 +115,9 @@ block content
                                             div(class="modal-body" id=`${id}-download-ticket`)
                                                 h5 Swift Bus
                                                 p.mb-1.text-secondary.d-flex.grid.gap-2   
-                                                    span= ticket.createAt.getFullYear() + "-"
-                                                    span= ticket.createAt.getMonth() + "-"                   
-                                                    span= ticket.createAt.getDay()
+                                                    span= ticket.createdAt.getFullYear() + "-"
+                                                    span= ticket.createdAt.getMonth() + "-"                   
+                                                    span= ticket.createdAt.getDay()
 
                                                 div
                                                     hr

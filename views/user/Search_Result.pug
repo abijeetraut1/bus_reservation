@@ -116,7 +116,7 @@ block content
                     </div>
 
                     <div class="container p-0">
-                        if(buses)
+                        if(Array.isArray(buses))
                             each bus in buses
                                 <div class="custom-border my-2 p-3 ">
                                     <div class="row">
@@ -294,7 +294,7 @@ block content
                                     div.collapse.my-2(id=`facility-slider-${bus.slug}`)
                                         <div class="d-flex flex-column grid gap-1 ">
                                             <div class="custom-border d-flex grid gap-4 py-3 px-3 align-items-center">
-                                                each faciliti in JSON.parse(bus.facilities)
+                                                each faciliti in bus.facilities
                                                     - if(faciliti.value == "true")
                                                         <div>
                                                             img(src=`./images/icons/facility/${faciliti.name}.svg` alt="")

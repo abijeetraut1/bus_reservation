@@ -1,15 +1,55 @@
 // const app = require("./app");
 const port = 8000 || process.env.PORT;
-const {
-    QueryTypes,
-    Sequelize
-} = require("sequelize");
 const server = require("./app");
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const cron = require("node-cron");
+const http = require("http");
+const socketIO = require('socket.io');
 const database = require("./model/index");
 const userModel = database.users;
+const {
+    Sequelize,
+    QueryTypes,
+    where
+} = require("sequelize");
+const jwt = require("jsonwebtoken");
+
+
+const httpServer = http.createServer(server);
+const io = socketIO(httpServer);
+
+
+
+
+
+io.on('connection', async (socket) => {
+    const cookies = socket.handshake.headers.cookie;
+    const parserUserId = cookies.split("=")[1];
+
+    const id = jwt.verify(parserUserId, process.env.JWT_SECRET);
+
+    const findUser = await database.sequelize.query(`SELECT users.id, users.name, users.role FROM users WHERE id = '${id.id}'`, {
+        type: QueryTypes.SELECT
+    })
+
+    
+    socket.on('locationUpdate', (data) => {
+        const LocaationData = {
+            name: findUser[0].name,
+            role: findUser[0].role,
+            location: data
+        }
+        console.log(data);
+
+        console.log('Received location:', LocaationData);
+        io.emit('broadcastLocation', LocaationData);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+});
 
 
 (async () => {
@@ -90,6 +130,6 @@ cron.schedule('* * * * *', async () => {
 
 
 
-server.listen(port, () => {
+httpServer.listen(port, () => {
     console.log("server is running at port: " + port);
 })
