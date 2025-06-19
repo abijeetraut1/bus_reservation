@@ -2,55 +2,185 @@ extends ./headers/base.pug
 
 block content
     style.
-        body{
-            overflow: hidden;
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
         }
-        .invalid-notation-hide{
+
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 0;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .login-image {
+            background:  url('./images/bus_login.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .login-form {
+            padding: 3rem;
+        }
+
+        .brand-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            background: white;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        .error-message {
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c66;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
             display: none;
         }
-        .invalid-notation-show{
+
+        .error-message.show {
             display: block;
         }
-    <section class="vh-100" style="background-color: #309AA8; position: absolute; top: 1px; width: 100%;">
-        <div class="container py-3 h-100">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col col-xl-10">
-                    <div class="card" style="border-radius: 1rem;">
+
+        .link-primary {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .link-primary:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .login-form {
+                padding: 2rem;
+            }
+            .brand-title {
+                font-size: 2rem;
+            }
+        }
+
+    <div class="login-container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="login-card">
                         <div class="row g-0">
-                            <div class="col-md-6 col-lg-5 d-none d-md-block">
-                                <img src="./images/bus_login.jpg" alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+                            <div class="col-lg-6 d-none d-lg-block">
+                                <div class="login-image h-100">
+                                    <div>
+                                        <h2 class="mb-3">Welcome Back!</h2>
+                                        <p class="lead">Sign in to continue your journey with Swift Bus</p>
+                                        <div class="mt-4">
+                                            <i class="fas fa-bus fa-3x opacity-75"></i>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-6 col-lg-7 d-flex align-items-center">
-                                <div class="card-body p-4 p-lg-5 text-black">
+
+                            <div class="col-lg-6">
+                                <div class="login-form">
+                                    <div class="text-center mb-4">
+                                        <h1 class="brand-title">Swift Bus</h1>
+                                        <p class="text-muted">Sign into your account</p>
+                                    </div>
+
                                     <form>
-                                        <div class="d-flex align-items-center mb-3 pb-1">
-                                            <span class="h1 fw-bold mb-0">Swift Bus</span>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="contact-number">
+                                                <i class="fas fa-phone me-2"></i>Phone Number
+                                            </label>
+                                            <input type="number" id="contact-number" class="form-control" placeholder="Enter your phone number" required />
+                                            <div class="error-message invalid-notation-hide">Invalid Number</div>
                                         </div>
 
-                                        <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign into your account</h5>
-
-                                        <div data-mdb-input-init class="form-outline mb-3">
-                                            <label class="form-label" for="contact-number">Phone Number</label>
-                                            <input type="number" id="contact-number" class="form-control form-control-lg" required />
-                                            span.text-danger.invalid-notation-hide Invalid Number
+                                        <div class="mb-4">
+                                            <label class="form-label" for="password">
+                                                <i class="fas fa-lock me-2"></i>Password
+                                            </label>
+                                            <input type="password" id="password" class="form-control" placeholder="Enter your password" required/>
+                                            <div class="error-message invalid-notation-hide">Invalid Password</div>
                                         </div>
 
-                                        <div data-mdb-input-init class="form-outline mb-3">
-                                            <label class="form-label" for="password">Password</label>
-                                            <input type="password" id="password" class="form-control form-control-lg" required/>
-                                            span.text-danger.invalid-notation-hide Invalid Password
+                                        <div class="d-grid mb-3">
+                                            <button id="login-button" class="btn btn-login text-white" type="button">
+                                                <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                                            </button>
                                         </div>
 
-                                        <div class="pt-1 mb-4">
-                                            <button id="login-button" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-lg btn-block" style="background: #309AA8; border: none;" type="button">Login</button>
+                                        <div class="text-center mb-3">
+                                            <a href="#!" class="link-primary">Forgot password?</a>
                                         </div>
 
-                                        <a class="small text-muted" href="#!">Forgot password?</a>
-
-                                        <p class="mb-5 pb-lg-2" style="color: #393f81;">Don't have an account? <a href="/register"
-                                            | style="color: #393f81;">Register here</a></p>                                         
+                                        <div class="text-center">
+                                            <p class="text-muted">Don't have an account? 
+                                                <a href="/register" class="link-primary">Register here</a>
+                                            </p>
+                                        </div>
                                     </form>
-
                                 </div>
                             </div>
                         </div>
@@ -58,6 +188,6 @@ block content
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    script(src="./js/login.js") 
+    script(src="./js/login.js")

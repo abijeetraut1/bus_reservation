@@ -19,7 +19,7 @@ exports.bookedSeat = async (req, res) => {
     const userId = res.locals.user.id;
 
 
-    const tables = await database.sequelize.query(`SHOW TABLES IN bus_reservations WHERE Tables_in_bus_reservations NOT IN ('buses', 'users')`, {
+    const tables = await database.sequelize.query(`SHOW TABLES IN bus_reservation WHERE Tables_in_bus_reservation NOT IN ('buses', 'users')`, {
         type: QueryTypes.SHOWTABLES
     });
 
@@ -149,7 +149,7 @@ exports.companydashboard = async (req, res) => {
 
     const busesLength = buses.length;
     const totalCompany = busesCompany.length;
-    const tables = await database.sequelize.query(`SHOW TABLES IN bus_reservations WHERE Tables_in_bus_reservations NOT IN ('buses', 'users')`, {
+    const tables = await database.sequelize.query(`SHOW TABLES IN bus_reservation WHERE Tables_in_bus_reservation NOT IN ('buses', 'users')`, {
         type: QueryTypes.SHOWTABLES
     });
 
@@ -216,7 +216,7 @@ exports.dashboard = async (req, res) => {
 
     const busesLength = buses.length;
     const totalCompany = busesCompany.length;
-    const tables = await database.sequelize.query(`SHOW TABLES IN bus_reservations WHERE Tables_in_bus_reservations NOT IN ('buses', 'users')`, {
+    const tables = await database.sequelize.query(`SHOW TABLES IN bus_reservation WHERE Tables_in_bus_reservation NOT IN ('buses', 'users')`, {
         type: QueryTypes.SHOWTABLES
     });
 
@@ -314,7 +314,7 @@ function ArrangeSeat(seatArr) {
 
 
 exports.ticket_records = async (req, res) => {
-    const tables = await database.sequelize.query(`SHOW TABLES IN bus_reservations WHERE Tables_in_bus_reservations NOT IN ('buses', 'users')`, {
+    const tables = await database.sequelize.query(`SHOW TABLES IN bus_reservation WHERE Tables_in_bus_reservation NOT IN ('buses', 'users')`, {
         type: QueryTypes.SHOWTABLES
     });
 

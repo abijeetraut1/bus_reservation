@@ -1,82 +1,170 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary" style="z-index: 100;">
+style.
+    .navbar {
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        padding: 1rem 0;
+    }
+    
+    .navbar-brand {
+        font-weight: 800;
+        font-size: 1.5rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .navbar-brand img {
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+    
+    .nav-link {
+        font-weight: 500;
+        color: #495057 !important;
+        transition: all 0.3s ease;
+        border-radius: 8px;
+        padding: 8px 16px !important;
+        margin: 0 4px;
+    }
+    
+    .nav-link:hover {
+        color: #667eea !important;
+        background: rgba(102, 126, 234, 0.1);
+    }
+    
+    .btn {
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 8px 20px;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .btn-outline-primary {
+        color: #667eea;
+        border-color: #667eea;
+        background: transparent;
+    }
+    
+    .btn-outline-primary:hover {
+        background: #667eea;
+        border-color: #667eea;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+    
+    .user-badge {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border: 2px solid #dee2e6;
+        border-radius: 12px;
+        padding: 6px 12px;
+        font-weight: 600;
+        color: #495057;
+    }
+    
+    .role-badge {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-size: 0.75rem;
+        padding: 2px 8px;
+        border-radius: 12px;
+        margin-left: 8px;
+    }
+
+    body {
+        padding-top: 80px;
+    }
+
+<nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
-        //- Logo
-        <a style="font-weight: 700; color: #FF6C00;" class="navbar-brand me-2 d-flex align-items-center" href="/">
-            img(src="./../../images/favicon.png", height="20", alt="")
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <img src="./../../images/favicon.png" height="24" alt="Swift Bus" class="me-2">
             | Swift Bus
         </a>
 
-        <button data-mdb-collapse-init class="navbar-toggler" type="button" data-mdb-target="#navbarResponsiveButtons" aria-controls="navbarResponsiveButtons" aria-expanded="false">
-            img(src="./../../images/icons/hamburger.svg", alt="")
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
         </button>
 
-        //- Right Section Links
-        <div class="collapse navbar-collapse" id="navbarResponsiveButtons">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
                 if(user)
                     <li class="nav-item">
-                        span(class="nav-link" style="font-weight: 600; cursor: pointer; text-transform: capitalize;" title=`${user.role}`)= user.name
-                            span(style="position: relative; bottom: 10px; font-size: 12px;")= "[" + user.role  + "]"
-                    </li> 
-                each nav in [{title: "About us", link:"/about"}]
-                    <li class="nav-item">
-                        a(class="nav-link" href=`${nav.link}`)= nav.title
-                    </li>                
+                        <span class="nav-link user-badge">
+                            <i class="fas fa-user me-2"></i>#{user.name}
+                            <span class="role-badge">#{user.role}</span>
+                        </span>
+                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">
+                        <i class="fas fa-info-circle me-1"></i>About Us
+                    </a>
+                </li>
             </ul>
 
-            //- Left Slide NAvs 
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center gap-2 flex-wrap">
                 if(user)
                     if(user.role === "owner")
-                        a(href="/owner/dashboard")
-                            button(data-mdb-ripple-init type="button" class="btn me-2") Dashboard
-                        a(href="/owner/add-bus")
-                            button(data-mdb-ripple-init type="button" class="btn me-2") Add bus
-                        a(href="/owner/assistants")
-                            button(data-mdb-ripple-init type="button" class="btn me-2") Assistants                        
-                        a(href="/owner/records")
-                            button(data-mdb-ripple-init type="button" class="btn me-2") Records
-                        a(href="/owner/show-all-bus")
-                            button(data-mdb-ripple-init type="button" class="btn me-2") Buses
+                        <a href="/owner/dashboard" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                        </a>
+                        <a href="/owner/add-bus" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-plus me-1"></i>Add Bus
+                        </a>
+                        <a href="/owner/assistants" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-users me-1"></i>Staff
+                        </a>
+                        <a href="/owner/records" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-chart-line me-1"></i>Records
+                        </a>
 
                     else if(user.role === "super-admin")
-                        a(href="/admin/dashboard")
-                            button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Dashboard                                      
-                        a(href="/admin/listed-company")
-                            button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Listed Company
-                        a(href="/admin/all-users")
-                            button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") All Users
-                        a(href="/admin/upload-ads")
-                            button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Upload Ads           
+                        <a href="/admin/dashboard" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-crown me-1"></i>Admin Panel
+                        </a>
+                        <a href="/admin/listed-company" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-building me-1"></i>Companies
+                        </a>
+                        <a href="/admin/all-users" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-users me-1"></i>Users
+                        </a>
 
                     else if(user.role === "conductor" || user.role === "driver")
-                        a(href="/check-tickets")
-                            button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Check ticket
-                else                                             
-                    a(href="/login") 
-                        <button data-mdb-ripple-init type="button" class="btn px-3 me-2">
-                            | Login
-                        </button>
+                        <a href="/check-tickets" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-ticket-alt me-1"></i>Check Tickets
+                        </a>
 
-                    a(href="/register") 
-                        <button data-mdb-ripple-init type="button" class="btn btn-primary me-3">
-                            | Sign up
-                        </button>
-
-                    a(href="/signup-as-company") 
-                        <button data-mdb-ripple-init type="button" class="btn btn-primary me-3">
-                            | Sign up as Company
-                        </button>                        
-
-                if(user)
-                    if(user.role === "user")
-                        a(href="/tickets")
-                            button(data-mdb-ripple-init type="button" class="btn me-2" style="text-transform: capitalize;") Ticket
+                    else if(user.role === "user")
+                        <a href="/tickets" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-ticket-alt me-1"></i>My Tickets
+                        </a>
                     
-                    a(href="/logout")
-                        <button data-mdb-ripple-init type="button" class="btn btn-primary me-3">
-                            | Log out
-                        </button>           
+                    <a href="/logout" class="btn btn-primary">
+                        <i class="fas fa-sign-out-alt me-1"></i>Logout
+                    </a>
+                else
+                    <a href="/login" class="btn btn-outline-primary">
+                        <i class="fas fa-sign-in-alt me-1"></i>Login
+                    </a>
+                    <a href="/register" class="btn btn-primary">
+                        <i class="fas fa-user-plus me-1"></i>Sign Up
+                    </a>
+                    <a href="/signup-as-company" class="btn btn-primary">
+                        <i class="fas fa-building me-1"></i>Company
+                    </a>
             </div>
         </div>
     </div>

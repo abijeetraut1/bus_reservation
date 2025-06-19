@@ -362,7 +362,7 @@ block content
                                                                     <div class="col-5 d-flex flex-wrap grid gap-1 justify-content-around">
                                                                         - for(let i = 0; i <= ((bus.totalSeats) - 5) /2; i++)
                                                                             <div>
-                                                                                
+
                                                                                 div(class=`avl-seat seat-height-width custom-border rounded p-1 ${bus.seatA ? bus.seatA.includes(JSON.stringify(i+1)) ? "reserved bookedTicket" : "" : ""}`   value=`${"A" + (i+1)}`)= "A" + (i+1)
                                                                             </div>                                   
                                                                     </div>
@@ -489,9 +489,10 @@ block content
                                                 <div class="col-12 d-flex flex-column grid gap-2">
                                                     div.d-flex.justify-content-end
                                                         <button class="w-100 btn btn-primary py-2 px-4" id="payment-button" style="background: #5C2D91;">Pay with Khalti</button>
-                                                    if(user.role === "conductor" || user.role === "owner")
-                                                        div.d-flex.justify-content-end
-                                                            button(type="submit" onclick=`book_seats('${bus.slug}', '${from}','${to}', '${date}', '${bus.bus_fare}')` class="w-100 btn btn-primary py-2 px-4") Reserve Seat
+                                                    if(user)
+                                                        if(user.role === "conductor" || user.role === "owner")
+                                                            div.d-flex.justify-content-end
+                                                                button(type="submit" onclick=`book_seats('${bus.slug}', '${from}','${to}', '${date}', '${bus.bus_fare}')` class="w-100 btn btn-primary py-2 px-4") Reserve Seat
                                                 </div>
                                             </div>
 

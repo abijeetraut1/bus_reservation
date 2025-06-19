@@ -2,93 +2,224 @@ extends ../headers/base
 
 block content
     style.
-        .custom-border{
-            border: 1px solid #afafaf;
+        .admin-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #f1f3f4;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .stats-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        .stats-icon.seats {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+        
+        .stats-icon.income {
+            background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+        }
+        
+        .stats-icon.company {
+            background: linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%);
+        }
+        
+        .stats-icon.buses {
+            background: linear-gradient(135deg, #17a2b8 0%, #6610f2 100%);
+        }
+        
+        .stats-icon img {
+            filter: brightness(0) invert(1);
+            width: 28px;
+            height: 28px;
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stats-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+        
+        .upload-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #f1f3f4;
+        }
+        
+        .upload-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .image-preview {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .custom-width{
-            width: 16.5vw;
-            box-shadow: 3px 2px #afafaf;
-        }
-
-        @media screen and (max-width: 768px){
-            .custom-width{
-                width: 100%;
-            }
-        }
-
-
-
-    .container.my-4
-        div.d-flex.flex-column.flex-md-row.grid.gap-2.flex-wrap
-            div.custom-width.d-flex.grid.gap-3.custom-border.p-2.rounded.align-items-center
-                div.bg-success.rounded.p-4
-                    img(src="../../images/icons/seat.svg", alt="")
-                div
-                    h5.text-success.fs-4 Total Booked
-                    h5.text-secondary= totalBookedSeat
-
-            div.custom-width.d-flex.grid.gap-3.custom-border.p-2.rounded.align-items-center
-                div.bg-success.rounded.p-4
-                    img(src="../../images/icons/rupee.svg", alt="")
-                div
-                    h5.text-success.fs-4 Total Income
-                    h5.text-secondary= totalIncomeGenerated
-
-            if(user.role === "super-admin")
-                div.custom-width.d-flex.grid.gap-3.custom-border.p-2.rounded.align-items-center
-                    div.bg-success.rounded.p-4
-                        img(src="../../images/icons/company.svg", alt="")
-                    div
-                        h5.text-success.fs-4 Total Company
-                        h5.text-secondary= totalCompany   
-
-            div.custom-width.d-flex.grid.gap-3.custom-border.p-2.rounded.align-items-center
-                div.bg-success.rounded.p-4
-                    img(src="../../images/icons/bus.svg", alt="")
-                div
-                    h5.text-success.fs-4 Total Buses
-                    h5.text-secondary= busesLength
-
-        if(user.role === "super-admin")
-            <div class="container mt-5">
-                <form class="mb-3" id="image-form">
-                    <div class="mb-3">
-                        <label for="image-input" class="form-label">Choose an image to upload</label>
-                        <input class="form-control" onchange="onImageUpload()" type="file" id="image-input" accept="image/*">
+    <div class="admin-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="display-5 fw-bold mb-2">Dashboard Overview</h1>
+                    <p class="lead mb-0">Welcome back, #{name}! Here's what's happening with your business.</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <div class="d-flex align-items-center justify-content-md-end">
+                        <i class="fas fa-chart-line fa-3x opacity-75"></i>
                     </div>
-                    <button type="submit" class="btn btn-primary">Upload</button>
-                </form>
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Uploaded Image</h5>
-                        <img id="image-display" class="img-fluid" alt="Uploaded Image">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row g-4 mb-5">
+            <div class="col-lg-3 col-md-6">
+                <div class="stats-card">
+                    <div class="stats-icon seats">
+                        <img src="../../images/icons/seat.svg" alt="Seats">
+                    </div>
+                    <div class="stats-number">#{totalBookedSeat}</div>
+                    <div class="stats-label">Total Bookings</div>
+                    <div class="mt-2">
+                        <small class="text-success">
+                            <i class="fas fa-arrow-up me-1"></i>12% from last month
+                        </small>
                     </div>
                 </div>
             </div>
 
-        //- 
-            div
-                table.table.table-striped.table-hover.shadow-lg.my-4
-                    tr
-                        th S.N
-                        th Bus Name
-                        th User Name
-                        th Seat No
-                        th CurrentLocation
-                        th Destination
-                        th Price 
-                    
-                    if(userBookedSeat)
-                        each ticket, i in userBookedSeat
-                            tr
-                                td= i + 1                   
-                                td= ticket.busName                   
-                                td= ticket.name                   
-                                td= ticket.seatNo                   
-                                td= ticket.passengerCurrentLocation                   
-                                td= ticket.passengerDestination                   
-                                td= ticket.price       
+            <div class="col-lg-3 col-md-6">
+                <div class="stats-card">
+                    <div class="stats-icon income">
+                        <img src="../../images/icons/rupee.svg" alt="Income">
+                    </div>
+                    <div class="stats-number">#{totalIncomeGenerated}</div>
+                    <div class="stats-label">Total Revenue</div>
+                    <div class="mt-2">
+                        <small class="text-success">
+                            <i class="fas fa-arrow-up me-1"></i>8% from last month
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            if(user.role === "super-admin")
+                <div class="col-lg-3 col-md-6">
+                    <div class="stats-card">
+                        <div class="stats-icon company">
+                            <img src="../../images/icons/company.svg" alt="Companies">
+                        </div>
+                        <div class="stats-number">#{totalCompany}</div>
+                        <div class="stats-label">Active Companies</div>
+                        <div class="mt-2">
+                            <small class="text-info">
+                                <i class="fas fa-minus me-1"></i>No change
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="stats-card">
+                    <div class="stats-icon buses">
+                        <img src="../../images/icons/bus.svg" alt="Buses">
+                    </div>
+                    <div class="stats-number">#{busesLength}</div>
+                    <div class="stats-label">Total Buses</div>
+                    <div class="mt-2">
+                        <small class="text-success">
+                            <i class="fas fa-arrow-up me-1"></i>5% from last month
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        if(user.role === "super-admin")
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="upload-section">
+                        <h4 class="fw-bold mb-4">
+                            <i class="fas fa-cloud-upload-alt me-2"></i>Upload Advertisement
+                        </h4>
+                        
+                        <form id="image-form" class="mb-4">
+                            <div class="mb-3">
+                                <label for="image-input" class="form-label fw-semibold">Choose an image to upload</label>
+                                <input class="form-control" onchange="onImageUpload()" type="file" id="image-input" accept="image/*">
+                            </div>
+                            <button type="submit" class="upload-btn">
+                                <i class="fas fa-upload me-2"></i>Upload Image
+                            </button>
+                        </form>
+                        
+                        <div class="image-preview">
+                            <img id="image-display" class="img-fluid w-100" alt="Uploaded Image" style="display: none;">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="upload-section">
+                        <h5 class="fw-bold mb-3">Quick Actions</h5>
+                        <div class="d-grid gap-2">
+                            <a href="/admin/listed-company" class="btn btn-outline-primary">
+                                <i class="fas fa-building me-2"></i>Manage Companies
+                            </a>
+                            <a href="/admin/all-users" class="btn btn-outline-primary">
+                                <i class="fas fa-users me-2"></i>View All Users
+                            </a>
+                            <a href="/admin/ticket-records" class="btn btn-outline-primary">
+                                <i class="fas fa-ticket-alt me-2"></i>Ticket Records
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         script.
             async function onImageUpload(){
