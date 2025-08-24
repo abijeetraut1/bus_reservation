@@ -32,5 +32,6 @@ router.get("/showAllTicket", authController.isLoggedIn, busController.showAllTic
 // user page controlls route
 router.get("/:slug/accessCurrentBusLocation", busController.currentBusLocations);
 router.get("/:slug/hostCurrentBusLocation", busController.currentBusLocations);
+router.post("/khalti-payment-verification", busController.khaltiPaymentVerification);
 
 module.exports = router;

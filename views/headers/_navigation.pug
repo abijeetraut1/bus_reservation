@@ -6,7 +6,7 @@ style.
         border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         padding: 1rem 0;
     }
-    
+
     .navbar-brand {
         font-weight: 800;
         font-size: 1.5rem;
@@ -15,11 +15,11 @@ style.
         -webkit-text-fill-color: transparent;
         background-clip: text;
     }
-    
+
     .navbar-brand img {
         filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     }
-    
+
     .nav-link {
         font-weight: 500;
         color: #495057 !important;
@@ -28,12 +28,12 @@ style.
         padding: 8px 16px !important;
         margin: 0 4px;
     }
-    
+
     .nav-link:hover {
         color: #667eea !important;
         background: rgba(102, 126, 234, 0.1);
     }
-    
+
     .btn {
         border-radius: 10px;
         font-weight: 600;
@@ -41,31 +41,31 @@ style.
         transition: all 0.3s ease;
         border: 2px solid transparent;
     }
-    
+
     .btn-outline-primary {
         color: #667eea;
         border-color: #667eea;
         background: transparent;
     }
-    
+
     .btn-outline-primary:hover {
         background: #667eea;
         border-color: #667eea;
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
     }
-    
+
     .btn-primary {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         border: none;
         box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
     }
-    
+
     .btn-primary:hover {
         transform: translateY(-1px);
         box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
     }
-    
+
     .user-badge {
         background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         border: 2px solid #dee2e6;
@@ -74,7 +74,7 @@ style.
         font-weight: 600;
         color: #495057;
     }
-    
+
     .role-badge {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
@@ -115,6 +115,8 @@ style.
                 </li>
             </ul>
 
+
+
             <div class="d-flex align-items-center gap-2 flex-wrap">
                 if(user)
                     if(user.role === "owner")
@@ -147,11 +149,16 @@ style.
                             <i class="fas fa-ticket-alt me-1"></i>Check Tickets
                         </a>
 
+                        if(bus)
+                            a(href=`/host-location/${bus}` class="btn btn-outline-primary btn-sm")
+                                <i class="fas fa-map-marker-alt me-1"></i>Host Location
+                            </a>
+
                     else if(user.role === "user")
                         <a href="/tickets" class="btn btn-outline-primary btn-sm">
                             <i class="fas fa-ticket-alt me-1"></i>My Tickets
                         </a>
-                    
+
                     <a href="/logout" class="btn btn-primary">
                         <i class="fas fa-sign-out-alt me-1"></i>Logout
                     </a>

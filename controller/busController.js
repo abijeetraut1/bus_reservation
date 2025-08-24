@@ -3,8 +3,12 @@ const {
     statusFuncLength,
     statusFuncWithRender
 } = require("../utils/statusFunc");
-const database = require("./../model/index");
-const busModel = database.bus;
+const db = require("./../model/index");
+const Bus = db.buses;
+const Payment = db.payments;
+const Ticket = db.tickets;
+const User = db.users;
+const { Op } = require("sequelize");
 
 const {
     QueryTypes,
@@ -13,7 +17,6 @@ const {
 
 const locations = ['damak', 'urlabari', 'manglabare', 'pathri', 'bhaunne', 'laxmimarga', 'belbari', 'lalbhitti', 'khorsane', 'birathchowk', 'gothgaon', 'itahari'];
 
-// extract the index position of the location 
 function extractLocationIndex(locations, checkLocation) {
     return locations.findIndex(el => el.toUpperCase() === checkLocation.toUpperCase());
 }
@@ -27,8 +30,6 @@ exports.registerBus = async (req, res) => {
         req.files.forEach(el => {
             image.push(el.filename);
         });
-
-        console.log(image)
 
         // Extracting request body variables
         const {
@@ -136,38 +137,17 @@ exports.registerBus = async (req, res) => {
             }
         ];
 
-        const days = JSON.stringify(daysOfWeek);
-        const facilities = JSON.stringify(facilitiesArr);
-
-        const createTable = `CREATE TABLE IF NOT EXISTS buses (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            user INT,
-            busNumber INT,
-            busName VARCHAR(100),
-            ticketPrice INT,
-            stopCut INT,
-            imageJSON JSON,
-            startLocation VARCHAR(100),
-            endLocation VARCHAR(100),
-            stopLocationJSON JSON,
-            journeyStartTime TIME,
-            totalSeats INT,
-            days JSON,
-            facilities JSON,
-            slug VARCHAR(100),
-            FOREIGN KEY (user) REFERENCES users(id)
-        )`;
-
-        await database.sequelize.query(createTable, {
-            type: Sequelize.QueryTypes.RAW
-        })
+        const days = daysOfWeek;
+        const facilities = facilitiesArr;
 
         // Check if busNumber already exists
-        const busNumberExists = await database.sequelize.query(`SELECT buses.busNumber from buses WHERE busNumber = ${busNumber}`, {
-            type: Sequelize.QueryTypes.RAW,
+        const busNumberExists = await Bus.findOne({
+            where: {
+                busNumber: busNumber
+            }
         });
 
-        if (busNumberExists[0].length > 0) {
+        if (busNumberExists) {
             return statusFunc(res, 401, "This bus number is already registered.");
         }
 
@@ -184,31 +164,25 @@ exports.registerBus = async (req, res) => {
             if (index === toLocationIndex) break;
         }
 
-        const stopLocationJSON = JSON.stringify(stopLocation);
-        const imageJSON = JSON.stringify(image);
+        const stopLocationJSON = stopLocation;
+        const imageJSON = image;
 
-        // Prepare INSERT query
-        const insertDataQuery = `INSERT INTO buses (user, busNumber, busName, ticketPrice, stopCut, imageJSON, startLocation, endLocation, stopLocationJSON, journeyStartTime, totalSeats, days, facilities, slug) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-
-        // Insert data
-        await database.sequelize.query(insertDataQuery, {
-            type: Sequelize.QueryTypes.INSERT,
-            replacements: [
-                user,
-                busNumber,
-                busName,
-                ticketPrice,
-                stopCut,
-                imageJSON,
-                startLocation,
-                endLocation,
-                stopLocationJSON,
-                journeyStartTime,
-                totalSeats,
-                days,
-                facilities,
-                busSlug
-            ]
+        // Create new bus
+        await Bus.create({
+            userId: user,
+            busNumber,
+            busName,
+            ticketPrice,
+            stopCut,
+            imageJSON,
+            startLocation,
+            endLocation,
+            stopLocationJSON,
+            journeyStartTime,
+            totalSeats,
+            days,
+            facilities,
+            slug: busSlug
         });
 
         statusFunc(res, 200, "Bus registered successfully.");
@@ -281,100 +255,57 @@ exports.searchBus = async (req, res) => {
 
 // reserve the seat according to the bus location
 exports.reserveSeat = async (req, res) => {
-
     try {
         const {
-            slug
-        } = req.params;
-        const {
             seatno,
-            year,
-            month,
-            day,
             passengerCurrentLocation,
             passengerDestination,
-            price
+            price,
+            date,
+            paymentId,
+            busId,
+            userId
         } = req.body;
 
-        // block the reservation on past dates
-        // if(year < new Date().getFullYear() || month < new Date().getMonth() + 1 || day < new Date().getDate()){
-        //     return statusFunc(res, 400, "cannot reserve seat on the past dates");
-        // } 
-
-
-        console.log(seatno)
-        console.log(req.body)
-
-        const userId = res.locals.user.id;
-
-        const tableName = `${year}_${month}_${day}_${slug.replaceAll("-", "_")}`;
-        const expirationDate = `${year}-${month}-${day}`;
-
-        const createTable = `
-            CREATE TABLE IF NOT EXISTS ${tableName} (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            seatNo VARCHAR(3),
-            userid INT,
-            busid INT,
-            isTicketChecked TINYINT(1) NOT NULL,
-            passengerCurrentLocation VARCHAR(100),
-            passengerDestination VARCHAR(100),
-            price INT,
-            ticketExpirationStatus TINYINT(1) DEFAULT 0,
-            ticketExpirationDate DATE,
-            createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (userid) REFERENCES Users(id),
-            FOREIGN KEY (busid) REFERENCES Buses(id)
-        );`;
-
-        // created table
-        await database.sequelize.query(createTable, {
-            type: QueryTypes.RAW,
-        })
-
-        const allBuses = await database.sequelize.query(`SELECT * FROM ${tableName}`, {
-            type: QueryTypes.SELECT
-        })
-
-        // finding the seat no to check the bus total seats
-        const busSeat = await database.sequelize.query(`SELECT buses.id, buses.totalSeats FROM buses WHERE slug = ?`, {
-            type: QueryTypes.SELECT,
-            replacements: [slug]
-        })
-
-        // checking if all seats are reserved
-        if (allBuses.length === busSeat[0].noOfSeats) {
-            return statusFunc(res, 200, "all seats are reserved");
-        }
-
-        // checking if the bus is available
-        if (busSeat.length === 0) {
-            return statusFunc(res, 400, "bus not found");
-        }
+        const [year, month, day] = date.split('-');
+        const ticketExpirationDate = new Date(year, month - 1, day);
 
         // checking if the reserved seat is available or already reserved
-        const ifSeatAvailable = await database.sequelize.query(`SELECT ${tableName}.seatNo FROM ${tableName} WHERE seatNo = '${seatno}'`, {
-            type: QueryTypes.SELECT,
-        })
+        const existingTicket = await Ticket.findOne({
+            where: {
+                seatNo: {
+                    [Op.in]: seatno
+                },
+                busId: busId,
+                ticketExpirationDate: ticketExpirationDate
+            }
+        });
 
-        console.log(ifSeatAvailable)
-
-        if (ifSeatAvailable.length === 1) {
-            return statusFunc(res, 400, "seat is already booked");
+        if (existingTicket) {
+            return statusFunc(res, 400, "One or more seats are already booked.");
         }
 
-
-        seatno.forEach(async el => {
-            await database.sequelize.query(`INSERT INTO ${tableName} (seatNo, userId, busid, isTicketChecked, passengerCurrentLocation, passengerDestination, price, ticketExpirationStatus, ticketExpirationDate) values (?, ?, ?, ?, ?, ?, ?, ?, ?)`, {
-                type: QueryTypes.INSERT,
-                replacements: [el, userId, busSeat[0].id, 0, passengerCurrentLocation, passengerDestination, price, 0, expirationDate]
+        const tickets = [];
+        for (const seat of seatno) {
+            tickets.push({
+                seatNo: seat,
+                passengerCurrentLocation,
+                passengerDestination,
+                price,
+                ticketExpirationDate,
+                paymentId,
+                busId,
+                userId
             });
-        })
+        }
 
-        statusFunc(res, 200, `seat no: ${seatno} by userid: ${userId}`)
+        await Ticket.bulkCreate(tickets);
+
+        statusFunc(res, 200, `Seats ${seatno.join(', ')} reserved successfully.`)
 
     } catch (err) {
-        return console.error(err);
+        console.error(err);
+        return statusFunc(res, 500, "Internal server error");
     }
 }
 
@@ -617,4 +548,71 @@ exports.getCurrentBusPosition = async (req, res) => {
             console.log('User disconnected');
         });
     });
+}
+
+const axios = require('axios');
+
+exports.khaltiPaymentVerification = async (req, res) => {
+    try {
+        const {
+            token,
+            amount,
+            seatno,
+            passengerCurrentLocation,
+            passengerDestination,
+            date,
+            price
+        } = req.body;
+
+        const response = await axios.post("https://khalti.com/api/v2/payment/verify/", {
+            token: token,
+            amount: amount
+        }, {
+            headers: {
+                'Authorization': `Key ${process.env.KHALTI_SECRET_KEY}`
+            }
+        });
+
+        if (response.data.state === "Completed") {
+            const bus_slug = req.get('Referer').split('/')[4].split('?')[0];
+            const bus = await Bus.findOne({
+                where: {
+                    slug: bus_slug
+                }
+            });
+
+            if (!bus) {
+                return statusFunc(res, 404, "Bus not found");
+            }
+
+            const payment = await Payment.create({
+                token: token,
+                amount: amount,
+                status: response.data.state,
+                seatNo: seatno,
+                userId: req.locals.user.id,
+                busId: bus.id
+            });
+
+            const reserveSeatReq = {
+                body: {
+                    seatno,
+                    passengerCurrentLocation,
+                    passengerDestination,
+                    price,
+                    date,
+                    paymentId: payment.id,
+                    busId: bus.id,
+                    userId: req.locals.user.id
+                },
+            };
+
+            await exports.reserveSeat(reserveSeatReq, res);
+        } else {
+            statusFunc(res, 400, "Payment verification failed.");
+        }
+    } catch (err) {
+        console.error(err);
+        return statusFunc(res, 500, "Internal server error.");
+    }
 }

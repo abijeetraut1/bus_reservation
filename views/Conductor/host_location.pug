@@ -2,10 +2,13 @@ html(lang="en")
     head
         meta(charset="UTF-8")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        title= title
+        title= "Track Location"
 
-        link(rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css")
-        link(rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css")
+        //- link(rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css")
+        //- link(rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css")
+        
+        link(rel="stylesheet" href="../plugin/leaflet/leaflet.css")
+        link(rel="stylesheet" href="../plugin/routing_machine/routine_machine.css")
 
         style.
             * {
@@ -13,8 +16,8 @@ html(lang="en")
                 padding: 0;
             }
 
-            #map {
-                height: 50rem;
+            #driverMap {
+                height: 100vh;
                 width: 100%;
             }
 
@@ -33,20 +36,11 @@ html(lang="en")
             }        
     body 
 
-        div#map
-        h1 Your Shareing Your Location
+        div#driverMap
 
         script(src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js")
         script(src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js")
         script(src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous")
-        script(src="./../js/tracker.js") 
+        script(src="./../js/driverSocketController.js") 
         script.
-            const socket = io();
-            socket.emit('chat message', "helll");
-
-            io.on('connection', (socket) => {
-                socket.on('chat message', (msg) => {
-                    console.log('message: ' + msg);
-                });
-            });
-        
+            const BUS_ID = "#{bus}";

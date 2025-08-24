@@ -1,7 +1,60 @@
 let seatsArr = [];
 
+async function initiatePayment(el, user, bus) {
+
+    const userData = JSON.parse(user);
+    const busData = JSON.parse(bus);
+
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const from = urlParams.get('from');
+    const to = urlParams.get('to');
+
+    console.log(busData);
+
+    console.log(userData, busData)
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const day = String(today.getDate()).padStart(2, '0');
+
+    const book_seat_request = await axios({
+        method: "POST",
+        url: 'api/khalti/initiate',
+        data: {
+            return_url: "http://localhost:8000/payment/success",
+            website_url: "http://localhost:8000",
+            amount: (seatsArr.length * busData.bus_fare) * 100,
+            purchase_order_id: `${busData.id}-${year}${month}${day}-${seatsArr.join("-")}`,
+            purchase_order_name: `${busData.id}--${userData.id}--${from}--${to}--${seatsArr.join(",")}`,
+            customer_info: {
+                name: user.name || "user",
+                email: user.email || "user@example.com",
+                phone: user.phoneNo || "9800000000"
+            },
+            metadata: {
+                bus_id: busData.id,
+                busName: busData.busName,
+                bus_number: busData.busNumber,
+                bus_fare: busData.bus_fare,
+                seats: seatsArr,
+                from: from,
+                to: to
+            }
+        },
+    })
+
+    if (book_seat_request.data.status === true) {
+        console.log("assigned", book_seat_request.data.message.payment_url)
+        window.location.assign(book_seat_request.data.message.payment_url);
+    }
+    console.log(book_seat_request);
+}
 
 $(document).ready(function () {
+
+
+
     let count = 0;
     const baseTicketPrice = parseInt($("#base-price")[0].innerText);
     console.log(baseTicketPrice)
@@ -56,6 +109,7 @@ $(document).ready(function () {
             onSuccess(payload) {
                 // hit merchant api for initiating verfication
                 console.log(payload);
+                book_seats_khalti(payload);
             },
             onError(error) {
                 console.log(error);
@@ -68,12 +122,6 @@ $(document).ready(function () {
 
     var checkout = new KhaltiCheckout(config);
     var btn = document.getElementById("payment-button");
-    btn.onclick = function () {
-        // minimum transaction amount must be 10, i.e 1000 in paisa.
-        checkout.show({
-            amount: (baseTicketPrice * seatsArr.length) * 100
-        });
-    }
 });
 
 
@@ -84,9 +132,12 @@ async function book_seats(bus_slug, from, to, date, bus_fare) {
     const month = date.split("-")[1];
     const day = date.split("-")[2]
 
+
+
     const book_seat_request = await axios({
         method: "POST",
-        url: `/api/v1/bus/${bus_slug}/reserve-seat`,
+        url: '/api/khalti/initiate',
+        // url: `/api/v1/bus/${bus_slug}/reserve-seat`,
         data: {
             seatno: seats,
             passengerCurrentLocation: from,
@@ -98,10 +149,38 @@ async function book_seats(bus_slug, from, to, date, bus_fare) {
         }
     })
 
-    if(book_seat_request.data.status === "Success"){
+    if (book_seat_request.data.status === "Success") {
         window.location.assign = "/tickets";
-    }else{
+    } else {
         alert("Please Reload The Page");
     }
 
 };
+
+async function book_seats_khalti(payload) {
+    const bus_slug = window.location.pathname.split("/")[2];
+    const searchParams = new URLSearchParams(window.location.search);
+    const from = searchParams.get('from');
+    const to = searchParams.get('to');
+    const date = searchParams.get('date');
+    const baseTicketPrice = parseInt($("#base-price")[0].innerText);
+
+    const book_seat_request = await axios({
+        method: "POST",
+        url: `/api/v1/bus/khalti-payment-verification`,
+        data: {
+            ...payload,
+            seatno: seatsArr,
+            passengerCurrentLocation: from,
+            passengerDestination: to,
+            date: date,
+            price: baseTicketPrice * seatsArr.length
+        }
+    })
+
+    if (book_seat_request.data.status === "Success") {
+        window.location.assign = "/tickets";
+    } else {
+        alert("Please Reload The Page");
+    }
+}

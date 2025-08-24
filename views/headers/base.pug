@@ -4,6 +4,17 @@ html(lang="en")
         meta(charset="UTF-8")
         meta(name="viewport" content="width=device-width, initial-scale=1.0")
         title= title
+        link(rel="manifest" href="/manifest.json")
+        script.
+          if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+              navigator.serviceWorker.register('/sw.js').then(registration => {
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+              }, err => {
+                console.log('ServiceWorker registration failed: ', err);
+              });
+            });
+          }
         link(rel="stylesheet" href="./style/home.css")  
         link(rel="icon" type="image/x-icon" href="/images/favicon.png")
         link(rel="icon" type="image/x-icon" href="../images/favicon.png")
@@ -29,32 +40,32 @@ html(lang="en")
 
         block content
 
-        <footer class="bg-dark py-5 text-white">
-            <div class="container custom-padding">
-                <div class="row">
-                    <div class="col-md-4 mb-4 mb-md-0">
-                        <h2 class="footer-title">About Us</h2>
-                        <p>We provide buses at cheap and affordable prices with the best possible features and facilities.</p>
-                        <ul class="list-inline">
-                            <li class="list-inline-item"><a href="#"><i class="fab fa-facebook"></i></a></li>
-                            <li class="list-inline-item"><a href="#"><i class="fab fa-twitter"></i></a></li>
-                            <li class="list-inline-item"><a href="#"><i class="fab fa-instagram"></i></a></li>
-                            <li class="list-inline-item"><a href="#"><i class="fab fa-linkedin"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-4 mb-4 mb-md-0">
-                        <h2 class="footer-title">Quick Links</h2>
-                        <ul class="list-unstyled">
-                            <li><a class="text-white no-text-decoration" href="/">Home</a></li>
-                            <li><a class="text-white no-text-decoration" href="/about">About</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-4">
-                        <h2 class="footer-title">Contact Us</h2>
-                        <p>Email: swiftbus@gmail.com</p>
-                        <p>Phone: +1234567890</p>
-                        <p>Address: Itahari, Sunsari, Laxmimarga</p>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        //- <footer class="bg-dark py-5 text-white">
+        //-     <div class="container custom-padding">
+        //-         <div class="row">
+        //-             <div class="col-md-4 mb-4 mb-md-0">
+        //-                 <h2 class="footer-title">About Us</h2>
+        //-                 <p>We provide buses at cheap and affordable prices with the best possible features and facilities.</p>
+        //-                 <ul class="list-inline">
+        //-                     <li class="list-inline-item"><a href="#"><i class="fab fa-facebook"></i></a></li>
+        //-                     <li class="list-inline-item"><a href="#"><i class="fab fa-twitter"></i></a></li>
+        //-                     <li class="list-inline-item"><a href="#"><i class="fab fa-instagram"></i></a></li>
+        //-                     <li class="list-inline-item"><a href="#"><i class="fab fa-linkedin"></i></a></li>
+        //-                 </ul>
+        //-             </div>
+        //-             <div class="col-md-4 mb-4 mb-md-0">
+        //-                 <h2 class="footer-title">Quick Links</h2>
+        //-                 <ul class="list-unstyled">
+        //-                     <li><a class="text-white no-text-decoration" href="/">Home</a></li>
+        //-                     <li><a class="text-white no-text-decoration" href="/about">About</a></li>
+        //-                 </ul>
+        //-             </div>
+        //-             <div class="col-md-4">
+        //-                 <h2 class="footer-title">Contact Us</h2>
+        //-                 <p>Email: swiftbus@gmail.com</p>
+        //-                 <p>Phone: +1234567890</p>
+        //-                 <p>Address: Itahari, Sunsari, Laxmimarga</p>
+        //-             </div>
+        //-         </div>
+        //-     </div>
+        //- </footer>

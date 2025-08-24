@@ -1,0 +1,8 @@
+{
+  "appId": "com.example.app",
+  "appName": "swift-bus-reservation",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}

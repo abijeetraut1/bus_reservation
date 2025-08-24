@@ -1,0 +1,652 @@
+.leaflet-routing-container,
+.leaflet-routing-error {
+    width: 380px;
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.05);
+    padding: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.leaflet-routing-container:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.leaflet-routing-alternatives-container {
+    padding: 24px;
+    background: white;
+    border-radius: 16px;
+    margin: 2px;
+}
+
+.leaflet-control-container .leaflet-routing-container-hide {
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+}
+
+.leaflet-routing-container h2 {
+    font-size: 14px;
+}
+
+.leaflet-routing-container h3 {
+    font-size: 1rem;
+
+    font-weight: bolder;
+}
+
+.leaflet-routing-collapsible .leaflet-routing-geocoders {
+    margin-top: 20px;
+}
+
+.leaflet-routing-alt,
+.leaflet-routing-geocoders,
+.leaflet-routing-error {
+    padding: 6px;
+    margin-top: 2px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid #ccc;
+    max-height: 320px;
+    overflow-y: auto;
+    transition: all 0.2s ease;
+}
+
+.leaflet-control-container .leaflet-routing-container-hide .leaflet-routing-alt,
+.leaflet-control-container .leaflet-routing-container-hide .leaflet-routing-geocoders {
+    display: none;
+}
+
+.leaflet-bar .leaflet-routing-alt:last-child {
+    border-bottom: none;
+}
+
+.leaflet-routing-alt-minimized {
+    color: #888;
+    max-height: 64px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.leaflet-routing-alt table {
+    border-collapse: collapse;
+}
+
+.leaflet-routing-alt tr:hover {
+    background-color: #eee;
+    cursor: pointer;
+}
+
+.leaflet-routing-alt::-webkit-scrollbar {
+    width: 8px;
+}
+
+.leaflet-routing-alt::-webkit-scrollbar-track {
+    border-radius: 2px;
+    background-color: #eee;
+}
+
+.leaflet-routing-alt::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background-color: #888;
+}
+
+.leaflet-routing-icon {
+    background-image: url('leaflet.routing.icons.png');
+    -webkit-background-size: 240px 20px;
+    background-size: 240px 20px;
+    background-repeat: no-repeat;
+    margin: 0;
+    content: '';
+    display: inline-block;
+    vertical-align: top;
+    width: 20px;
+    height: 20px;
+}
+
+.leaflet-routing-icon-continue {
+    background-position: 0 0;
+}
+
+.leaflet-routing-icon-sharp-right {
+    background-position: -20px 0;
+}
+
+.leaflet-routing-icon-turn-right {
+    background-position: -40px 0;
+}
+
+.leaflet-routing-icon-bear-right {
+    background-position: -60px 0;
+}
+
+.leaflet-routing-icon-u-turn {
+    background-position: -80px 0;
+}
+
+.leaflet-routing-icon-sharp-left {
+    background-position: -100px 0;
+}
+
+.leaflet-routing-icon-turn-left {
+    background-position: -120px 0;
+}
+
+.leaflet-routing-icon-bear-left {
+    background-position: -140px 0;
+}
+
+.leaflet-routing-icon-depart {
+    background-position: -160px 0;
+}
+
+.leaflet-routing-icon-enter-roundabout {
+    background-position: -180px 0;
+}
+
+.leaflet-routing-icon-arrive {
+    background-position: -200px 0;
+}
+
+.leaflet-routing-icon-via {
+    background-position: -220px 0;
+}
+
+.leaflet-routing-geocoders div {
+    padding: 4px 0px 4px 0px;
+}
+
+.leaflet-routing-geocoders input {
+    width: 303px;
+    width: calc(100% - 4px);
+    line-height: 1.67;
+    border: 1px solid #ccc;
+}
+
+.leaflet-routing-geocoders button {
+    font: bold 18px 'Lucida Console', Monaco, monospace;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    margin: 0;
+    margin-right: 3px;
+    float: right;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.leaflet-routing-add-waypoint:after {
+    content: '+';
+}
+
+.leaflet-routing-reverse-waypoints:after {
+    font-weight: normal;
+    content: '\21c5';
+}
+
+.leaflet-routing-geocoders button:hover {
+    background-color: #eee;
+}
+
+.leaflet-routing-geocoders input,
+.leaflet-routing-remove-waypoint,
+.leaflet-routing-geocoder {
+    position: relative;
+}
+
+.leaflet-routing-geocoder-result {
+    font: 12px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
+    position: absolute;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.5s ease;
+    z-index: 1000;
+    /* Arbitrary, but try to be above "most" things. */
+}
+
+.leaflet-routing-geocoder-result table {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 0 0 4px 4px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.leaflet-routing-geocoder-result-open {
+    max-height: 800px;
+}
+
+.leaflet-routing-geocoder-selected,
+.leaflet-routing-geocoder-result tr:hover {
+    background-color: #eee;
+}
+
+.leaflet-routing-geocoder-no-results {
+    font-style: italic;
+    color: #888;
+}
+
+.leaflet-routing-remove-waypoint {
+    background-color: transparent;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.leaflet-routing-remove-waypoint:after {
+    position: absolute;
+    display: block;
+    width: 15px;
+    height: 1px;
+    z-index: 1;
+    right: 1px;
+    top: 4px;
+    bottom: 0;
+    margin: auto;
+    padding: 2px;
+    font-size: 18px;
+    font-weight: bold;
+    content: "\00d7";
+    text-align: center;
+    cursor: pointer;
+    color: #ccc;
+    background: white;
+    padding-bottom: 16px;
+    margin-top: -16px;
+    padding-right: 4px;
+    line-height: 1;
+}
+
+.leaflet-routing-remove-waypoint:hover {
+    color: black;
+}
+
+.leaflet-routing-instruction-distance {
+    width: 48px;
+}
+
+.leaflet-routing-collapse-btn {
+    position: absolute;
+    top: 0;
+    right: 6px;
+    font-size: 24px;
+    color: #ccc;
+    font-weight: bold;
+}
+
+.leaflet-routing-collapse-btn:after {
+    content: '\00d7';
+}
+
+.leaflet-routing-container-hide .leaflet-routing-collapse-btn {
+    position: relative;
+    left: 4px;
+    top: 4px;
+    display: block;
+    width: 26px;
+    height: 23px;
+    background-image: url('routing-icon.png');
+}
+
+.leaflet-routing-container-hide .leaflet-routing-collapse-btn:after {
+    content: none;
+}
+
+.leaflet-top .leaflet-routing-container.leaflet-routing-container-hide {
+    margin-top: 10px !important;
+}
+
+.leaflet-right .leaflet-routing-container.leaflet-routing-container-hide {
+    margin-right: 10px !important;
+}
+
+.leaflet-bottom .leaflet-routing-container.leaflet-routing-container-hide {
+    margin-bottom: 10px !important;
+}
+
+.leaflet-left .leaflet-routing-container.leaflet-routing-container-hide {
+    margin-left: 10px !important;
+}
+
+@media only screen and (max-width: 640px) {
+    .leaflet-routing-container {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+
+.leaflet-routing-alt h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2d3748;
+    margin: 0 0 8px 0;
+    padding: 0;
+    line-height: 1.4;
+    text-shadow: none;
+}
+
+.leaflet-routing-alt h3 {
+    font-size: 14px;
+    font-weight: 500;
+    color: #4a5568;
+    margin: 0 0 20px 0;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Geocoders and alternatives */
+.leaflet-routing-collapsible .leaflet-routing-geocoders {
+    margin-top: 24px;
+}
+
+.leaflet-routing-alt,
+.leaflet-routing-geocoders,
+.leaflet-routing-error {
+    padding: 0;
+    margin: 0;
+    border: none;
+    max-height: 400px;
+    overflow-y: auto;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.leaflet-control-container .leaflet-routing-container-hide .leaflet-routing-alt,
+.leaflet-control-container .leaflet-routing-container-hide .leaflet-routing-geocoders {
+    display: none;
+}
+
+/* Route alternatives */
+.leaflet-routing-alt-minimized {
+    color: #718096;
+    max-height: 80px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.leaflet-routing-alt-minimized:hover {
+    color: #4a5568;
+    background: #f7fafc;
+}
+
+/* Table improvements */
+.leaflet-routing-alt table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0;
+}
+
+.leaflet-routing-alt tr {
+    transition: all 0.2s ease;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.leaflet-routing-alt tr:hover {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    cursor: pointer;
+    transform: translateX(2px);
+}
+
+.leaflet-routing-alt tr:last-child {
+    border-bottom: none;
+}
+
+.leaflet-routing-alt td {
+    padding: 16px 12px;
+    vertical-align: middle;
+    font-size: 14px;
+    color: #4a5568;
+    line-height: 1.5;
+}
+
+/* Icon improvements */
+.leaflet-routing-icon {
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMTMuMDkgOC4yNkwyMCAxMEwxMy4wOSAxNS43NEwxMiAyMkwxMC45MSAxNS43NEw0IDEwTDEwLjkxIDguMjZMMTIgMloiIGZpbGw9IiM2NjdlZWEiLz4KPC9zdmc+');
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #f7fafc;
+    border: 2px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.leaflet-routing-icon:hover {
+    background-color: #667eea;
+    border-color: #667eea;
+    transform: scale(1.1);
+}
+
+/* Specific icon styles */
+.leaflet-routing-icon-depart {
+    background-color: #48bb78;
+    border-color: #48bb78;
+}
+
+.leaflet-routing-icon-arrive {
+    background-color: #ed64a6;
+    border-color: #ed64a6;
+}
+
+.leaflet-routing-icon-turn-right,
+.leaflet-routing-icon-turn-left {
+    background-color: #4299e1;
+    border-color: #4299e1;
+}
+
+.leaflet-routing-icon-enter-roundabout {
+    background-color: #f6ad55;
+    border-color: #f6ad55;
+}
+
+/* Distance column */
+.leaflet-routing-instruction-distance {
+    width: 80px;
+    text-align: right;
+    font-weight: 600;
+    color: #667eea;
+    font-size: 13px;
+}
+
+/* Instruction text */
+.leaflet-routing-instruction-text {
+    font-weight: 500;
+    color: #2d3748;
+}
+
+/* Scrollbar improvements */
+.leaflet-routing-alt::-webkit-scrollbar {
+    width: 6px;
+}
+
+.leaflet-routing-alt::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+}
+
+.leaflet-routing-alt::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 3px;
+}
+
+.leaflet-routing-alt::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+}
+
+/* Geocoder improvements */
+.leaflet-routing-geocoders div {
+    padding: 8px 0;
+}
+
+.leaflet-routing-geocoders input {
+    width: calc(100% - 8px);
+    line-height: 1.6;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.leaflet-routing-geocoders input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.leaflet-routing-geocoders button {
+    font: 600 16px system-ui;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    background: white;
+    padding: 8px 12px;
+    margin: 0 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #4a5568;
+}
+
+.leaflet-routing-geocoders button:hover {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Collapse button */
+.leaflet-routing-collapse-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 24px;
+    color: #a0aec0;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+}
+
+.leaflet-routing-collapse-btn:hover {
+    color: #667eea;
+    background: rgba(255, 255, 255, 0.9);
+    transform: scale(1.1);
+}
+
+/* Mobile responsiveness */
+@media only screen and (max-width: 640px) {
+    .leaflet-routing-container {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+    }
+
+    .leaflet-routing-alternatives-container {
+        padding: 16px;
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .leaflet-routing-alt h2 {
+        font-size: 14px;
+    }
+
+    .leaflet-routing-alt h3 {
+        font-size: 13px;
+        padding: 10px 12px;
+    }
+
+    .leaflet-routing-alt td {
+        padding: 12px 8px;
+        font-size: 13px;
+    }
+}
+
+/* Animation for route loading */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.leaflet-routing-alt {
+    animation: fadeInUp 0.5s ease;
+}
+
+/* Waypoint remove button */
+.leaflet-routing-remove-waypoint {
+    background: #fed7d7;
+    border: 2px solid #feb2b2;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #e53e3e;
+    font-weight: 600;
+}
+
+.leaflet-routing-remove-waypoint:hover {
+    background: #e53e3e;
+    color: white;
+    border-color: #e53e3e;
+    transform: scale(1.1);
+}
+
+/* Geocoder results */
+.leaflet-routing-geocoder-result {
+    font-family: inherit;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.leaflet-routing-geocoder-result table {
+    border: none;
+    border-radius: 12px;
+    background: white;
+}
+
+.leaflet-routing-geocoder-selected,
+.leaflet-routing-geocoder-result tr:hover {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+}
+
+.leaflet-routing-geocoder-no-results {
+    font-style: italic;
+    color: #a0aec0;
+    text-align: center;
+    padding: 16px;
+}

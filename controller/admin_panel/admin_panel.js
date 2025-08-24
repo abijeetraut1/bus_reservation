@@ -18,8 +18,7 @@ exports.addBus = (req, res) => {
 exports.bookedSeat = async (req, res) => {
     const userId = res.locals.user.id;
 
-
-    const tables = await database.sequelize.query(`SHOW TABLES IN bus_reservation WHERE Tables_in_bus_reservation NOT IN ('buses', 'users')`, {
+    const tables = await database.sequelize.query(`SHOW TABLES IN bus_reservation WHERE Tables_in_bus_reservation NOT IN ('buses', 'users', 'payments', 'price', 'ratings')`, {
         type: QueryTypes.SHOWTABLES
     });
 
@@ -149,7 +148,7 @@ exports.companydashboard = async (req, res) => {
 
     const busesLength = buses.length;
     const totalCompany = busesCompany.length;
-    const tables = await database.sequelize.query(`SHOW TABLES IN bus_reservation WHERE Tables_in_bus_reservation NOT IN ('buses', 'users')`, {
+    const tables = await database.sequelize.query(`SHOW TABLES IN bus_reservation WHERE Tables_in_bus_reservation NOT IN ('buses', 'users', 'payments', 'price', 'ratings')`, {
         type: QueryTypes.SHOWTABLES
     });
 
@@ -216,7 +215,7 @@ exports.dashboard = async (req, res) => {
 
     const busesLength = buses.length;
     const totalCompany = busesCompany.length;
-    const tables = await database.sequelize.query(`SHOW TABLES IN bus_reservation WHERE Tables_in_bus_reservation NOT IN ('buses', 'users')`, {
+    const tables = await database.sequelize.query(`SHOW TABLES IN bus_reservation WHERE Tables_in_bus_reservation NOT IN ('buses', 'payments', 'users', 'price', 'ratings')`, {
         type: QueryTypes.SHOWTABLES
     });
 
@@ -238,6 +237,7 @@ exports.dashboard = async (req, res) => {
     }
 
     var bookedSeats = []; // Changed variable name to bookedSeats
+    console.log(tables)
 
     for (const table of tables) {
 
@@ -314,7 +314,7 @@ function ArrangeSeat(seatArr) {
 
 
 exports.ticket_records = async (req, res) => {
-    const tables = await database.sequelize.query(`SHOW TABLES IN bus_reservation WHERE Tables_in_bus_reservation NOT IN ('buses', 'users')`, {
+    const tables = await database.sequelize.query(`SHOW TABLES IN bus_reservation WHERE Tables_in_bus_reservation NOT IN ('buses', 'users', 'payments', 'price', 'ratings')`, {
         type: QueryTypes.SHOWTABLES
     });
 

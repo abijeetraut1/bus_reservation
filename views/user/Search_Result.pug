@@ -1,6 +1,7 @@
 extends ../headers/base
 
 block content
+
     script(src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js")
     style.
         svg {
@@ -138,7 +139,7 @@ block content
                                             </div>
                                             <div class="h6 d-none d-md-block">
                                                 | Number: 
-                                                span.text-secondary.h6= bus.busNumber
+                                                span.text-secondary.h6#bus-number= bus.busNumber
                                             </div> 
                                             <div class="h6 d-none d-md-flex grid gap-1 d-none d-md-block">
                                                 span.h6 Route:
@@ -305,7 +306,7 @@ block content
                                     //- seats
                                     div.collapse.my-2(id=`seat-slider-${bus.slug}`)
                                         <div class="container d-flex flex-column flex-md-row justify-content-between grid gap-4">
-                                            <div class="col-md-3 custom-border py-2 row rounded">
+                                            div(class="col-md-3 custom-border py-2 row rounded" id=`seat-${bus.slug}-layout`)
                                                 <div class="d-flex justify-content-around">
                                                     <div class="container">
                                                         <div class="row">
@@ -396,7 +397,7 @@ block content
                                                     </div>
 
                                                 </div>
-                                            </div>
+
 
                                             //- booking page
                                             <div class="col-md-9 custom-border px-2 px-md-0 py-3 row rounded">
@@ -488,7 +489,13 @@ block content
 
                                                 <div class="col-12 d-flex flex-column grid gap-2">
                                                     div.d-flex.justify-content-end
-                                                        <button class="w-100 btn btn-primary py-2 px-4" id="payment-button" style="background: #5C2D91;">Pay with Khalti</button>
+                                                        //- button.w-100.btn.btn-primary.py-2.px-4#payment-button(data-attribute-busid=`seat-${bus.slug}-layout` data-attribute-bus-no=`${bus.busNumber}` data-attribute-busNo=`${bus.busNumber}` data-attribute-bus-slug=`${bus.slug}` data-attribute-bus-fare=`${bus.bus_fare}` style="background: #5C2D91;") Pay with Khalti
+                                                        button.w-100.btn.btn-primary.py-2.px-4#payment-button(
+                                                            data-attribute-busid=`seat-${bus.slug}-layout`
+                                                            onclick=`initiatePayment(this, '${JSON.stringify(user)}', '${JSON.stringify(bus)}')`
+                                                            style="background: #5C2D91;"
+                                                        ) Pay with Khalti
+
                                                     if(user)
                                                         if(user.role === "conductor" || user.role === "owner")
                                                             div.d-flex.justify-content-end

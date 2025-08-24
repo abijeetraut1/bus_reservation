@@ -84,24 +84,22 @@ block content
                                     span.text-success.fw-bold Valid
 
                             if(ticket.ticketExpirationStatus)
-                                div.d-flex.flex-column.custom-border.p-2.my-2                 
-                                    form
+                                div.d-flex.flex-column.custom-border.p-2.my-2
+                                    form(id=`review-form-${ticket.slug}`)
                                         div.d-flex.flex-column
                                             label.fw-bold Rating
-                                            input.rounded.p-2.my-1(type="number", name="" min=1 max=5)
+                                            input.rounded.p-2.my-1(type="number", name="rate" min=1 max=5, id=`rate-${ticket.slug}`)
                                         div.d-flex.flex-column
                                             label.fw-bold Review
-                                            input.rounded.p-2.my-1(type="text", name="")
-        
-                                        div.d-flex.flex-column
-                                        button(class="rounded py-2 px-5 w-100" style="background: #FF6C00; border: none; outline: none; color: white;") Upload Review
+                                            input.rounded.p-2.my-1(type="text", name="review", id=`review-${ticket.slug}`)
+                                        button(class="rounded py-2 px-5 w-100" style="background: #FF6C00; border: none; outline: none; color: white;" type="button" onclick=`submitReview('${ticket.slug}')`) Upload Review
 
 
 
                             div.d-flex.grid.gap-2
                                 - const id = ticket.slug + "-" + ticket.seatNo
                                 button(class="bg-primary rounded py-2 px-5 w-100" onclick=`QrTicket('${id}', '${ticket.seatNo}', '${ticket.slug}')` style="border: none; outline: none; color: white;" data-bs-toggle="modal" data-bs-target="#appoint") Ticket
-                                a(href="/track") 
+                                a(href=`/track/${ticket.slug}`) 
                                     button(class="bg-primary rounded py-2 px-5 w-100" style="border: none; outline: none; color: white;" ) Track
 
                                 <div class="modal fade" id="appoint" tabindex="-1" aria-labelledby="appointLabel" aria-hidden="true">
@@ -161,4 +159,30 @@ block content
                 .set({ html2canvas: { scale: 4 } })
                 .from(element)
                 .save();
+        }
+
+        async function submitReview(slug) {
+            const rate = document.getElementById(`rate-${slug}`).value;
+            const review = document.getElementById(`review-${slug}`).value;
+
+            try {
+                const response = await axios({
+                    method: 'POST',
+                    url: `/api/v1/bus/${slug}/rate-bus`,
+                    data: {
+                        rate,
+                        review
+                    }
+                });
+
+                if (response.data.status === 'Success') {
+                    alert('Review submitted successfully!');
+                    document.getElementById(`review-form-${slug}`).style.display = 'none';
+                } else {
+                    alert('Error submitting review: ' + response.data.message);
+                }
+            } catch (error) {
+                console.error('Error submitting review:', error);
+                alert('An error occurred while submitting your review.');
+            }
         }

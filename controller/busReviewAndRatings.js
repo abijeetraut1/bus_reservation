@@ -1,49 +1,55 @@
 const {
     statusFunc
 } = require("../utils/statusFunc");
-const database = require("./../model/index");
-const {
-    QueryTypes
-} = require("sequelize");
-
+const db = require("./../model/index");
+const Bus = db.buses;
+const Rating = db.ratings;
+const User = db.users;
 
 exports.rateBus = async (req, res) => {
     try {
-        const slug = req.params.slug.replaceAll("-", "_");
-
-        const user = 1;
+        const slug = req.params.slug;
         const {
             rate,
             review
         } = req.body;
+        const userId = res.locals.user.id;
 
-        // create review and rating table
-        await database.sequelize.query(`CREATE TABLE IF NOT EXISTS ${slug+"_ratings"} (id INT AUTO_INCREMENT PRIMARY KEY, userId INT, busId INT, rate INT, review TEXT, aggree INT, disaggree INT, createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`);
-
-        const checkAlreadyReviewed = await database.sequelize.query(`SELECT ${slug+"_ratings"}.userId FROM ${slug+"_ratings"}`, {
-            type: QueryTypes.SELECT,
+        // Find the bus by slug
+        const bus = await Bus.findOne({
+            where: {
+                slug: slug
+            }
         });
 
-        // prevent user reviewing more then one time
-        if (checkAlreadyReviewed[0].userId === user) {
-            return statusFunc(res, 200, "cannot review on single bus more then one");
+        if (!bus) {
+            return statusFunc(res, 404, "Bus not found");
         }
 
-        // find the bus
-        const bus = await database.sequelize.query(`SELECT buses.id FROM buses WHERE slug = ?`, {
-            type: QueryTypes.SELECT,
-            replacements: [slug.replaceAll("_", "-")]
-        })
+        // Check if the user has already reviewed this bus
+        const existingRating = await Rating.findOne({
+            where: {
+                userId: userId,
+                busId: bus.id
+            }
+        });
 
-        const uploadBusRating = await database.sequelize.query(`INSERT INTO ${slug+"_ratings"} (userid , busId, rate, review, aggree, disaggree) VALUES (?, ?, ?, ?, ?, ?)`, {
-            type: QueryTypes.INSERT,
-            replacements: [user, bus[0].id, rate, review, 0, 0]
-        })
+        if (existingRating) {
+            return statusFunc(res, 400, "You have already reviewed this bus.");
+        }
 
-        statusFunc(res, 201, uploadBusRating);
+        // Create the new rating
+        const newRating = await Rating.create({
+            rate,
+            review,
+            userId: userId,
+            busId: bus.id
+        });
+
+        statusFunc(res, 201, newRating);
 
     } catch (err) {
-        console.log(err)
-        return statusFunc(res, 400, err)
+        console.error(err);
+        return statusFunc(res, 500, "Internal server error");
     }
 }

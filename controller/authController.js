@@ -130,12 +130,11 @@ exports.isLoggedIn = async (req, res, next) => {
         console.log(req.cookies.jwt, process.env.JWT_SECRET)
         const id = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
         // console.log(id)
-        const findUser = await database.sequelize.query(`SELECT users.id, users.name, users.role FROM users WHERE id = '${id.id}'`, {
+        const findUser = await database.sequelize.query(`SELECT users.id, users.name, users.role, users.phoneNo, users.busId FROM users WHERE id = '${id.id}'`, {
             type: QueryTypes.SELECT
         })
 
-        console.log(findUser)
-
+        console.log(findUser[0])
         res.locals.user = findUser[0];
     }
     next();
@@ -154,7 +153,7 @@ exports.Authenticate_to_only_logged_user = async (req, res, next) => {
 exports.isOwnerLoggedIn = async (req, res, next) => {
     if (req.cookies.jwt) {
         const id = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
-        const findUser = await database.sequelize.query(`SELECT users.id, users.name, users.role FROM users WHERE id = '${id.id}'`, {
+        const findUser = await database.sequelize.query(`SELECT users.id, users.name, users.role, users.phoneNo FROM users WHERE id = '${id.id}'`, {
             type: QueryTypes.SELECT
         })
 
@@ -171,7 +170,7 @@ exports.isOwnerLoggedIn = async (req, res, next) => {
 exports.isDriverLoggedIn = async (req, res, next) => {
     if (req.cookies.jwt) {
         const id = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
-        const findUser = await database.sequelize.query(`SELECT users.id, users.name, users.role FROM users WHERE id = '${id.id}'`, {
+        const findUser = await database.sequelize.query(`SELECT users.id, users.name, users.role, users.phoneNo FROM users WHERE id = '${id.id}'`, {
             type: QueryTypes.SELECT
         })
 
@@ -187,7 +186,7 @@ exports.isDriverLoggedIn = async (req, res, next) => {
 exports.isSuperAdminLoggedIn = async (req, res, next) => {
     if (req.cookies.jwt) {
         const id = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
-        const findUser = await database.sequelize.query(`SELECT users.id, users.name, users.role FROM users WHERE id = '${id.id}'`, {
+        const findUser = await database.sequelize.query(`SELECT users.id, users.name, users.role, users.phoneNo FROM users WHERE id = '${id.id}'`, {
             type: QueryTypes.SELECT
         })
 

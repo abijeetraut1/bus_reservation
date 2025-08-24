@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const socket = io('http://localhost:8000');
     let driverMap, userMarkers = {}, routeControl, currentRoute = null;
 
@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (typeof L === 'undefined') {
             return setTimeout(initDriverMap, 100);
         }
-        
+
         driverMap = L.map('driverMap').setView([0, 0], 13);
-        
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(driverMap);
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
             addWaypoints: false,
             draggableWaypoints: false,
             fitSelectedRoutes: true,
-            lineOptions: {styles: [{color: 'green', opacity: 0.7, weight: 5}]}
+            lineOptions: { styles: [{ color: 'green', opacity: 0.7, weight: 5 }] }
         }).addTo(driverMap);
     }
 
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     lng: position.coords.longitude,
                     accuracy: position.coords.accuracy
                 };
-                
+
                 // Update driver's own marker
                 if (!window.driverMarker) {
                     window.driverMarker = L.marker([location.lat, location.lng], {
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             iconSize: [20, 20]
                         })
                     }).addTo(driverMap).bindPopup("Your Vehicle");
-                    
+
                     // Center map on first location
                     driverMap.setView([location.lat, location.lng], 13);
                 } else {
@@ -56,7 +56,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Send update to server
                 socket.emit('locationUpdate', {
-                    location: location
+                    location: location,
+                    busId: typeof BUS_ID !== 'undefined' ? BUS_ID : null // Include busId if available
                 });
             },
             error => {
@@ -65,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
             {
                 enableHighAccuracy: true,
                 maximumAge: 10000,
-                timeout: 5000
+                timeout: 15000
             }
         );
     }
@@ -73,9 +74,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle incoming user locations
     socket.on('userLocationUpdate', data => {
         if (!driverMap) return;
-        
+
         const position = [data.location.lat, data.location.lng];
-        
+
         // Update or create user marker
         if (!userMarkers[data.userId]) {
             userMarkers[data.userId] = L.marker(position, {
@@ -85,8 +86,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     iconSize: [15, 15]
                 })
             }).addTo(driverMap)
-              .bindPopup(`${data.name} (User)`)
-              .on('click', () => showRouteToUser(data.userId));
+                .bindPopup(`Passenger`)
+                .on('click', () => showRouteToUser(data.userId));
         } else {
             userMarkers[data.userId].setLatLng(position);
         }
@@ -95,24 +96,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // Show route to a specific user
     function showRouteToUser(userId) {
         if (!window.driverMarker || !userMarkers[userId]) return;
-        
+
         // Remove existing route if any
         if (routeControl) {
             driverMap.removeControl(routeControl);
         }
-        
+
         const driverPos = window.driverMarker.getLatLng();
         const userPos = userMarkers[userId].getLatLng();
-        
+
         routeControl = L.Routing.control({
             waypoints: [driverPos, userPos],
             routeWhileDragging: true,
             showAlternatives: false,
             lineOptions: {
-                styles: [{color: 'green', opacity: 0.7, weight: 5}]
+                styles: [{ color: 'green', opacity: 0.7, weight: 5 }]
             }
         }).addTo(driverMap);
-        
+
         currentRoute = userId;
     }
 
@@ -121,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (userMarkers[userId]) {
             driverMap.removeLayer(userMarkers[userId]);
             delete userMarkers[userId];
-            
+
             // Remove route if it was to this user
             if (currentRoute === userId && routeControl) {
                 driverMap.removeControl(routeControl);

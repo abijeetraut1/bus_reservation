@@ -7,10 +7,9 @@ const {
 
 
 exports.checkTicket = async (req, res) => {
-    const {
-        bus,
-        seat
-    } = req.params;
+    console.log(req.params)
+    const { bus, seat } = req.params;
+    // const [bus, seat] = data.split('-');
 
     const tableName = "2024-04-10".replaceAll("-", "_") + "_" + bus.toLowerCase().replaceAll("-", "_");
     const selectData = await database.sequelize.query(`UPDATE ${tableName} SET isTicketChecked = 1 WHERE seatNo = '${seat}' `, {
@@ -22,8 +21,6 @@ exports.checkTicket = async (req, res) => {
 
 exports.checkTicketPage = async (req, res) => {
     const userid = res.locals.user.id;
-
-
 
     const new_Date = new Date();
     const Current_Date = new_Date.getFullYear() + "_" + (new_Date.getMonth() + 1) + "_" + new_Date.getDate();
@@ -48,6 +45,7 @@ exports.getCurrentBusPosition = async (req, res) => {
 // Express route handler
 // Assume `io` is globally defined or passed into this module.
 exports.host_location = async (req, res) => {
+    const { slug } = req.params;
     // Setup socket connection logic only once
     if (!global.socketSetupDone && typeof io !== "undefined") {
         io.on("connection", (socket) => {
@@ -70,6 +68,7 @@ exports.host_location = async (req, res) => {
     }
 
     res.render("./Conductor/host_location.pug", {
-        user: "hello"
+        user: "hello",
+        bus: slug
     });
 };

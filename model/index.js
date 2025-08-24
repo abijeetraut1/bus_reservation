@@ -31,11 +31,35 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.users = require("./model/userModel")(sequelize, DataTypes);
-// db.bus = require("./model/busModel")(sequelize, DataTypes);
+db.buses = require("./busModel")(sequelize, DataTypes);
+db.ratings = require("./ratingModel")(sequelize, DataTypes);
+db.payments = require("./paymentModel")(sequelize, DataTypes);
+db.tickets = require("./ticketModel")(sequelize, DataTypes);
 
-// relation
-// db.users.hasMany(db.bus);
-// db.bus.belongsTo(db.users);
+// relations
+db.users.hasMany(db.buses);
+db.buses.belongsTo(db.users);
+
+db.users.hasMany(db.ratings);
+db.ratings.belongsTo(db.users);
+
+db.buses.hasMany(db.ratings);
+db.ratings.belongsTo(db.buses);
+
+db.users.hasMany(db.payments);
+db.payments.belongsTo(db.users);
+
+db.buses.hasMany(db.payments);
+db.payments.belongsTo(db.buses);
+
+db.users.hasMany(db.tickets);
+db.tickets.belongsTo(db.users);
+
+db.buses.hasMany(db.tickets);
+db.tickets.belongsTo(db.buses);
+
+db.payments.hasOne(db.tickets);
+db.tickets.belongsTo(db.payments);
 
 
 

@@ -7,16 +7,22 @@ const authController = require("./../controller/authController")
 const driverController = require("./../controller/driverController")
 const catchAsync = require("./../utils/catchAsync")
 
+
 router.use(authController.isLoggedIn);
 
+router.get('/payment/success', viewController.payment_success);
+
 router.get("/", catchAsync(viewController.home));
-router.get("/search", catchAsync(viewController.search));
+router.get("/search", viewController.search);
 router.get("/login", viewController.login);
 router.get("/register", viewController.register);
 router.get("/signup-as-company", viewController.signup_as_company);
 router.get("/logout", catchAsync(viewController.logout));
-router.get("/tickets", viewController.tickets);
-router.get("/track", viewController.track);
+router.get("/tickets", authController.isLoggedIn, viewController.tickets);
+router.get("/track/:slug", viewController.track);
+router.get("/about", viewController.about);
+
+
 
 
 // admin panel 
@@ -39,7 +45,7 @@ router.get("/owner/assistants", authController.isOwnerLoggedIn, authController.A
 
 router.get("/check-tickets", authController.isDriverLoggedIn, driverController.checkTicketPage);
 router.get("/checkTicket/:bus/:seat", authController.isDriverLoggedIn, driverController.checkTicket);
-// router.get("/host-location", driverController.host_location);
+router.get("/host-location/:slug", driverController.host_location);
 // router.get("/get-location", driverController.getCurrentBusPosition);
 
 
