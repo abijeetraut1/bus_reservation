@@ -11,7 +11,12 @@ exports.checkTicket = async (req, res) => {
     const { bus, seat } = req.params;
     // const [bus, seat] = data.split('-');
 
-    const tableName = "2024-04-10".replaceAll("-", "_") + "_" + bus.toLowerCase().replaceAll("-", "_");
+    const new_Date = new Date();
+    const Current_Date = new_Date.getFullYear() + "_" + (new_Date.getMonth() + 1) + "_" + new_Date.getDate();
+
+    const tableName = Current_Date + "_" + bus.toLowerCase().replaceAll("-", "_");
+
+    // const tableName = "2024-04-10".replaceAll("-", "_") + "_" + bus.toLowerCase().replaceAll("-", "_");
     const selectData = await database.sequelize.query(`UPDATE ${tableName} SET isTicketChecked = 1 WHERE seatNo = '${seat}' `, {
         type: QueryTypes.UPDATE,
     })

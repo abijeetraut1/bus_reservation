@@ -2,6 +2,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const socket = io('http://localhost:8000');
     let driverMap, userMarkers = {}, routeControl, currentRoute = null;
 
+    socket.on('connect', () => {
+        console.log("Driver connected to socket");
+        if (typeof BUS_ID !== 'undefined') {
+            socket.emit('driverConnect', BUS_ID);
+        }
+    });
+
     // Initialize map for drivers/conductors
     function initDriverMap() {
         if (typeof L === 'undefined') {
@@ -62,11 +69,23 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             error => {
                 console.error("Geolocation error:", error);
+                const statusDiv = document.getElementById('location-status');
+                if (statusDiv) {
+                    let message = 'Could not get your location. Please check your device settings and ensure you have a clear view of the sky.';
+                    if (error.code === 1) {
+                        message = 'You have denied access to your location. Please enable it in your browser settings.';
+                    } else if (error.code === 2) {
+                        message = 'Location information is unavailable. Please try again later.';
+                    } else if (error.code === 3) {
+                        message = 'Getting your location timed out. Please try again in a few moments.';
+                    }
+                    // statusDiv.innerHTML = `<p style="color: red; font-weight: bold;">${message}</p>`;
+                }
             },
             {
                 enableHighAccuracy: true,
                 maximumAge: 10000,
-                timeout: 15000
+                timeout: 30000
             }
         );
     }

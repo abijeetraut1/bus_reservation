@@ -34,8 +34,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showUserLocation() {
+        const statusDiv = document.getElementById('location-status');
+        if (statusDiv) {
+            // statusDiv.innerHTML = '<p style="color: blue; font-weight: bold;">Getting your location...</p>';
+        }
+
         if (navigator.geolocation) {
             navigator.geolocation.watchPosition(position => { // Use watchPosition for continuous updates
+                if (statusDiv) {
+                    statusDiv.innerHTML = ''; // Clear status on success
+                }
                 const userPos = {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
@@ -60,13 +68,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 updateRoute();
 
-            }, () => {
-                console.log('Could not get user location.');
+            }, (error) => {
+                console.error('Geolocation error:', error);
+                if (statusDiv) {
+                    let message = 'Could not get your location. Please check your device settings and ensure you have a clear view of the sky.';
+                    if (error.code === 1) {
+                        message = 'You have denied access to your location. Please enable it in your browser settings.';
+                    } else if (error.code === 2) {
+                        message = 'Location information is unavailable. Please try again later.';
+                    } else if (error.code === 3) {
+                        message = 'Getting your location timed out. Please try again in a few moments.';
+                    }
+                    statusDiv.innerHTML = `<p style="color: red; font-weight: bold;">${message}</p>`;
+                }
             }, {
                 enableHighAccuracy: true,
                 maximumAge: 10000,
                 timeout: 5000
             });
+        } else {
+            if (statusDiv) {
+                statusDiv.innerHTML = '<p style="color: red; font-weight: bold;">Geolocation is not supported by your browser.</p>';
+            }
         }
     }
 

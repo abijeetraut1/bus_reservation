@@ -97,8 +97,8 @@ block content
 
 
                             div.d-flex.grid.gap-2
-                                - const id = ticket.slug + "-" + ticket.seatNo
-                                button(class="bg-primary rounded py-2 px-5 w-100" onclick=`QrTicket('${id}', '${ticket.seatNo}', '${ticket.slug}')` style="border: none; outline: none; color: white;" data-bs-toggle="modal" data-bs-target="#appoint") Ticket
+                                - const id = "qr-" + ticket.slug + "-" + ticket.seatNo
+                                button(class="bg-primary rounded py-2 px-5 w-100" style="border: none; outline: none; color: white;" data-bs-toggle="modal" data-bs-target="#appoint" data-ticket-id=`${id}` data-seat-no=`${ticket.seatNo}` data-bus-slug=`${ticket.slug}`) Ticket
                                 a(href=`/track/${ticket.slug}`) 
                                     button(class="bg-primary rounded py-2 px-5 w-100" style="border: none; outline: none; color: white;" ) Track
 
@@ -147,10 +147,6 @@ block content
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     script.
-        function QrTicket(id, seatNo, BusSlug){
-            $(`#${id}`).qrcode(`${window.location.host}/checkTicket/${BusSlug}/${seatNo}`);
-        }
-
         function downloadTicket(id){
             console.log(id+"-download-ticket");
             const element = document.getElementById(id+"-download-ticket");
@@ -185,4 +181,21 @@ block content
                 console.error('Error submitting review:', error);
                 alert('An error occurred while submitting your review.');
             }
+        }
+
+        const appointModal = document.getElementById('appoint');
+        if (appointModal) {
+            appointModal.addEventListener('show.bs.modal', event => {
+                const button = event.relatedTarget;
+                const ticketId = button.getAttribute('data-ticket-id');
+                const seatNo = button.getAttribute('data-seat-no');
+                const busSlug = button.getAttribute('data-bus-slug');
+
+                console.log(seatNo, busSlug)
+
+                const qrCodeContainer = appointModal.querySelector(`#${ticketId}`);
+                if(qrCodeContainer) {
+                    $(qrCodeContainer).empty().qrcode(`${window.location.host}/checkTicket/${busSlug}/${seatNo}`);
+                }
+            });
         }

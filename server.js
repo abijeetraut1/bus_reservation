@@ -22,6 +22,19 @@ const userTrackingLocations = {}; // { busId: { userId: { lat, lng, timestamp },
 io.on('connection', async (socket) => {
     console.log("socket connected ");
 
+    socket.on('driverConnect', (busId) => {
+        console.log(`Driver connected for bus: ${busId}`);
+        socket.join(`driver-${busId}`);
+
+        // Send existing user locations to this newly connected driver
+        if (userTrackingLocations[busId]) {
+            console.log(`Server: Sending ${Object.keys(userTrackingLocations[busId]).length} existing user locations to new driver for busId: ${busId}`);
+            for (const userId in userTrackingLocations[busId]) {
+                socket.emit('userLocationUpdate', { userId, location: userTrackingLocations[busId][userId] });
+            }
+        }
+    });
+
     // User sends location updates
     socket.on('userLocationUpdate', (data) => {
         const { busId, location } = data;
@@ -42,17 +55,8 @@ io.on('connection', async (socket) => {
         const { location, busId } = data;
         console.log(`Server: Received locationUpdate from driver for busId: ${busId}, location:`, location);
         if (busId && location) {
-            socket.join(`driver-${busId}`); // Driver joins their bus-specific room
             busLocations[busId] = { ...location, timestamp: Date.now() };
             console.log(`Server: Bus ${busId} location updated to:`, busLocations[busId]);
-
-            // Send existing user locations to this newly connected driver
-            if (userTrackingLocations[busId]) {
-                console.log(`Server: Sending ${Object.keys(userTrackingLocations[busId]).length} existing user locations to new driver for busId: ${busId}`);
-                for (const userId in userTrackingLocations[busId]) {
-                    socket.emit('userLocationUpdate', { userId, location: userTrackingLocations[busId][userId] });
-                }
-            }
 
             // Broadcast to users tracking this bus
             io.to(`bus-${busId}`).emit('busLocationUpdate', { busId, location });
@@ -129,7 +133,7 @@ cron.schedule('* * * * *', async () => {
 
                 if (check_ticket_status.length > 0) {
 
-                    if (currentDateTimestamp >= expirationTimeStamp) {
+                    if (currentDateTimestamp > expirationTimeStamp) {
 
                         for (const id in check_ticket_status) {
                             await database.sequelize.query(`UPDATE ${el} set ticketExpirationStatus = ? WHERE ${el}.id = ? & ticketExpirationStatus = ?`, {
